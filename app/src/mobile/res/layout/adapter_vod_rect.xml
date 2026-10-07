@@ -1,45 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- 影视仓海报 Grid 项：8dp 圆角封面 + 角标 + 备注 + 标题 -->
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_margin="6dp"
+    android:layout_marginStart="@dimen/ysc_grid_item_gap"
+    android:layout_marginEnd="@dimen/ysc_grid_item_gap"
+    android:layout_marginBottom="10dp"
     android:foreground="@drawable/shape_vod">
 
     <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/image"
         android:layout_width="match_parent"
         android:layout_height="80dp"
-        android:background="@color/black_20"
+        android:background="@color/ysc_poster_placeholder"
         android:scaleType="centerCrop"
         app:shapeAppearanceOverlay="@style/Vod.Grid" />
 
-    <!-- 左上：评分/更新角标（金渐变） -->
-    <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/remark"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignStart="@+id/image"
-        android:layout_alignTop="@+id/image"
-        android:background="@drawable/shape_vod_remark"
-        android:singleLine="true"
-        android:textColor="@color/text_remark"
-        android:textSize="11sp"
-        android:textStyle="bold"
-        tools:text="9.2" />
-
-    <!-- 年份可叠在角标旁，默认隐藏 -->
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/year"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/image"
-        android:layout_toEndOf="@+id/remark"
+        android:layout_alignStart="@id/image"
+        android:layout_alignTop="@id/image"
+        android:layout_margin="6dp"
         android:background="@drawable/shape_vod_year"
+        android:paddingStart="5dp"
+        android:paddingTop="1dp"
+        android:paddingEnd="5dp"
+        android:paddingBottom="1dp"
         android:singleLine="true"
-        android:textColor="@color/white"
-        android:textSize="10sp"
+        android:textColor="@color/text_year"
+        android:textSize="11sp"
         android:visibility="gone"
         tools:text="2024"
         tools:visibility="visible" />
@@ -48,30 +41,52 @@
         android:id="@+id/site"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignEnd="@+id/image"
-        android:layout_alignBottom="@+id/image"
+        android:layout_alignTop="@id/image"
+        android:layout_alignEnd="@id/image"
+        android:layout_margin="6dp"
         android:background="@drawable/shape_vod_site"
+        android:paddingStart="5dp"
+        android:paddingTop="1dp"
+        android:paddingEnd="5dp"
+        android:paddingBottom="1dp"
         android:singleLine="true"
         android:textColor="@color/text_site"
-        android:textSize="10sp"
+        android:textSize="11sp"
         android:visibility="gone"
-        tools:text="泥巴"
+        tools:text="源"
         tools:visibility="visible" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/remark"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@id/image"
+        android:layout_alignEnd="@id/image"
+        android:layout_alignBottom="@id/image"
+        android:background="@drawable/shape_vod_remark_full"
+        android:ellipsize="end"
+        android:gravity="center"
+        android:includeFontPadding="false"
+        android:paddingTop="12dp"
+        android:paddingBottom="5dp"
+        android:singleLine="true"
+        android:textColor="@color/white"
+        android:textSize="11sp"
+        tools:text="更新至12集" />
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/image"
-        android:layout_alignStart="@+id/image"
-        android:layout_alignEnd="@+id/image"
-        android:background="@drawable/shape_vod_name"
+        android:layout_below="@id/image"
+        android:layout_alignStart="@id/image"
+        android:layout_alignEnd="@id/image"
         android:ellipsize="end"
-        android:gravity="start|top"
-        android:lineSpacingExtra="2dp"
-        android:maxLines="2"
-        android:textColor="@color/xingchen_text_secondary"
+        android:gravity="center_horizontal"
+        android:maxLines="4"
+        android:paddingTop="4dp"
+        android:textColor="@color/white"
         android:textSize="13sp"
-        tools:text="蜘蛛侠：纵横宇宙" />
+        tools:text="影片名称" />
 
 </RelativeLayout>

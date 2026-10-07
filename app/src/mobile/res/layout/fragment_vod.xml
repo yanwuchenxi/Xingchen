@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/transparent">
+    android:background="@color/ysc_bg">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appBar"
@@ -19,51 +19,81 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:paddingStart="8dp"
-            android:paddingEnd="4dp"
-            app:layout_scrollFlags="scroll|enterAlways"
-            app:menu="@menu/menu_vod">
+            app:menu="@menu/menu_vod"
+            app:popupTheme="@style/ToolbarPopupTheme">
 
             <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/logo"
-                android:layout_width="32dp"
-                android:layout_height="32dp"
-                android:layout_marginEnd="8dp"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:layout_marginEnd="12dp"
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:src="@drawable/ic_logo" />
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/title"
                 android:layout_width="match_parent"
-                android:layout_height="30dp"
-                android:layout_marginEnd="8dp"
-                android:background="@drawable/bg_search_bar"
+                android:layout_height="@dimen/ysc_search_height"
+                android:layout_marginEnd="4dp"
+                android:background="@drawable/shape_ysc_search"
+                android:drawableStart="@drawable/ic_action_search"
+                android:drawablePadding="8dp"
                 android:ellipsize="end"
                 android:gravity="center_vertical"
-                android:maxLines="1"
-                android:paddingStart="14dp"
-                android:paddingEnd="14dp"
+                android:paddingStart="12dp"
+                android:paddingEnd="12dp"
                 android:singleLine="true"
-                android:text="@string/app_name"
-                android:textColor="@color/xingchen_text_secondary"
-                android:textSize="13sp" />
+                android:text="@string/menu_search"
+                android:textAppearance="@style/ToolbarTextAppearance"
+                android:textColor="@color/ysc_text_secondary"
+                android:textSize="14sp" />
 
         </com.google.android.material.appbar.MaterialToolbar>
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/type"
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:id="@+id/typeBar"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="@dimen/ysc_home_tab_height"
+            android:layout_marginBottom="4dp"
             android:clipChildren="false"
             android:clipToPadding="false"
+            android:gravity="center_vertical"
             android:orientation="horizontal"
             android:paddingStart="4dp"
-            android:paddingTop="0dp"
-            android:paddingEnd="4dp"
-            android:paddingBottom="8dp"
-            android:minHeight="28dp"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            tools:listitem="@layout/adapter_type" />
+            android:paddingEnd="4dp">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/type"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:clipChildren="true"
+                android:clipToPadding="true"
+                android:orientation="horizontal"
+                android:paddingStart="4dp"
+                android:paddingTop="0dp"
+                android:paddingEnd="0dp"
+                android:paddingBottom="8dp"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                tools:listitem="@layout/adapter_type" />
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/typeMore"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="2dp"
+                android:background="@android:color/transparent"
+                android:minWidth="0dp"
+                android:minHeight="0dp"
+                android:padding="8dp"
+                android:scaleType="center"
+                android:translationY="-4dp"
+                android:visibility="gone"
+                app:srcCompat="@drawable/ic_action_menu"
+                tools:visibility="visible" />
+
+        </androidx.appcompat.widget.LinearLayoutCompat>
 
     </com.google.android.material.appbar.AppBarLayout>
 

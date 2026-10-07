@@ -127,6 +127,7 @@ public class VodFragment extends BaseFragment implements ConfigListener, SiteLis
         mBinding.type.setHasFixedSize(true);
         mBinding.type.setItemAnimator(null);
         mBinding.type.setAdapter(mAdapter = new TypeAdapter(this));
+        mBinding.typeMore.setVisibility(View.GONE);
         mBinding.pager.setAdapter(new PageAdapter(getChildFragmentManager()));
     }
 

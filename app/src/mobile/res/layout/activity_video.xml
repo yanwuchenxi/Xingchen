@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#CC0F0F12"
+    android:background="@color/ysc_bg"
     android:tag="port">
 
     <View
@@ -91,7 +91,7 @@
                         android:ellipsize="end"
                         android:maxLines="2"
                         android:textColor="@color/white"
-                        android:textSize="22sp"
+                        android:textSize="19sp"
                         android:textStyle="bold"
                         tools:text="慶餘年第二季" />
 
