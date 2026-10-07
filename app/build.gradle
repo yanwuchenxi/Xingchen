@@ -20,8 +20,8 @@ android {
         applicationId "com.xingchen.android.tv"
         minSdk libs.versions.minSdk.get().toInteger()
         targetSdk libs.versions.targetSdk.get().toInteger()
-        versionCode 552
-        versionName "5.5.2"
+        versionCode (findProperty("xingchenVersionCode") ?: "552") as int
+        versionName (findProperty("xingchenVersionName") ?: "5.5.2")
         javaCompileOptions {
             annotationProcessorOptions {
                 arguments = ["room.schemaLocation": "$projectDir/schemas".toString(), "eventBusIndex": "com.xingchen.android.tv.event.EventIndex"]

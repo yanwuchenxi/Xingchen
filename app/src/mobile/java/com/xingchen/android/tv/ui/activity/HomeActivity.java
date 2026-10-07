@@ -16,6 +16,7 @@ import androidx.core.graphics.drawable.IconCompat;
 import androidx.core.splashscreen.SplashScreen;
 import androidx.viewbinding.ViewBinding;
 
+import com.xingchen.android.tv.Updater;
 import com.xingchen.android.tv.App;
 import com.xingchen.android.tv.R;
 import com.xingchen.android.tv.api.config.LiveConfig;
@@ -71,6 +72,7 @@ public class HomeActivity extends BaseActivity implements NavigationBarView.OnIt
     protected void onCreate(Bundle savedInstanceState) {
         SplashScreen.installSplashScreen(this);
         super.onCreate(savedInstanceState);
+        Updater.create().start(this);
     }
 
     @Override

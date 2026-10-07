@@ -7,6 +7,9 @@ on:
     branches: [ main ]
   workflow_dispatch:
 
+permissions:
+  contents: write
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -46,26 +49,73 @@ jobs:
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
 
-      - name: Build mobileRelease
+      - name: Build mobile arm64 release
         run: |
-          python3 --version
-          ./gradlew assembleMobileArm64_v8aRelease --stacktrace --no-daemon
+          # versionCode 用 run_number 保证应用内更新可识别新版本
+          CODE=$((552 + ${{ github.run_number }}))
+          NAME="5.5.2.${{ github.run_number }}"
+          echo "VERSION_CODE=$CODE" >> $GITHUB_ENV
+          echo "VERSION_NAME=$NAME" >> $GITHUB_ENV
+          ./gradlew assembleMobileArm64_v8aRelease --stacktrace --no-daemon             -PxingchenVersionCode=$CODE             -PxingchenVersionName=$NAME
         env:
           GRADLE_OPTS: "-Xmx5g -Dorg.gradle.daemon=false -Dorg.gradle.jvmargs=-Xmx5g"
 
-      - name: Upload APK
+      - name: Prepare single APK + update JSON
+        run: |
+          mkdir -p Release/apk
+          # Prefer already-copied Release/apk, else copy from outputs
+          APK=$(find Release/apk -name 'mobile-arm64_v8a.apk' 2>/dev/null | head -1)
+          if [ -z "$APK" ]; then
+            APK=$(find app/build/outputs/apk -name '*.apk' 2>/dev/null | head -1)
+            if [ -n "$APK" ]; then
+              cp -f "$APK" Release/apk/mobile-arm64_v8a.apk
+            fi
+          fi
+          test -f Release/apk/mobile-arm64_v8a.apk
+          # Version from app/build.gradle
+          CODE=$(grep -E 'versionCode' app/build.gradle | head -1 | grep -oE '[0-9]+')
+          NAME=$(grep -E 'versionName' app/build.gradle | head -1 | sed -E 's/.*"([^"]+)".*/\1/')
+          cat > Release/apk/mobile.json << JSON
+          {
+            "name": "${NAME}",
+            "desc": "星辰 ${NAME}\n- 手机 arm64-v8a\n- 构建: ${GITHUB_SHA}",
+            "code": ${CODE}
+          }
+          JSON
+          # minify json whitespace
+          python3 -c "import json,pathlib; p=pathlib.Path('Release/apk/mobile.json'); p.write_text(json.dumps(json.loads(p.read_text()), ensure_ascii=False, indent=2), encoding='utf-8')"
+          ls -la Release/apk/
+          cat Release/apk/mobile.json
+
+      - name: Upload APK artifact (single)
         if: success()
         uses: actions/upload-artifact@v4
         with:
           name: xingchen-mobile-release
-          path: |
-            app/build/outputs/apk/**/*.apk
-            Release/apk/*.apk
+          path: Release/apk/mobile-arm64_v8a.apk
           retention-days: 14
-          if-no-files-found: warn
+          if-no-files-found: error
+
+      - name: Publish GitHub Release for in-app update
+        if: success() && github.event_name == 'push' && github.ref == 'refs/heads/main'
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: v${{ github.run_number }}
+          name: 星辰 build ${{ github.run_number }}
+          body: |
+            自动构建发布，供应用内更新使用。
+            - 产物：mobile-arm64_v8a.apk
+            - 版本信息：mobile.json
+          files: |
+            Release/apk/mobile-arm64_v8a.apk
+            Release/apk/mobile.json
+          draft: false
+          prerelease: false
+          make_latest: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: List outputs
         if: always()
         run: |
-          find app/build/outputs -name "*.apk" -ls 2>/dev/null || echo "No APK under app/build/outputs"
-          find Release -name "*.apk" -ls 2>/dev/null || true
+          find Release app/build/outputs -name "*.apk" -ls 2>/dev/null || true
