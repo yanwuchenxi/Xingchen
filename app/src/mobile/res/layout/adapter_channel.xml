@@ -3,28 +3,29 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginTop="2dp"
-    android:layout_marginBottom="2dp"
+    android:layout_marginTop="1dp"
+    android:layout_marginBottom="1dp"
     android:background="@drawable/shape_live"
     android:gravity="center_vertical"
+    android:minHeight="44dp"
     android:orientation="horizontal">
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/number"
-        android:layout_width="36dp"
+        android:layout_width="40dp"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
+        android:layout_marginEnd="6dp"
         android:duplicateParentState="true"
         android:fontFeatureSettings="tnum"
         android:gravity="end"
         android:textColor="@color/selector_text"
-        android:textSize="13sp"
-        tools:text="01" />
+        android:textSize="12sp"
+        tools:text="001" />
 
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/logo"
-        android:layout_width="40dp"
-        android:layout_height="30dp"
+        android:layout_width="36dp"
+        android:layout_height="27dp"
         android:layout_marginEnd="8dp"
         android:visibility="gone" />
 

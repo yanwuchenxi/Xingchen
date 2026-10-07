@@ -42,20 +42,18 @@
 
     </FrameLayout>
 
-    <!-- 影视仓风格：左侧频道面板 -->
+    <!-- 影视仓：全高左侧频道抽屉 -->
     <androidx.appcompat.widget.LinearLayoutCompat
         android:id="@+id/recycler"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:layout_marginTop="24dp"
-        android:layout_marginBottom="24dp"
         android:background="@drawable/shape_live_list"
-        android:elevation="6dp"
+        android:elevation="8dp"
         android:orientation="horizontal"
-        android:paddingStart="4dp"
-        android:paddingTop="8dp"
-        android:paddingEnd="8dp"
-        android:paddingBottom="8dp"
+        android:paddingStart="0dp"
+        android:paddingTop="12dp"
+        android:paddingEnd="6dp"
+        android:paddingBottom="12dp"
         android:visibility="gone"
         tools:visibility="visible">
 
@@ -65,7 +63,8 @@
             android:layout_height="match_parent"
             android:clipChildren="false"
             android:clipToPadding="false"
-            android:padding="4dp"
+            android:paddingStart="4dp"
+            android:paddingEnd="2dp"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             tools:itemCount="5"
             tools:listitem="@layout/adapter_group" />
@@ -76,8 +75,8 @@
             android:layout_height="match_parent"
             android:clipChildren="false"
             android:clipToPadding="false"
-            android:padding="4dp"
-            android:translationX="-8dp"
+            android:paddingStart="2dp"
+            android:paddingEnd="4dp"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             tools:itemCount="5"
             tools:listitem="@layout/adapter_channel" />
