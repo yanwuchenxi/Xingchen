@@ -5,10 +5,9 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_marginEnd="8dp"
-    android:background="@drawable/shape_item_round"
+    android:background="@drawable/shape_episode_chip"
     android:gravity="center"
-    android:minHeight="32dp"
+    android:minHeight="30dp"
     android:textColor="@color/selector_episode_text"
     android:textSize="13sp"
-    android:textStyle="bold"
     tools:text="线路1" />

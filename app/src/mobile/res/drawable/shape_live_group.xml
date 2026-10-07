@@ -4,13 +4,13 @@
         <layer-list>
             <item>
                 <shape android:shape="rectangle">
-                    <solid android:color="#334FC3F7" />
+                    <solid android:color="#33FFB40A" />
                     <corners android:radius="6dp" />
                 </shape>
             </item>
             <item android:width="3dp" android:gravity="start">
                 <shape android:shape="rectangle">
-                    <solid android:color="#FF4FC3F7" />
+                    <solid android:color="#FFFFB40A" />
                     <corners android:radius="2dp" />
                 </shape>
             </item>

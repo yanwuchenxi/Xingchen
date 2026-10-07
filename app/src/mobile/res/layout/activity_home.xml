@@ -25,11 +25,10 @@
         android:layout_alignParentBottom="true"
         android:background="@color/xingchen_surface"
         app:elevation="0dp"
-        app:itemIconSize="22dp"
+        app:itemIconSize="24dp"
         app:itemIconTint="@color/selector_nav"
-        app:itemTextColor="@color/selector_nav"
         app:itemRippleColor="@color/xingchen_accent_dim"
-        app:labelVisibilityMode="labeled"
+        app:labelVisibilityMode="unlabeled"
         app:menu="@menu/menu_nav" />
 
 </RelativeLayout>

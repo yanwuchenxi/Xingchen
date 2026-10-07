@@ -15,22 +15,35 @@
         android:scaleType="centerCrop"
         app:shapeAppearanceOverlay="@style/Vod.Grid" />
 
-    <!-- 年份：左上角 -->
+    <!-- 左上：评分/更新角标（金渐变） -->
     <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/year"
+        android:id="@+id/remark"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignStart="@+id/image"
         android:layout_alignTop="@+id/image"
+        android:background="@drawable/shape_vod_remark"
+        android:singleLine="true"
+        android:textColor="@color/text_remark"
+        android:textSize="11sp"
+        android:textStyle="bold"
+        tools:text="9.2" />
+
+    <!-- 年份可叠在角标旁，默认隐藏 -->
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/year"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/image"
+        android:layout_toEndOf="@+id/remark"
         android:background="@drawable/shape_vod_year"
         android:singleLine="true"
-        android:textColor="@color/xingchen_text_secondary"
-        android:textSize="11sp"
+        android:textColor="@color/white"
+        android:textSize="10sp"
         android:visibility="gone"
         tools:text="2024"
         tools:visibility="visible" />
 
-    <!-- 站点：右下角贴海报 -->
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/site"
         android:layout_width="wrap_content"
@@ -45,21 +58,6 @@
         tools:text="泥巴"
         tools:visibility="visible" />
 
-    <!-- 评分/集数：右上角角标 -->
-    <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/remark"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/image"
-        android:layout_alignEnd="@+id/image"
-        android:background="@drawable/shape_vod_remark"
-        android:singleLine="true"
-        android:textColor="@color/text_remark"
-        android:textSize="11sp"
-        android:textStyle="bold"
-        tools:text="更新至12集" />
-
-    <!-- 标题：海报下方左对齐最多两行 -->
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/name"
         android:layout_width="match_parent"
