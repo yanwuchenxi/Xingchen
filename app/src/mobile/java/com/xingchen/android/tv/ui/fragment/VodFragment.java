@@ -189,6 +189,10 @@ public class VodFragment extends BaseFragment implements ConfigListener, SiteLis
         SiteDialog.create().change().show(this);
     }
 
+    private void onSearchBar(View view) {
+        SearchActivity.start(requireActivity());
+    }
+
     private void onFilter(View view) {
         if (mAdapter.getItemCount() > 0) FilterDialog.create().filter(mAdapter.get(mBinding.pager.getCurrentItem()).getFilters()).show(this);
     }
