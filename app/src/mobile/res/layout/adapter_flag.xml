@@ -8,7 +8,7 @@
     android:background="@drawable/shape_item_round"
     android:gravity="center"
     android:minHeight="32dp"
-    android:textColor="@color/selector_type_text"
+    android:textColor="@color/selector_episode_text"
     android:textSize="13sp"
     android:textStyle="bold"
     tools:text="线路1" />

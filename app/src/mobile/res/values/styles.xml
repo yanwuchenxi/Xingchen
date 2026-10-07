@@ -14,7 +14,14 @@
         <item name="windowSplashScreenAnimationDuration">300</item>
     </style>
 
-    <style name="Theme.App" parent="Theme.Base" />
+    <style name="Theme.App" parent="Theme.Base">
+        <item name="colorPrimary">@color/xingchen_accent</item>
+        <item name="colorSecondary">@color/xingchen_accent</item>
+        <item name="android:colorBackground">@color/xingchen_bg</item>
+        <item name="colorSurface">@color/xingchen_surface</item>
+        <item name="android:statusBarColor">@color/xingchen_bg</item>
+        <item name="android:navigationBarColor">@color/xingchen_bg</item>
+    </style>
 
     <style name="Theme.Crash" parent="Theme.Base">
         <item name="android:windowDisablePreview">true</item>

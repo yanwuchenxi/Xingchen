@@ -30,4 +30,14 @@
 
     <color name="yellow">#FFEB3B</color>
     <color name="grey_700">#616161</color>
+
+    <!-- 星辰 / 影视仓视觉 -->
+    <color name="xingchen_bg">#FF0F0F12</color>
+    <color name="xingchen_surface">#FF1A1A1F</color>
+    <color name="xingchen_surface2">#FF242429</color>
+    <color name="xingchen_accent">#FF4FC3F7</color>
+    <color name="xingchen_accent_dim">#334FC3F7</color>
+    <color name="xingchen_text_secondary">#B3FFFFFF</color>
+    <color name="xingchen_text_hint">#80FFFFFF</color>
+
 </resources>

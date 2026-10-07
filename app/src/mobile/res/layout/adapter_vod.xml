@@ -76,7 +76,7 @@
         android:ellipsize="end"
         android:gravity="start|top"
         android:maxLines="2"
-        android:textColor="@color/white"
+        android:textColor="@color/xingchen_text_secondary"
         app:autoSizeMaxTextSize="14sp"
         app:autoSizeMinTextSize="12sp"
         app:autoSizeStepGranularity="1sp"
