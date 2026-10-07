@@ -15,7 +15,8 @@ public class Product {
     }
 
     public static int getColumn(Context context) {
-        int count = ResUtil.isLand(context) ? 7 : 5;
+        // 影视仓风格：竖屏约 3 列大海报，横屏/平板再加列
+        int count = ResUtil.isLand(context) ? 6 : 3;
         count = count + (ResUtil.isPad() ? 1 : 0);
         return Math.abs(PlayerSetting.getSize() - count);
     }
