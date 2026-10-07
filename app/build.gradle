@@ -11,6 +11,10 @@ if (localPropsFile.exists()) {
 }
 def hasReleaseSigning = localProps['storeFile'] && localProps['keyAlias'] && localProps['storePassword']
 
+// CI 可通过 -PxingchenVersionCode / -PxingchenVersionName 注入版本
+def xingchenVersionCode = (project.findProperty("xingchenVersionCode") ?: "552").toString().toInteger()
+def xingchenVersionName = (project.findProperty("xingchenVersionName") ?: "5.5.2").toString()
+
 android {
     namespace = 'com.xingchen.android.tv'
 
@@ -20,8 +24,8 @@ android {
         applicationId "com.xingchen.android.tv"
         minSdk libs.versions.minSdk.get().toInteger()
         targetSdk libs.versions.targetSdk.get().toInteger()
-        versionCode (findProperty("xingchenVersionCode") ?: "552") as int
-        versionName (findProperty("xingchenVersionName") ?: "5.5.2")
+        versionCode xingchenVersionCode
+        versionName xingchenVersionName
         javaCompileOptions {
             annotationProcessorOptions {
                 arguments = ["room.schemaLocation": "$projectDir/schemas".toString(), "eventBusIndex": "com.xingchen.android.tv.event.EventIndex"]
