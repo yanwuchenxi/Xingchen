@@ -62,30 +62,24 @@ jobs:
 
       - name: Prepare single APK + update JSON
         run: |
+          set -euo pipefail
           mkdir -p Release/apk
-          # Prefer already-copied Release/apk, else copy from outputs
-          APK=$(find Release/apk -name 'mobile-arm64_v8a.apk' 2>/dev/null | head -1)
-          if [ -z "$APK" ]; then
-            APK=$(find app/build/outputs/apk -name '*.apk' 2>/dev/null | head -1)
-            if [ -n "$APK" ]; then
-              cp -f "$APK" Release/apk/mobile-arm64_v8a.apk
-            fi
+          if [ ! -f Release/apk/mobile-arm64_v8a.apk ]; then
+            APK=$(find app/build/outputs/apk -name '*.apk' | head -1)
+            echo "Copying $APK"
+            cp -f "$APK" Release/apk/mobile-arm64_v8a.apk
           fi
           test -f Release/apk/mobile-arm64_v8a.apk
-          # Version from app/build.gradle
-          CODE=$(grep -E 'versionCode' app/build.gradle | head -1 | grep -oE '[0-9]+')
-          NAME=$(grep -E 'versionName' app/build.gradle | head -1 | sed -E 's/.*"([^"]+)".*/\1/')
-          cat > Release/apk/mobile.json << JSON
-          {
-            "name": "${NAME}",
-            "desc": "星辰 ${NAME}\n- 手机 arm64-v8a\n- 构建: ${GITHUB_SHA}",
-            "code": ${CODE}
-          }
-          JSON
-          # minify json whitespace
-          python3 -c "import json,pathlib; p=pathlib.Path('Release/apk/mobile.json'); p.write_text(json.dumps(json.loads(p.read_text()), ensure_ascii=False, indent=2), encoding='utf-8')"
+          CODE="${VERSION_CODE:-552}"
+          NAME="${VERSION_NAME:-5.5.2}"
+          SHA="${GITHUB_SHA:-unknown}"
+          cat > Release/apk/mobile.json <<EOF
+          {"name":"${NAME}","desc":"星辰 ${NAME}\n- 手机 arm64-v8a\n- 构建: ${SHA:0:7}","code":${CODE}}
+          EOF
+          # strip leading spaces from heredoc lines
+          python3 -c "import pathlib; p=pathlib.Path('Release/apk/mobile.json'); p.write_text('\n'.join(l.lstrip() for l in p.read_text().splitlines())+'\n')"
+          python3 -c "import json,pathlib; p=pathlib.Path('Release/apk/mobile.json'); d=json.loads(p.read_text()); p.write_text(json.dumps(d,ensure_ascii=False,indent=2)+'\n'); print(p.read_text())"
           ls -la Release/apk/
-          cat Release/apk/mobile.json
 
       - name: Upload APK artifact (single)
         if: success()
