@@ -49,7 +49,7 @@ jobs:
       - name: Build mobileRelease
         run: |
           python3 --version
-          ./gradlew assembleMobileRelease --stacktrace --no-daemon
+          ./gradlew assembleMobileArm64_v8aRelease --stacktrace --no-daemon
         env:
           GRADLE_OPTS: "-Xmx5g -Dorg.gradle.daemon=false -Dorg.gradle.jvmargs=-Xmx5g"
 
@@ -59,7 +59,7 @@ jobs:
         with:
           name: xingchen-mobile-release
           path: |
-            app/build/outputs/apk/mobile/**/*.apk
+            app/build/outputs/apk/**/*.apk
             Release/apk/*.apk
           retention-days: 14
           if-no-files-found: warn
