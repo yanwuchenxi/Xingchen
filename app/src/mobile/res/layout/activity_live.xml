@@ -42,12 +42,20 @@
 
     </FrameLayout>
 
+    <!-- 影视仓风格：左侧频道面板 -->
     <androidx.appcompat.widget.LinearLayoutCompat
         android:id="@+id/recycler"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
+        android:layout_marginTop="24dp"
+        android:layout_marginBottom="24dp"
         android:background="@drawable/shape_live_list"
+        android:elevation="6dp"
         android:orientation="horizontal"
+        android:paddingStart="4dp"
+        android:paddingTop="8dp"
+        android:paddingEnd="8dp"
+        android:paddingBottom="8dp"
         android:visibility="gone"
         tools:visibility="visible">
 
@@ -57,7 +65,7 @@
             android:layout_height="match_parent"
             android:clipChildren="false"
             android:clipToPadding="false"
-            android:padding="8dp"
+            android:padding="4dp"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             tools:itemCount="5"
             tools:listitem="@layout/adapter_group" />
@@ -68,8 +76,8 @@
             android:layout_height="match_parent"
             android:clipChildren="false"
             android:clipToPadding="false"
-            android:padding="8dp"
-            android:translationX="-16dp"
+            android:padding="4dp"
+            android:translationX="-8dp"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             tools:itemCount="5"
             tools:listitem="@layout/adapter_channel" />
@@ -80,11 +88,10 @@
             android:layout_height="match_parent"
             android:clipChildren="false"
             android:clipToPadding="false"
-            android:padding="8dp"
+            android:padding="4dp"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             tools:itemCount="5"
             tools:listitem="@layout/adapter_epg_data" />
 
     </androidx.appcompat.widget.LinearLayoutCompat>
 </FrameLayout>
-
