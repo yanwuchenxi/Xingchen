@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
 
     <style name="Theme.Base" parent="Theme.Material3.DynamicColors.DayNight.NoActionBar">
@@ -9,13 +10,15 @@
     <style name="Theme.Splash" parent="Theme.SplashScreen">
         <item name="postSplashScreenTheme">@style/Theme.App</item>
         <item name="windowSplashScreenAnimatedIcon">@drawable/ic_launcher_foreground</item>
+        <item name="windowSplashScreenBackground">@color/xingchen_splash_bg</item>
+        <item name="windowSplashScreenAnimationDuration">300</item>
     </style>
 
     <style name="Theme.App" parent="Theme.Base" />
 
     <style name="Theme.Crash" parent="Theme.Base">
         <item name="android:windowDisablePreview">true</item>
-        <item name="android:windowBackground">@color/grey_700</item>
+        <item name="android:windowBackground">@color/black_70</item>
     </style>
 
     <style name="Control">

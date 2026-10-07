@@ -2,7 +2,8 @@
 
     <color name="transparent">#00000000</color>
     <color name="black">#000000</color>
-    <color name="startup_background">#032B51</color>
+    <color name="startup_background">#0A1628</color>
+    <color name="xingchen_splash_bg">#0A1628</color>
     <color name="black_05">#0D000000</color>
     <color name="black_10">#1A000000</color>
     <color name="black_15">#26000000</color>
@@ -27,4 +28,6 @@
     <color name="white_80">#CCFFFFFF</color>
     <color name="white_90">#E6FFFFFF</color>
 
+    <color name="yellow">#FFEB3B</color>
+    <color name="grey_700">#616161</color>
 </resources>
