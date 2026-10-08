@@ -1,5 +1,9 @@
 package com.xingchen.android.tv.ui.adapter;
 
+import androidx.core.content.ContextCompat;
+import com.xingchen.android.tv.R;
+import com.xingchen.android.tv.setting.LiveSetting;
+
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
@@ -64,9 +68,20 @@ public class EpgDataAdapter extends RecyclerView.Adapter<EpgDataAdapter.ViewHold
         holder.binding.time.setText(item.getTime());
         holder.binding.title.setText(item.getTitle());
         holder.binding.getRoot().setSelected(item.isSelected());
+        setListStyle(holder);
         holder.binding.getRoot().setOnClickListener(view -> {
             if (!item.isFuture()) listener.onItemClick(item);
         });
+    }
+
+
+    private void setListStyle(ViewHolder holder) {
+        boolean classic = LiveSetting.isListStyleClassic();
+        holder.binding.getRoot().setBackgroundResource(classic ? R.drawable.shape_live_classic : R.drawable.shape_live);
+        try {
+            holder.binding.title.setTextColor(ContextCompat.getColorStateList(holder.binding.title.getContext(), classic ? R.color.selector_live_text_classic : R.color.selector_live_text));
+            holder.binding.time.setTextColor(ContextCompat.getColorStateList(holder.binding.time.getContext(), classic ? R.color.selector_live_text_classic : R.color.selector_live_text));
+        } catch (Exception ignored) {}
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {

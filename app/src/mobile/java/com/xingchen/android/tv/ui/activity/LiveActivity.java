@@ -1226,45 +1226,96 @@ public class LiveActivity extends PlaybackActivity implements CustomKeyDown.List
             mBinding.recycler.setBackgroundResource(classic ? R.color.transparent : R.drawable.shape_live_embedded_list);
         }
         if (mBinding.liveCurrent != null) {
-            mBinding.liveCurrent.setBackgroundResource(classic ? R.drawable.shape_live : R.drawable.shape_live_current);
+            mBinding.liveCurrent.setBackgroundResource(classic ? R.drawable.shape_live_classic : R.drawable.shape_live_current);
         }
-        // 刷新列表项样式
         if (mGroupAdapter != null) mGroupAdapter.notifyDataSetChanged();
         if (mChannelAdapter != null) mChannelAdapter.notifyDataSetChanged();
+        if (mEpgDataAdapter != null) mEpgDataAdapter.notifyDataSetChanged();
     }
 
-    @Override
-    public void onLiveConfigPanel() {
-        try { if (mBinding.control != null) mBinding.control.action.config.performClick(); } catch (Exception ignored) {}
-    }
-
-    @Override
-    public void onLiveSourcePanel() {
-        LiveDialog.show(this);
-    }
-
-    @Override
-    public void onLiveEpgPanel() {
-        // 预留：EPG 源配置
-    }
-
-    @Override
-    public void onLiveCastPanel() {
-        try { onCast(); } catch (Exception ignored) {}
-    }
-
-    @Override
-    public void onLivePiPPanel() {
+    /** 屏显：时间/网速/分辨率/标题/参数 → widget 控件显隐 */
+    private void applyLiveDisplay() {
+        boolean[] d = LiveSetting.getLiveDisplayChecked();
+        // 0 时间 1 网速 2 分辨率 3 标题 4 参数
         try {
-            if (service() != null && player().haveTrack(C.TRACK_TYPE_VIDEO)) {
-                mPiP.enter(this, player().getVideoWidth(), player().getVideoHeight(), LiveSetting.getScale());
+            if (mBinding.widget.time != null) {
+                mBinding.widget.time.setVisibility(d[0] ? View.VISIBLE : View.GONE);
+            }
+            if (mBinding.progress != null && mBinding.progress.traffic != null) {
+                mBinding.progress.traffic.setVisibility(d[1] ? View.VISIBLE : View.INVISIBLE);
+            }
+            if (mBinding.control != null && mBinding.control.size != null) {
+                mBinding.control.size.setVisibility(d[2] ? View.VISIBLE : View.GONE);
+            }
+            if (mBinding.widget.name != null) {
+                mBinding.widget.name.setVisibility(d[3] ? View.VISIBLE : View.GONE);
+            }
+            if (mBinding.liveTitle != null) {
+                mBinding.liveTitle.setVisibility(d[3] ? View.VISIBLE : View.GONE);
+            }
+            // 参数：无独立 OSD 时用 info 行近似
+            if (mBinding.widget.play != null) {
+                // 保留 EPG 文本，不因参数开关隐藏
             }
         } catch (Exception ignored) {}
     }
 
+    private void dismissLiveControlDialog() {
+        for (androidx.fragment.app.Fragment fragment : getSupportFragmentManager().getFragments()) {
+            if (fragment instanceof LiveControlDialog) {
+                ((LiveControlDialog) fragment).dismissAllowingStateLoss();
+            }
+        }
+    }
+
+    @Override
+    public void onLiveConfigPanel() {
+        dismissLiveControlDialog();
+        onConfig();
+    }
+
+    @Override
+    public void onLiveSourcePanel() {
+        onHome();
+    }
+
+    @Override
+    public void onLiveEpgPanel() {
+        dismissLiveControlDialog();
+        // 无独立 EPG 源对话框时：刷新当前频道 EPG
+        if (mChannel != null) {
+            mViewModel.getEpg(mChannel);
+        }
+        hideControl();
+        hideInfo();
+    }
+
+    @Override
+    public void onLiveCastPanel() {
+        dismissLiveControlDialog();
+        onCast();
+        hideControl();
+    }
+
+    @Override
+    public void onLivePiPPanel() {
+        dismissLiveControlDialog();
+        App.post(() -> {
+            try {
+                if (service() != null && player().haveTrack(C.TRACK_TYPE_VIDEO)) {
+                    mPiP.enter(this, player().getVideoWidth(), player().getVideoHeight(), LiveSetting.getScale());
+                }
+            } catch (Exception ignored) {}
+        }, 100);
+    }
+
     @Override
     public void onLiveBackgroundPanel() {
-        // 后台播放：交由播放服务现有逻辑
+        dismissLiveControlDialog();
+        // 后台播放：退到后台，由 PlaybackService 继续播
+        try {
+            moveTaskToBack(true);
+        } catch (Exception ignored) {}
     }
 
     @Override
@@ -1275,23 +1326,26 @@ public class LiveActivity extends PlaybackActivity implements CustomKeyDown.List
 
     @Override
     public void onLiveDisplayChanged() {
-        // 屏显开关已写入 LiveSetting，widget 侧可按需读取
+        applyLiveDisplay();
     }
 
     @Override
     public void onLiveScalePanel(int scale) {
-        LiveSetting.putScale(scale);
-        try {
-            if (mBinding.control != null) {
-                // 触发已有 scale 点击循环对齐
-                mBinding.control.action.scale.performClick();
-            }
-        } catch (Exception ignored) {}
+        setScale(scale);
+        String[] array = ResUtil.getStringArray(R.array.select_scale);
+        if (scale >= 0 && scale < array.length) {
+            mBinding.control.action.scale.setText(array[scale]);
+        }
     }
 
     @Override
     public void onLiveTrackPanel(int type) {
-        // 轨道由 action text/audio/video 处理
+        dismissLiveControlDialog();
+        try {
+            if (type == 1) mBinding.control.action.audio.performClick();
+            else if (type == 2) mBinding.control.action.video.performClick();
+            else if (type == 3) mBinding.control.action.text.performClick();
+        } catch (Exception ignored) {}
     }
 
 }

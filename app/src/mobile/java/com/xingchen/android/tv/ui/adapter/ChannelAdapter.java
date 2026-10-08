@@ -1,5 +1,9 @@
 package com.xingchen.android.tv.ui.adapter;
 
+import androidx.core.content.ContextCompat;
+import com.xingchen.android.tv.R;
+import com.xingchen.android.tv.setting.LiveSetting;
+
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
@@ -80,6 +84,7 @@ public class ChannelAdapter extends RecyclerView.Adapter<ChannelAdapter.ViewHold
         holder.binding.name.setSelected(item.isSelected());
         holder.binding.number.setSelected(item.isSelected());
         holder.binding.getRoot().setSelected(item.isSelected());
+        setListStyle(holder);
         holder.binding.getRoot().setOnClickListener(view -> listener.onItemClick(item));
         holder.binding.getRoot().setOnLongClickListener(view -> listener.onLongClick(item));
     }
@@ -87,6 +92,14 @@ public class ChannelAdapter extends RecyclerView.Adapter<ChannelAdapter.ViewHold
     @Override
     public void onViewRecycled(@NonNull ViewHolder holder) {
         Glide.with(holder.binding.logo).clear(holder.binding.logo);
+    }
+
+
+    private void setListStyle(ViewHolder holder) {
+        boolean classic = LiveSetting.isListStyleClassic();
+        holder.binding.getRoot().setBackgroundResource(classic ? R.drawable.shape_live_classic : R.drawable.shape_live);
+        holder.binding.name.setTextColor(ContextCompat.getColorStateList(holder.binding.name.getContext(), classic ? R.color.selector_live_text_classic : R.color.selector_live_text));
+        holder.binding.number.setTextColor(ContextCompat.getColorStateList(holder.binding.number.getContext(), classic ? R.color.selector_live_text_classic : R.color.selector_live_text));
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
