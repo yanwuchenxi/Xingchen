@@ -62,6 +62,8 @@ import com.xingchen.android.tv.ui.dialog.HistoryDialog;
 import com.xingchen.android.tv.ui.dialog.InfoDialog;
 import com.xingchen.android.tv.ui.dialog.LiveDialog;
 import com.xingchen.android.tv.ui.dialog.LiveControlDialog;
+import com.xingchen.android.tv.ui.dialog.LiveEpgDialog;
+import com.xingchen.android.tv.setting.LiveEpgSetting;
 import com.xingchen.android.tv.ui.dialog.PassDialog;
 import com.xingchen.android.tv.ui.dialog.SubtitleDialog;
 import com.xingchen.android.tv.ui.dialog.TrackDialog;
@@ -80,7 +82,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-public class LiveActivity extends PlaybackActivity implements CustomKeyDown.Listener, TrackDialog.Listener, Biometric.Callback, PassListener, ConfigListener, LiveListener, GroupAdapter.OnClickListener, ChannelAdapter.OnClickListener, EpgDataAdapter.OnClickListener, CastDialog.Listener, InfoDialog.Listener, LiveControlDialog.Listener {
+public class LiveActivity extends PlaybackActivity implements CustomKeyDown.Listener, TrackDialog.Listener, Biometric.Callback, PassListener, ConfigListener, LiveListener, GroupAdapter.OnClickListener, ChannelAdapter.OnClickListener, EpgDataAdapter.OnClickListener, CastDialog.Listener, InfoDialog.Listener, LiveControlDialog.Listener, LiveEpgDialog.Listener {
 
     private ActivityLiveBinding mBinding;
     private ChannelAdapter mChannelAdapter;
@@ -1282,9 +1284,25 @@ public class LiveActivity extends PlaybackActivity implements CustomKeyDown.List
     @Override
     public void onLiveEpgPanel() {
         dismissLiveControlDialog();
-        // 无独立 EPG 源对话框时：刷新当前频道 EPG
+        LiveEpgDialog.create().show(this);
+        hideControl();
+        hideInfo();
+    }
+
+    @Override
+    public void onLiveEpgSelected(String url) {
+        LiveEpgSetting.putUrl(url == null ? "" : url);
+        Live home = getHome();
+        if (home != null) LiveEpgSetting.apply(home);
         if (mChannel != null) {
-            mViewModel.getEpg(mChannel);
+            LiveEpgSetting.apply(home, mChannel);
+            if (LiveEpgSetting.isGlobalXmlUrl(LiveEpgSetting.getUrl()) || (LiveEpgSetting.getUrl().isEmpty() && home != null && !home.getEpgXml().isEmpty())) {
+                try { mViewModel.parseXml(home); } catch (Exception e) {
+                    mViewModel.getEpg(mChannel);
+                }
+            } else {
+                mViewModel.getEpg(mChannel);
+            }
         }
         hideControl();
         hideInfo();
