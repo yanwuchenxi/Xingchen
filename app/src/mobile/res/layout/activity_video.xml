@@ -93,7 +93,6 @@
                         android:textColor="@color/white"
                         android:textSize="20sp"
                         android:textStyle="bold"
-                        android:textStyle="bold"
                         tools:text="慶餘年第二季" />
 
                     <com.google.android.material.textview.MaterialTextView
