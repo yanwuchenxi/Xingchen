@@ -59,4 +59,6 @@
         <item>PiP</item>
     </string-array>
 
+    <string name="live_no_epg">暂无节目信息</string>
+    <string name="live_control_source">直播源</string>
 </resources>

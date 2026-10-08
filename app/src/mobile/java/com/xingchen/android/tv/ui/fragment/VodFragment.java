@@ -420,12 +420,7 @@ public class VodFragment extends BaseFragment implements ConfigListener, SiteLis
 
 
     private void applyStatusBarInset() {
-        ViewCompat.setOnApplyWindowInsetsListener(mBinding.appBar, (v, insets) -> {
-            Insets bars = insets.getInsets(WindowInsetsCompat.Type.statusBars());
-            v.setPadding(v.getPaddingLeft(), bars.top, v.getPaddingRight(), v.getPaddingBottom());
-            return insets;
-        });
-        ViewCompat.requestApplyInsets(mBinding.appBar);
+        // 状态栏由 HomeActivity 统一给 container 加 top padding，避免与顶栏叠加
     }
 
     private void updateTypeMoreVisible() {

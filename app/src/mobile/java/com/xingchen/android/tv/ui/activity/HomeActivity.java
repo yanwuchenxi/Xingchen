@@ -11,6 +11,9 @@ import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.core.content.pm.ShortcutInfoCompat;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 import androidx.core.content.pm.ShortcutManagerCompat;
 import androidx.core.graphics.drawable.IconCompat;
 import androidx.core.splashscreen.SplashScreen;
@@ -77,6 +80,8 @@ public class HomeActivity extends BaseActivity implements NavigationBarView.OnIt
 
     @Override
     protected void initView(Bundle savedInstanceState) {
+        applyHomeInsets();
+
         orientation = getResources().getConfiguration().orientation;
         mBinding.navigation.setOnItemSelectedListener(this);
         PermissionUtil.requestFile(this, allGranted -> PermissionUtil.requestNotify(this));
@@ -245,4 +250,14 @@ public class HomeActivity extends BaseActivity implements NavigationBarView.OnIt
         Server.get().stop();
         super.onDestroy();
     }
+    private void applyHomeInsets() {
+        ViewCompat.setOnApplyWindowInsetsListener(mBinding.getRoot(), (v, insets) -> {
+            Insets bars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+            mBinding.container.setPadding(0, bars.top, 0, 0);
+            mBinding.navigation.setPadding(0, 0, 0, bars.bottom);
+            return insets;
+        });
+        ViewCompat.requestApplyInsets(mBinding.getRoot());
+    }
+
 }
