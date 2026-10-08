@@ -31,8 +31,9 @@ public class Product {
 
     public static int[] getSpec(Context context, Style style) {
         int column = getColumn(context, style);
-        int space = ResUtil.dp2px(32) + ResUtil.dp2px(16 * (column - 1)) + getCutout(context);
-        if (style.isOval()) space += ResUtil.dp2px(column * 16);
+        // 左右留白与 item 间距贴近影视仓（更满、海报更大）
+        int space = ResUtil.dp2px(20) + ResUtil.dp2px(8 * (column - 1)) + getCutout(context);
+        if (style.isOval()) space += ResUtil.dp2px(column * 12);
         return getSpec(context, space, column, style);
     }
 
