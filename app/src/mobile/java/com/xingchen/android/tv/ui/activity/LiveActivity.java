@@ -153,9 +153,13 @@ public class LiveActivity extends PlaybackActivity implements CustomKeyDown.List
 
     @Override
     protected void onServiceConnected() {
-        player().setDanmakuController(mBinding.exo.getDanmakuController());
-        mBinding.control.action.decode.setText(player().getDecodeText());
-        mBinding.control.action.speed.setText(player().getSpeedText());
+        try {
+            if (mBinding.exo != null) player().setDanmakuController(mBinding.exo.getDanmakuController());
+        } catch (Throwable ignored) {}
+        if (mBinding.control != null && mBinding.control.action != null) {
+            mBinding.control.action.decode.setText(player().getDecodeText());
+            mBinding.control.action.speed.setText(player().getSpeedText());
+        }
         checkLive();
     }
 
@@ -178,12 +182,18 @@ public class LiveActivity extends PlaybackActivity implements CustomKeyDown.List
         mR2 = this::setTraffic;
         mR3 = this::hideInfo;
         mPiP = new PiP();
-        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-        applyOrientationLayout();
-        applyLiveListStyle();
         setRecyclerView();
         setVideoView();
         setViewModel();
+        applyLiveListStyle();
+        // 避免在 init 同步改方向/改父布局触发崩溃，等布局完成后再应用
+        mBinding.getRoot().post(() -> {
+            try {
+                if (!isFinishing() && !isDestroyed()) applyOrientationLayout();
+            } catch (Throwable e) {
+                e.printStackTrace();
+            }
+        });
     }
 
     @Override
@@ -284,8 +294,12 @@ public class LiveActivity extends PlaybackActivity implements CustomKeyDown.List
     }
 
     private void getLive() {
-        mBinding.control.action.home.setText(LiveConfig.isOnly() ? getString(R.string.live_refresh) : getHome().getName());
-        mViewModel.parse(getHome());
+        Live home = getHome();
+        if (home == null) home = new Live();
+        String name = home.getName();
+        mBinding.control.action.home.setText(LiveConfig.isOnly() || name == null || name.isEmpty()
+                ? getString(R.string.live_refresh) : name);
+        mViewModel.parse(home);
         showProgress();
     }
 
@@ -507,29 +521,36 @@ public class LiveActivity extends PlaybackActivity implements CustomKeyDown.List
 
     /** 竖屏：上播放器+下列表；横屏：播放器全屏，列表侧栏叠在画面上 */
     private void applyOrientationLayout() {
-        if (mBinding == null) return;
-        boolean embedded = isEmbeddedLiveUi();
-        if (embedded) {
-            ensureRecyclerInRoot();
-            android.widget.LinearLayout.LayoutParams vp = new android.widget.LinearLayout.LayoutParams(
-                    ViewGroup.LayoutParams.MATCH_PARENT, 0, 9f);
-            android.widget.LinearLayout.LayoutParams rp = new android.widget.LinearLayout.LayoutParams(
-                    ViewGroup.LayoutParams.MATCH_PARENT, 0, 14f);
-            mBinding.video.setLayoutParams(vp);
-            mBinding.recycler.setLayoutParams(rp);
-            mBinding.recycler.setVisibility(View.VISIBLE);
-            keepLiveMenuVisible();
-            hideEpg();
-        } else {
-            ensureRecyclerOverlayOnVideo();
-            android.widget.LinearLayout.LayoutParams vp = new android.widget.LinearLayout.LayoutParams(
-                    ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT, 1f);
-            mBinding.video.setLayoutParams(vp);
-            if (!isVisible(mBinding.control.getRoot())) {
-                mBinding.recycler.setVisibility(View.GONE);
+        if (mBinding == null || mBinding.video == null || mBinding.recycler == null) return;
+        try {
+            boolean embedded = isEmbeddedLiveUi();
+            if (embedded) {
+                ensureRecyclerInRoot();
+                androidx.appcompat.widget.LinearLayoutCompat.LayoutParams vp =
+                        new androidx.appcompat.widget.LinearLayoutCompat.LayoutParams(
+                                ViewGroup.LayoutParams.MATCH_PARENT, 0, 9f);
+                androidx.appcompat.widget.LinearLayoutCompat.LayoutParams rp =
+                        new androidx.appcompat.widget.LinearLayoutCompat.LayoutParams(
+                                ViewGroup.LayoutParams.MATCH_PARENT, 0, 14f);
+                mBinding.video.setLayoutParams(vp);
+                mBinding.recycler.setLayoutParams(rp);
+                mBinding.recycler.setVisibility(View.VISIBLE);
+                keepLiveMenuVisible();
+                hideEpg();
+            } else {
+                ensureRecyclerOverlayOnVideo();
+                androidx.appcompat.widget.LinearLayoutCompat.LayoutParams vp =
+                        new androidx.appcompat.widget.LinearLayoutCompat.LayoutParams(
+                                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT, 1f);
+                mBinding.video.setLayoutParams(vp);
+                if (!isVisible(mBinding.control.getRoot())) {
+                    mBinding.recycler.setVisibility(View.GONE);
+                }
             }
+            if (isVisible(mBinding.control.getRoot())) showControl();
+        } catch (Throwable e) {
+            e.printStackTrace();
         }
-        if (isVisible(mBinding.control.getRoot())) showControl();
     }
 
     private void ensureRecyclerInRoot() {
@@ -538,9 +559,10 @@ public class LiveActivity extends PlaybackActivity implements CustomKeyDown.List
         if (recycler.getParent() == root) return;
         ViewGroup parent = (ViewGroup) recycler.getParent();
         if (parent != null) parent.removeView(recycler);
-        // video is index 0; recycler should be after video
         int index = root.indexOfChild(mBinding.video);
-        root.addView(recycler, index < 0 ? -1 : index + 1);
+        root.addView(recycler, index < 0 ? -1 : index + 1,
+                new androidx.appcompat.widget.LinearLayoutCompat.LayoutParams(
+                        ViewGroup.LayoutParams.MATCH_PARENT, 0, 14f));
     }
 
     private void ensureRecyclerOverlayOnVideo() {
@@ -549,7 +571,8 @@ public class LiveActivity extends PlaybackActivity implements CustomKeyDown.List
         if (recycler.getParent() == video) return;
         ViewGroup parent = (ViewGroup) recycler.getParent();
         if (parent != null) parent.removeView(recycler);
-        int w = Math.max(ResUtil.dp2px(280), Math.round(ResUtil.getScreenWidth(this) * 0.42f));
+        int sw = ResUtil.getScreenWidth(this);
+        int w = Math.max(ResUtil.dp2px(280), Math.round(sw * 0.42f));
         FrameLayout.LayoutParams lp = new FrameLayout.LayoutParams(w, ViewGroup.LayoutParams.MATCH_PARENT, Gravity.START);
         video.addView(recycler, lp);
         recycler.setBackgroundResource(R.drawable.shape_live_embedded_list);
@@ -1246,6 +1269,9 @@ public class LiveActivity extends PlaybackActivity implements CustomKeyDown.List
         super.onStart();
         setAudioOnly(false);
         setStop(false);
+        if (!isRotate()) {
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        }
     }
 
     @Override

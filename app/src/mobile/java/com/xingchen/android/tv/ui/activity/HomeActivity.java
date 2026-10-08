@@ -163,8 +163,13 @@ public class HomeActivity extends BaseActivity implements NavigationBarView.OnIt
     }
 
     private boolean openLive() {
-        LiveActivity.start(this);
-        return false;
+        try {
+            LiveActivity.start(this);
+        } catch (Throwable e) {
+            e.printStackTrace();
+            Notify.show(e.getMessage());
+        }
+        return true;
     }
 
     private boolean addShortcut(View view) {
