@@ -543,13 +543,20 @@ public class LiveActivity extends PlaybackActivity implements CustomKeyDown.List
 
     private void showControl() {
         if (service() == null || isInPictureInPictureMode()) return;
+        boolean embedded = isEmbeddedLiveUi();
+        // 竖屏嵌入：不盖住下列表，隐藏底部 action 条；仅在播放器区域显示顶栏/中控
         mBinding.control.info.setVisibility(player().isEmpty() ? View.GONE : View.VISIBLE);
-        mBinding.control.cast.setVisibility(player().isEmpty() ? View.GONE : View.VISIBLE);
+        mBinding.control.cast.setVisibility(player().isEmpty() || embedded ? View.GONE : View.VISIBLE);
         mBinding.control.right.rotate.setVisibility(isLock() ? View.GONE : View.VISIBLE);
         mBinding.control.center.setVisibility(isLock() ? View.GONE : View.VISIBLE);
-        mBinding.control.bottom.setVisibility(isLock() ? View.GONE : View.VISIBLE);
+        mBinding.control.bottom.setVisibility(isLock() || embedded ? View.GONE : View.VISIBLE);
+        if (mBinding.control.action != null) {
+            mBinding.control.action.getRoot().setVisibility(embedded ? View.GONE : View.VISIBLE);
+        }
         mBinding.control.back.setVisibility(isLock() ? View.GONE : View.VISIBLE);
         mBinding.control.top.setVisibility(isLock() ? View.GONE : View.VISIBLE);
+        // 嵌入模式下播控背景更轻，避免整屏压黑
+        mBinding.control.getRoot().setBackgroundResource(embedded ? R.color.transparent : R.color.black_20);
         mBinding.control.getRoot().setVisibility(View.VISIBLE);
         setR1Callback();
         hideInfo();

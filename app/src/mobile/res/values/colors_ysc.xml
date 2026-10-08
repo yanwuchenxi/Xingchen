@@ -3,7 +3,7 @@
     <color name="ysc_bg">#00000000</color>
     <color name="ysc_surface">#00000000</color>
     <color name="ysc_chip">#18FFFFFF</color>
-    <color name="ysc_text_secondary">#FFFFFFFF</color>
+    <color name="ysc_text_secondary">#E6FFFFFF</color>
     <color name="ysc_tab_unselected">#B3FFFFFF</color>
     <color name="ysc_tab_selected">#FFFFFFFF</color>
     <color name="ysc_divider">#22FFFFFF</color>
