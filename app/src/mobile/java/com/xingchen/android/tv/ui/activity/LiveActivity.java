@@ -173,6 +173,7 @@ public class LiveActivity extends PlaybackActivity implements CustomKeyDown.List
         mR2 = this::setTraffic;
         mR3 = this::hideInfo;
         mPiP = new PiP();
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         setRecyclerView();
         setVideoView();
         setViewModel();
@@ -360,7 +361,9 @@ public class LiveActivity extends PlaybackActivity implements CustomKeyDown.List
     private void onRotate() {
         setR1Callback();
         setRotate(!isRotate());
-        setRequestedOrientation(ResUtil.isLand(this) ? ActivityInfo.SCREEN_ORIENTATION_USER_PORTRAIT : ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE);
+        setRequestedOrientation(isRotate()
+            ? ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE
+            : ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
     }
 
     private void checkPlay() {
@@ -451,9 +454,11 @@ public class LiveActivity extends PlaybackActivity implements CustomKeyDown.List
         if (isLock()) {
             return ResUtil.getScreenOrientation(this);
         } else if (isRotate()) {
-            return ActivityInfo.SCREEN_ORIENTATION_USER_PORTRAIT;
+            // 旋转开关：竖屏下进入横屏全屏
+            return ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE;
         } else {
-            return ResUtil.isLand(this) ? ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE : ActivityInfo.SCREEN_ORIENTATION_USER_PORTRAIT;
+            // 默认竖屏（上播放器 + 下频道列表）
+            return ActivityInfo.SCREEN_ORIENTATION_PORTRAIT;
         }
     }
 
