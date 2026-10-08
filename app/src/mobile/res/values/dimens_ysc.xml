@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- 影视仓尺寸：home_tab 25dp、底栏约 55dp、海报圆角 8dp -->
 <resources>
     <dimen name="ysc_home_tab_height">25dp</dimen>
     <dimen name="ysc_bottom_nav_height">55dp</dimen>

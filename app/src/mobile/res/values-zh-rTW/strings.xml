@@ -59,4 +59,5 @@
         <item>子母畫面</item>
     </string-array>
 
+    <string name="ysc_search_hint">搜尋影片名/演員/導演</string>
 </resources>

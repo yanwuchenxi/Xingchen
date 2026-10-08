@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- 影视仓 mobile_home_fragment 结构：顶栏搜索 + 分类 Tab + 内容 -->
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -15,46 +16,52 @@
         app:elevation="0dp"
         app:liftOnScrollColor="@color/transparent">
 
+        <!-- 对应 mobile_title_search_bg：站点图标 + 搜索框 -->
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
+            android:layout_height="48dp"
+            android:paddingStart="10dp"
+            android:paddingEnd="6dp"
+            app:contentInsetStart="0dp"
+            app:contentInsetStartWithNavigation="0dp"
             app:menu="@menu/menu_vod"
             app:popupTheme="@style/ToolbarPopupTheme">
 
             <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/logo"
-                android:layout_width="36dp"
-                android:layout_height="36dp"
-                android:layout_marginEnd="12dp"
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                android:layout_marginEnd="8dp"
                 android:background="?attr/selectableItemBackgroundBorderless"
+                android:scaleType="centerCrop"
                 android:src="@drawable/ic_logo" />
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/title"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/ysc_search_height"
-                android:layout_marginEnd="4dp"
+                android:layout_height="36dp"
+                android:layout_marginEnd="2dp"
                 android:background="@drawable/shape_ysc_search"
                 android:drawableStart="@drawable/ic_action_search"
-                android:drawablePadding="8dp"
+                android:drawablePadding="10dp"
                 android:ellipsize="end"
                 android:gravity="center_vertical"
                 android:paddingStart="12dp"
                 android:paddingEnd="12dp"
                 android:singleLine="true"
-                android:text="@string/menu_search"
-                android:textAppearance="@style/ToolbarTextAppearance"
+                android:text="@string/ysc_search_hint"
                 android:textColor="@color/ysc_white_44"
-                android:textSize="14sp" />
+                android:textSize="13sp" />
 
         </com.google.android.material.appbar.MaterialToolbar>
 
+        <!-- 对应 magic_indicator：分类横滑 Tab -->
         <androidx.appcompat.widget.LinearLayoutCompat
             android:id="@+id/typeBar"
             android:layout_width="match_parent"
             android:layout_height="@dimen/ysc_home_tab_height"
-            android:layout_marginBottom="4dp"
+            android:layout_marginBottom="2dp"
             android:clipChildren="false"
             android:clipToPadding="false"
             android:gravity="center_vertical"
@@ -65,33 +72,27 @@
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/type"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:clipChildren="true"
                 android:clipToPadding="true"
                 android:orientation="horizontal"
                 android:paddingStart="4dp"
-                android:paddingTop="0dp"
                 android:paddingEnd="0dp"
-                android:paddingBottom="6dp"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 tools:listitem="@layout/adapter_type" />
 
             <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/typeMore"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
+                android:layout_width="28dp"
+                android:layout_height="28dp"
                 android:layout_gravity="center_vertical"
-                android:layout_marginStart="2dp"
-                android:background="@android:color/transparent"
-                android:minWidth="0dp"
-                android:minHeight="0dp"
-                android:padding="8dp"
+                android:alpha="0.45"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:padding="4dp"
                 android:scaleType="center"
-                android:translationY="-4dp"
                 android:visibility="gone"
                 app:srcCompat="@drawable/ic_action_menu"
-                app:tint="@color/white"
                 tools:visibility="visible" />
 
         </androidx.appcompat.widget.LinearLayoutCompat>
@@ -104,14 +105,12 @@
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
-    <WebView
+    <FrameLayout
         android:id="@+id/homeWeb"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="?attr/actionBarSize"
-        android:focusable="true"
-        android:focusableInTouchMode="true"
-        android:visibility="gone" />
+        android:visibility="gone"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
     <include
         android:id="@+id/progress"
@@ -119,17 +118,29 @@
         android:visibility="gone" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/top"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:contentDescription="@null"
+        android:visibility="invisible"
+        app:backgroundTint="?attr/colorSecondaryContainer"
+        app:layout_anchor="@id/pager"
+        app:layout_anchorGravity="end|bottom"
+        app:srcCompat="@drawable/ic_action_up"
+        tools:visibility="visible" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/filter"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
+        android:contentDescription="@null"
         android:visibility="gone"
         app:backgroundTint="?attr/colorSecondaryContainer"
         app:layout_anchor="@id/pager"
         app:layout_anchorGravity="end|bottom"
-        app:layout_behavior="com.xingchen.android.tv.ui.custom.CustomFabBehavior"
-        app:srcCompat="@drawable/ic_fab_filter"
-        app:tint="?attr/colorOnSecondaryContainer"
+        app:srcCompat="@drawable/ic_action_filter"
         tools:visibility="visible" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -137,27 +148,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
+        android:contentDescription="@null"
+        android:visibility="gone"
         app:backgroundTint="?attr/colorSecondaryContainer"
         app:layout_anchor="@id/pager"
         app:layout_anchorGravity="end|bottom"
-        app:layout_behavior="com.xingchen.android.tv.ui.custom.CustomFabBehavior"
-        app:srcCompat="@drawable/ic_fab_link"
-        app:tint="?attr/colorOnSecondaryContainer"
-        tools:visibility="visible" />
-
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/top"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="16dp"
-        android:tag="top"
-        android:visibility="invisible"
-        app:backgroundTint="?attr/colorSecondaryContainer"
-        app:layout_anchor="@id/pager"
-        app:layout_anchorGravity="end|bottom"
-        app:layout_behavior="com.xingchen.android.tv.ui.custom.CustomFabBehavior"
-        app:srcCompat="@drawable/ic_fab_top"
-        app:tint="?attr/colorOnSecondaryContainer"
+        app:srcCompat="@drawable/ic_action_link"
         tools:visibility="visible" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

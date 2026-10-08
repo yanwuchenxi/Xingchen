@@ -172,9 +172,10 @@ public class VodFragment extends BaseFragment implements ConfigListener, SiteLis
     }
 
     private void setTitle() {
-        List<String> items = Arrays.asList(getHome().getName(), getConfig().getName(), getString(R.string.app_name));
-        Optional<String> optional = items.stream().filter(s -> !TextUtils.isEmpty(s)).findFirst();
-        optional.ifPresent(s -> mBinding.title.setText(s));
+        // 影视仓：搜索框固定提示；站点名/图标走 logo
+        if (mBinding != null && mBinding.title != null) {
+            mBinding.title.setText(R.string.ysc_search_hint);
+        }
     }
 
     private void onTop(View view) {

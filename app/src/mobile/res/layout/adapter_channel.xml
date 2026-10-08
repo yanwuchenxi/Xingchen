@@ -4,29 +4,34 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginStart="4dp"
-    android:layout_marginTop="5dp"
+    android:layout_marginTop="6dp"
     android:layout_marginEnd="4dp"
-    android:layout_marginBottom="5dp"
+    android:layout_marginBottom="6dp"
     android:background="@drawable/shape_live"
     android:gravity="center_vertical"
-    android:orientation="horizontal">
+    android:orientation="horizontal"
+    android:paddingStart="10dp"
+    android:paddingTop="8dp"
+    android:paddingEnd="10dp"
+    android:paddingBottom="8dp">
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/number"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="12dp"
+        android:layout_marginEnd="10dp"
         android:duplicateParentState="true"
         android:fontFeatureSettings="tnum"
         android:textColor="@color/selector_live_text"
-        android:textSize="14sp"
+        android:textSize="12sp"
+        android:textStyle="bold"
         tools:text="01" />
 
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/logo"
-        android:layout_width="44dp"
-        android:layout_height="33dp"
-        android:layout_marginEnd="12dp"
+        android:layout_width="36dp"
+        android:layout_height="28dp"
+        android:layout_marginEnd="10dp"
         android:visibility="gone" />
 
     <com.google.android.material.textview.MaterialTextView
@@ -35,10 +40,12 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:duplicateParentState="true"
-        android:ellipsize="marquee"
-        android:singleLine="true"
+        android:ellipsize="middle"
+        android:gravity="center_vertical"
+        android:maxLines="2"
         android:textColor="@color/selector_live_text"
-        android:textSize="14sp"
-        tools:text="CNN" />
+        android:textSize="13sp"
+        android:textStyle="bold"
+        tools:text="CCTV-1 综合" />
 
 </androidx.appcompat.widget.LinearLayoutCompat>

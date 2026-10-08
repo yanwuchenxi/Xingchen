@@ -91,4 +91,5 @@
     <string name="live_epg_default">默认（订阅内）</string>
     <string name="live_epg_edit">编辑</string>
     <string name="live_epg_delete">删除</string>
+    <string name="ysc_search_hint">Search title / actor / director</string>
 </resources>

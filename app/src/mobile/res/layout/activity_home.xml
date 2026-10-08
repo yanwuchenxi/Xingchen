@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- 影视仓 mobile_home_activity：内容 + 底栏 -->
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
@@ -9,13 +10,14 @@
         android:id="@+id/container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@+id/navigation" />
+        android:layout_above="@+id/navigation"
+        android:layout_marginBottom="0dp" />
 
     <View
         android:layout_width="match_parent"
-        android:layout_height="1dp"
+        android:layout_height="0.5dp"
         android:layout_above="@id/navigation"
-        android:background="@color/ysc_divider" />
+        android:background="#22FFFFFF" />
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/navigation"
@@ -24,6 +26,7 @@
         android:layout_alignParentBottom="true"
         android:background="@drawable/shape_ysc_bottom_nav"
         app:elevation="0dp"
+        app:itemIconSize="24dp"
         app:itemIconTint="@color/selector_ysc_nav"
         app:itemTextColor="@color/selector_ysc_nav"
         app:labelVisibilityMode="unlabeled"

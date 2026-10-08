@@ -59,4 +59,5 @@
         <item>画中画</item>
     </string-array>
 
+    <string name="ysc_search_hint">搜索影片名/演员/导演</string>
 </resources>
