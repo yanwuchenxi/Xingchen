@@ -130,7 +130,6 @@ public class VodFragment extends BaseFragment implements ConfigListener, SiteLis
         mBinding.type.setHasFixedSize(true);
         mBinding.type.setItemAnimator(null);
         mBinding.type.setAdapter(mAdapter = new TypeAdapter(this));
-        mBinding.type.setItemAnimator(null);
         applyStatusBarInset();
         mBinding.typeMore.setOnClickListener(this::onTypeMore);
         mBinding.type.post(this::updateTypeMoreVisible);
@@ -418,6 +417,33 @@ public class VodFragment extends BaseFragment implements ConfigListener, SiteLis
         mBinding.homeWeb.setVisibility(View.GONE);
     }
 
+
+
+    private void applyStatusBarInset() {
+        ViewCompat.setOnApplyWindowInsetsListener(mBinding.appBar, (v, insets) -> {
+            Insets bars = insets.getInsets(WindowInsetsCompat.Type.statusBars());
+            v.setPadding(v.getPaddingLeft(), bars.top, v.getPaddingRight(), v.getPaddingBottom());
+            return insets;
+        });
+        ViewCompat.requestApplyInsets(mBinding.appBar);
+    }
+
+    private void updateTypeMoreVisible() {
+        if (mBinding.typeBar == null || mBinding.typeMore == null) return;
+        if (mBinding.type.getWidth() == 0 || mBinding.typeBar.getWidth() == 0) {
+            mBinding.type.post(this::updateTypeMoreVisible);
+            return;
+        }
+        int available = mBinding.typeBar.getWidth() - mBinding.typeBar.getPaddingStart() - mBinding.typeBar.getPaddingEnd() - mBinding.typeMore.getWidth();
+        boolean overflow = mAdapter != null && mAdapter.getItemCount() > 0 && mBinding.type.computeHorizontalScrollRange() > Math.max(available, 0);
+        mBinding.typeMore.setVisibility(overflow ? View.VISIBLE : View.GONE);
+    }
+
+    private void onTypeMore(View view) {
+        if (mAdapter != null && mAdapter.getItemCount() > 0) {
+            mBinding.type.smoothScrollToPosition(mAdapter.getItemCount() - 1);
+        }
+    }
 
     class PageAdapter extends FragmentStatePagerAdapter {
 
