@@ -31,7 +31,7 @@ public class Style implements Parcelable {
     }
 
     public static Style rect() {
-        return new Style("rect", 0.75f);
+        return new Style("rect", 0.785f); // 影视仓 220:280
     }
 
     public static Style list() {
@@ -49,7 +49,7 @@ public class Style implements Parcelable {
     }
 
     public float getRatio() {
-        return ratio <= 0 ? (isOval() ? 1.0f : 0.75f) : Math.min(4, ratio);
+        return ratio <= 0 ? (isOval() ? 1.0f : 0.785f) : Math.min(4, ratio);
     }
 
     public boolean isRect() {

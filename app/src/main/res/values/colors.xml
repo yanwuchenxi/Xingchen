@@ -44,4 +44,5 @@
     <color name="xingchen_badge_start">#FFEDC75F</color>
     <color name="xingchen_badge_end">#FFFEE5A2</color>
     <color name="xingchen_chip_bg">#0FFFFFFF</color>
+    <color name="ysc_accent">#FFFFB40A</color>
 </resources>

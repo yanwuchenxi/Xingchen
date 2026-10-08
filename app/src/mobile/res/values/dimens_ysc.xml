@@ -1,11 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- 影视仓尺寸：home_tab 25dp、底栏约 55dp、海报圆角 8dp -->
 <resources>
-    <dimen name="ysc_home_tab_height">28dp</dimen>
-    <dimen name="ysc_bottom_nav_height">56dp</dimen>
-    <dimen name="ysc_chip_height">34dp</dimen>
-    <dimen name="ysc_chip_radius">6dp</dimen>
-    <dimen name="ysc_poster_radius">10dp</dimen>
+    <dimen name="ysc_home_tab_height">25dp</dimen>
+    <dimen name="ysc_bottom_nav_height">55dp</dimen>
+    <dimen name="ysc_chip_height">35dp</dimen>
+    <dimen name="ysc_chip_radius">4dp</dimen>
+    <dimen name="ysc_poster_radius">8dp</dimen>
     <dimen name="ysc_search_height">36dp</dimen>
     <dimen name="ysc_grid_h_padding">10dp</dimen>
     <dimen name="ysc_grid_item_gap">4dp</dimen>
+    <dimen name="ysc_home_tab_padding_start">8dp</dimen>
+    <dimen name="ysc_home_tab_padding_end">12dp</dimen>
 </resources>

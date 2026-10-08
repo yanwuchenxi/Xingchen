@@ -1,36 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- 影视仓分类 Tab：选中底部橙色短下划线 -->
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:state_selected="true">
         <layer-list>
             <item>
                 <shape android:shape="rectangle">
-                    <solid android:color="@color/transparent" />
+                    <solid android:color="@android:color/transparent" />
                     <padding
-                        android:bottom="6dp"
-                        android:left="4dp"
-                        android:right="4dp"
+                        android:bottom="5dp"
+                        android:left="2dp"
+                        android:right="2dp"
                         android:top="2dp" />
                 </shape>
             </item>
             <item
-                android:width="22dp"
-                android:height="3dp"
-                android:gravity="bottom|center_horizontal"
-                android:bottom="1dp">
+                android:width="16dp"
+                android:height="2.5dp"
+                android:bottom="0dp"
+                android:gravity="bottom|center_horizontal">
                 <shape android:shape="rectangle">
-                    <solid android:color="@color/xingchen_accent" />
-                    <corners android:radius="2dp" />
+                    <solid android:color="#FFFFB40A" />
+                    <corners android:radius="1.5dp" />
                 </shape>
             </item>
         </layer-list>
     </item>
     <item>
         <shape android:shape="rectangle">
-            <solid android:color="@color/transparent" />
+            <solid android:color="@android:color/transparent" />
             <padding
-                android:bottom="6dp"
-                android:left="4dp"
-                android:right="4dp"
+                android:bottom="5dp"
+                android:left="2dp"
+                android:right="2dp"
                 android:top="2dp" />
         </shape>
     </item>

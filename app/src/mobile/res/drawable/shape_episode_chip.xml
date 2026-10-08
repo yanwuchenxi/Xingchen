@@ -4,17 +4,17 @@
         <selector>
             <item android:state_selected="true">
                 <shape android:shape="rectangle">
-                    <solid android:color="#33FFB40A" />
-                    <corners android:radius="16dp" />
+                    <solid android:color="#0FFFFFFF" />
+                    <corners android:radius="4dp" />
                     <stroke android:width="1dp" android:color="#FFFFB40A" />
-                    <padding android:left="12dp" android:top="6dp" android:right="12dp" android:bottom="6dp" />
+                    <padding android:left="10dp" android:top="6dp" android:right="10dp" android:bottom="6dp" />
                 </shape>
             </item>
             <item>
                 <shape android:shape="rectangle">
-                    <solid android:color="#18FFFFFF" />
-                    <corners android:radius="16dp" />
-                    <padding android:left="12dp" android:top="6dp" android:right="12dp" android:bottom="6dp" />
+                    <solid android:color="#0FFFFFFF" />
+                    <corners android:radius="4dp" />
+                    <padding android:left="10dp" android:top="6dp" android:right="10dp" android:bottom="6dp" />
                 </shape>
             </item>
         </selector>
