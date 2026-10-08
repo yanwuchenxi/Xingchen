@@ -190,6 +190,18 @@ public class LiveActivity extends PlaybackActivity implements CustomKeyDown.List
         mBinding.control.prev.setOnClickListener(view -> prevChannel());
         mBinding.control.right.lock.setOnClickListener(view -> onLock());
         mBinding.control.right.rotate.setOnClickListener(view -> onRotate());
+        if (mBinding.liveSource != null) mBinding.liveSource.setOnClickListener(v -> {
+            if (mBinding.control != null && mBinding.control.action != null) {
+                try { mBinding.control.action.home.performClick(); } catch (Exception ignored) {}
+            }
+        });
+        if (mBinding.liveSetting != null) mBinding.liveSetting.setOnClickListener(v -> {
+            try {
+                if (mBinding.control != null) {
+                    showControl();
+                }
+            } catch (Exception ignored) {}
+        });
         mBinding.control.action.text.setOnClickListener(this::onTrack);
         mBinding.control.action.audio.setOnClickListener(this::onTrack);
         mBinding.control.action.video.setOnClickListener(this::onTrack);
@@ -463,17 +475,39 @@ public class LiveActivity extends PlaybackActivity implements CustomKeyDown.List
     }
 
     private void hideUI() {
+        // 竖屏嵌入模式（上播放器+下列表）时不隐藏频道列表
+        if (isEmbeddedLiveUi()) {
+            keepLiveMenuVisible();
+            setPosition();
+            return;
+        }
         if (isGone(mBinding.recycler)) return;
         mBinding.recycler.setVisibility(View.GONE);
         setPosition();
     }
 
     private void showUI() {
+        if (isEmbeddedLiveUi()) {
+            keepLiveMenuVisible();
+            setPosition();
+            return;
+        }
         if (isVisible(mBinding.recycler) || mGroupAdapter.getItemCount() == 0) return;
         mBinding.recycler.setVisibility(View.VISIBLE);
         mBinding.channel.requestFocus();
         setPosition();
         hideEpg();
+    }
+
+    /** YingKe：竖屏且非旋转全屏、非 PiP 时为嵌入式列表 UI */
+    private boolean isEmbeddedLiveUi() {
+        return !ResUtil.isLand(this) && !isRotate() && !isInPictureInPictureMode();
+    }
+
+    private void keepLiveMenuVisible() {
+        mBinding.recycler.setVisibility(View.VISIBLE);
+        mBinding.group.setVisibility(View.VISIBLE);
+        mBinding.channel.setVisibility(View.VISIBLE);
     }
 
     private void showEpg(Channel item) {

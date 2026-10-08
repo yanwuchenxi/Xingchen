@@ -5,7 +5,9 @@
     <color name="ysc_chip">#18FFFFFF</color>
     <color name="ysc_text_secondary">#FFFFFFFF</color>
     <color name="ysc_tab_unselected">#B3FFFFFF</color>
+    <color name="ysc_tab_selected">#FFFFFFFF</color>
     <color name="ysc_divider">#22FFFFFF</color>
     <color name="ysc_search_bg">#33FFFFFF</color>
     <color name="ysc_poster_placeholder">#22FFFFFF</color>
+    <color name="ysc_accent">#FFFFB40A</color>
 </resources>
