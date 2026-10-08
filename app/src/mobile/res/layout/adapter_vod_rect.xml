@@ -89,7 +89,7 @@
         android:ellipsize="middle"
         android:gravity="center"
         android:includeFontPadding="false"
-        android:maxLines="2"
+        android:maxLines="4"
         android:paddingTop="2dp"
         android:textColor="@android:color/white"
         android:textSize="13sp"

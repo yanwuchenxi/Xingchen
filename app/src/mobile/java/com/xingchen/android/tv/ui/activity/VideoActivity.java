@@ -501,6 +501,21 @@ public class VideoActivity extends PlaybackActivity implements Clock.Callback, C
         checkKeepImg();
         setText(item);
         updateKeep();
+        setContextWall(item.getPic());
+    }
+
+
+    /** YingKe 风格：详情下方内容区用视频海报做背景 */
+    private void setContextWall(String url) {
+        if (mBinding.contextWall == null) return;
+        if (url == null || url.isEmpty()) {
+            mBinding.contextWall.setVisibility(View.GONE);
+            if (mBinding.videoContextScrim != null) mBinding.videoContextScrim.setVisibility(View.GONE);
+            return;
+        }
+        mBinding.contextWall.setVisibility(View.VISIBLE);
+        if (mBinding.videoContextScrim != null) mBinding.videoContextScrim.setVisibility(View.VISIBLE);
+        ImgUtil.load("", url, mBinding.contextWall);
     }
 
     private void setText(Vod item) {

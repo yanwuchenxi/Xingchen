@@ -104,7 +104,10 @@ public class VodFragment extends BaseFragment implements ConfigListener, SiteLis
     @Override
     protected void initEvent() {
         mBinding.top.setOnClickListener(this::onTop);
-        mBinding.logo.setOnClickListener(this::onSite);
+        // logo：订阅源切换；站点名：切站 / 长按刷新；title：搜索
+        mBinding.logo.setOnClickListener(this::onConfigSource);
+        mBinding.siteName.setOnClickListener(this::onSite);
+        mBinding.siteName.setOnLongClickListener(this::onSiteRefresh);
         mBinding.link.setOnClickListener(this::onLink);
         mBinding.title.setOnClickListener(this::onSearchBar);
         mBinding.filter.setOnClickListener(this::onFilter);
@@ -172,9 +175,16 @@ public class VodFragment extends BaseFragment implements ConfigListener, SiteLis
     }
 
     private void setTitle() {
-        // 影视仓：搜索框固定提示；站点名/图标走 logo
-        if (mBinding != null && mBinding.title != null) {
-            mBinding.title.setText(R.string.ysc_search_hint);
+        if (mBinding == null) return;
+        if (mBinding.title != null) mBinding.title.setText(R.string.ysc_search_hint);
+        if (mBinding.siteName != null) {
+            String name = getHome() != null ? getHome().getName() : "";
+            if (name == null || name.isEmpty()) name = getConfig() != null ? getConfig().getName() : "";
+            if (name == null) name = "";
+            // 最多显示 7 个字
+            if (name.length() > 7) name = name.substring(0, 7);
+            mBinding.siteName.setText(name);
+            mBinding.siteName.setVisibility(name.isEmpty() ? View.GONE : View.VISIBLE);
         }
     }
 
@@ -190,12 +200,21 @@ public class VodFragment extends BaseFragment implements ConfigListener, SiteLis
         return true;
     }
 
-    private void onLogo(View view) {
-        HistoryDialog.create().vod().readOnly().show(this);
+    private void onConfigSource(View view) {
+        // 左上角：订阅源（配置历史）切换
+        HistoryDialog.create().vod().show(this);
     }
 
     private void onSite(View view) {
+        // 站点名称点击：站点切换
         SiteDialog.create().change().show(this);
+    }
+
+    private boolean onSiteRefresh(View view) {
+        // 长按站点名：刷新当前站点数据
+        if (mWeb != null && mWeb.isVisible()) mWeb.reload();
+        else homeContent();
+        return true;
     }
 
     private void onSearchBar(View view) {
@@ -207,10 +226,7 @@ public class VodFragment extends BaseFragment implements ConfigListener, SiteLis
     }
 
     private boolean onMenuItemClick(MenuItem item) {
-        if (item.getItemId() == R.id.refresh) {
-            if (mWeb != null && mWeb.isVisible()) mWeb.reload();
-            else homeContent();
-        } else if (item.getItemId() == R.id.keep) KeepActivity.start(requireActivity());
+        if (item.getItemId() == R.id.keep) KeepActivity.start(requireActivity());
         else if (item.getItemId() == R.id.search) SearchActivity.start(requireActivity());
         else if (item.getItemId() == R.id.history) HistoryActivity.start(requireActivity());
         else if (item.getItemId() == R.id.sync) OneKeySyncDialog.create().show(requireActivity());
@@ -343,6 +359,8 @@ public class VodFragment extends BaseFragment implements ConfigListener, SiteLis
     @Override
     public void setSite(Site item) {
         VodConfig.get().setHome(item);
+        setTitle();
+        homeContent();
     }
 
     @Override

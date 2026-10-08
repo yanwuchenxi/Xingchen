@@ -7,6 +7,23 @@
     android:background="@color/ysc_bg"
     android:tag="port">
 
+    <com.xingchen.android.tv.ui.custom.ContextWallImageView
+        android:id="@+id/contextWall"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/video"
+        android:layout_alignParentBottom="true"
+        android:importantForAccessibility="no"
+        android:visibility="gone" />
+
+    <View
+        android:id="@+id/videoContextScrim"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/video"
+        android:background="@drawable/shape_video_context_scrim"
+        android:visibility="gone" />
+
     <View
         android:id="@+id/statusBar"
         android:layout_width="match_parent"
