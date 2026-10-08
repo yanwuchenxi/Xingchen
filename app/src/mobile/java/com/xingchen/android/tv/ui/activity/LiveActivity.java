@@ -190,18 +190,12 @@ public class LiveActivity extends PlaybackActivity implements CustomKeyDown.List
         mBinding.control.prev.setOnClickListener(view -> prevChannel());
         mBinding.control.right.lock.setOnClickListener(view -> onLock());
         mBinding.control.right.rotate.setOnClickListener(view -> onRotate());
-        if (mBinding.liveSource != null) mBinding.liveSource.setOnClickListener(v -> {
-            if (mBinding.control != null && mBinding.control.action != null) {
-                try { mBinding.control.action.home.performClick(); } catch (Exception ignored) {}
-            }
-        });
-        if (mBinding.liveSetting != null) mBinding.liveSetting.setOnClickListener(v -> {
-            try {
-                if (mBinding.control != null) {
-                    showControl();
-                }
-            } catch (Exception ignored) {}
-        });
+        if (mBinding.liveSource != null) {
+            mBinding.liveSource.setOnClickListener(v -> LiveDialog.show(this));
+        }
+        if (mBinding.liveSetting != null) {
+            mBinding.liveSetting.setOnClickListener(v -> showControl());
+        }
         mBinding.control.action.text.setOnClickListener(this::onTrack);
         mBinding.control.action.audio.setOnClickListener(this::onTrack);
         mBinding.control.action.video.setOnClickListener(this::onTrack);
@@ -709,6 +703,20 @@ public class LiveActivity extends PlaybackActivity implements CustomKeyDown.List
         if (hasTitle) mBinding.control.title.setText(getString(R.string.detail_title, mChannel.getShow(), data.getTitle()));
         mBinding.widget.name.setMaxEms(hasTitle ? 12 : 48);
         mBinding.widget.play.setText(data.format());
+        if (mBinding.liveProgram != null) {
+            mBinding.liveProgram.setText(data.format());
+        }
+        if (mBinding.liveProgramNext != null) {
+            String nextText = getString(R.string.live_no_epg);
+            if (epg.getList() != null && epg.getList().size() > 1) {
+                int idx = epg.getList().indexOf(data);
+                int nextIdx = (idx >= 0 ? idx + 1 : 1);
+                if (nextIdx >= 0 && nextIdx < epg.getList().size()) {
+                    nextText = epg.getList().get(nextIdx).format();
+                }
+            }
+            mBinding.liveProgramNext.setText(nextText);
+        }
         setWidth(epg);
         setMetadata();
     }
