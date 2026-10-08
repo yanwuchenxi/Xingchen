@@ -8,8 +8,10 @@ import android.content.res.Configuration;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.MotionEvent;
+import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -177,6 +179,7 @@ public class LiveActivity extends PlaybackActivity implements CustomKeyDown.List
         mR3 = this::hideInfo;
         mPiP = new PiP();
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        applyOrientationLayout();
         applyLiveListStyle();
         setRecyclerView();
         setVideoView();
@@ -374,6 +377,8 @@ public class LiveActivity extends PlaybackActivity implements CustomKeyDown.List
         setRequestedOrientation(isRotate()
             ? ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE
             : ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        // 等方向真正切换后再调布局；先按目标状态预应用
+        mBinding.getRoot().post(this::applyOrientationLayout);
     }
 
     private void checkPlay() {
@@ -490,11 +495,64 @@ public class LiveActivity extends PlaybackActivity implements CustomKeyDown.List
             setPosition();
             return;
         }
-        if (isVisible(mBinding.recycler) || mGroupAdapter.getItemCount() == 0) return;
+        if (mGroupAdapter.getItemCount() == 0) return;
+        ensureRecyclerOverlayOnVideo();
         mBinding.recycler.setVisibility(View.VISIBLE);
+        keepLiveMenuVisible();
         mBinding.channel.requestFocus();
         setPosition();
         hideEpg();
+    }
+
+
+    /** 竖屏：上播放器+下列表；横屏：播放器全屏，列表侧栏叠在画面上 */
+    private void applyOrientationLayout() {
+        if (mBinding == null) return;
+        boolean embedded = isEmbeddedLiveUi();
+        if (embedded) {
+            ensureRecyclerInRoot();
+            android.widget.LinearLayout.LayoutParams vp = new android.widget.LinearLayout.LayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT, 0, 9f);
+            android.widget.LinearLayout.LayoutParams rp = new android.widget.LinearLayout.LayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT, 0, 14f);
+            mBinding.video.setLayoutParams(vp);
+            mBinding.recycler.setLayoutParams(rp);
+            mBinding.recycler.setVisibility(View.VISIBLE);
+            keepLiveMenuVisible();
+            hideEpg();
+        } else {
+            ensureRecyclerOverlayOnVideo();
+            android.widget.LinearLayout.LayoutParams vp = new android.widget.LinearLayout.LayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT, 1f);
+            mBinding.video.setLayoutParams(vp);
+            if (!isVisible(mBinding.control.getRoot())) {
+                mBinding.recycler.setVisibility(View.GONE);
+            }
+        }
+        if (isVisible(mBinding.control.getRoot())) showControl();
+    }
+
+    private void ensureRecyclerInRoot() {
+        ViewGroup root = (ViewGroup) mBinding.getRoot();
+        View recycler = mBinding.recycler;
+        if (recycler.getParent() == root) return;
+        ViewGroup parent = (ViewGroup) recycler.getParent();
+        if (parent != null) parent.removeView(recycler);
+        // video is index 0; recycler should be after video
+        int index = root.indexOfChild(mBinding.video);
+        root.addView(recycler, index < 0 ? -1 : index + 1);
+    }
+
+    private void ensureRecyclerOverlayOnVideo() {
+        ViewGroup video = mBinding.video;
+        View recycler = mBinding.recycler;
+        if (recycler.getParent() == video) return;
+        ViewGroup parent = (ViewGroup) recycler.getParent();
+        if (parent != null) parent.removeView(recycler);
+        int w = Math.max(ResUtil.dp2px(280), Math.round(ResUtil.getScreenWidth(this) * 0.42f));
+        FrameLayout.LayoutParams lp = new FrameLayout.LayoutParams(w, ViewGroup.LayoutParams.MATCH_PARENT, Gravity.START);
+        video.addView(recycler, lp);
+        recycler.setBackgroundResource(R.drawable.shape_live_embedded_list);
     }
 
     /** YingKe：竖屏且非旋转全屏、非 PiP 时为嵌入式列表 UI */
@@ -1174,6 +1232,7 @@ public class LiveActivity extends PlaybackActivity implements CustomKeyDown.List
     public void onConfigurationChanged(@NonNull Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         Util.hideSystemUI(this);
+        applyOrientationLayout();
     }
 
     @Override
@@ -1199,13 +1258,31 @@ public class LiveActivity extends PlaybackActivity implements CustomKeyDown.List
     protected void onBackInvoked() {
         if (isVisible(mBinding.control.getRoot())) {
             hideControl();
-        } else if (isVisible(mBinding.widget.info)) {
+            return;
+        }
+        if (isVisible(mBinding.widget.info)) {
             hideInfo();
-        } else if (isVisible(mBinding.recycler)) {
+            return;
+        }
+        // 横屏全屏：先退回竖屏嵌入，再按返回才退出直播页
+        if (isRotate() || ResUtil.isLand(this)) {
+            setRotate(false);
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+            applyOrientationLayout();
+            return;
+        }
+        // 横屏叠加列表（非嵌入）可先收列表
+        if (!isEmbeddedLiveUi() && isVisible(mBinding.recycler)) {
             hideUI();
-        } else if (!isLock()) {
-            if (isTaskRoot()) startActivity(new Intent(this, HomeActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP));
-            super.onBackInvoked();
+            return;
+        }
+        if (!isLock()) {
+            // 竖屏嵌入下列表常显，直接结束回到 HomeActivity
+            if (isTaskRoot()) {
+                startActivity(new Intent(this, HomeActivity.class)
+                        .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP));
+            }
+            finish();
         }
     }
 
