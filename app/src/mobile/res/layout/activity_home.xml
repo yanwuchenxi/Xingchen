@@ -22,7 +22,7 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/ysc_bottom_nav_height"
         android:layout_alignParentBottom="true"
-        android:background="@color/transparent"
+        android:background="@drawable/shape_ysc_bottom_nav"
         app:elevation="0dp"
         app:itemIconTint="@color/selector_ysc_nav"
         app:itemTextColor="@color/selector_ysc_nav"

@@ -1,5 +1,6 @@
 package com.xingchen.android.tv.ui.adapter;
 
+import android.graphics.Typeface;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
@@ -79,8 +80,9 @@ public class TypeAdapter extends RecyclerView.Adapter<TypeAdapter.ViewHolder> {
         Class item = mItems.get(position);
         holder.binding.text.setText(item.getTypeName());
         holder.binding.text.setSelected(item.isSelected());
-        // 选中：强调色+下划线（selector）；字号略大
-        holder.binding.text.setTextSize(item.isSelected() ? 16f : 15f);
+        // 选中：白字 + 下划线 + 略大加粗（贴近 YingKe/影视仓）
+        holder.binding.text.setTextSize(item.isSelected() ? 16.5f : 14.5f);
+        holder.binding.text.setTypeface(null, item.isSelected() ? Typeface.BOLD : Typeface.NORMAL);
         holder.binding.text.setOnClickListener(v -> listener.onItemClick(position, item));
     }
 
