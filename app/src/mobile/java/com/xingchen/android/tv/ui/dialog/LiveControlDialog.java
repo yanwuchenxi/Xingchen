@@ -1,0 +1,246 @@
+package com.xingchen.android.tv.ui.dialog;
+
+import android.app.Dialog;
+import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
+import android.widget.FrameLayout;
+import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.core.view.WindowCompat;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
+import androidx.viewbinding.ViewBinding;
+
+import com.google.android.material.bottomsheet.BottomSheetBehavior;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.xingchen.android.tv.R;
+import com.xingchen.android.tv.databinding.ActivityLiveBinding;
+import com.xingchen.android.tv.databinding.DialogLiveControlBinding;
+import com.xingchen.android.tv.setting.LiveSetting;
+import com.xingchen.android.tv.utils.ResUtil;
+
+import java.util.Arrays;
+import java.util.List;
+
+/**
+ * YingKe 风格直播设置面板：玻璃底 + 分区按钮（来源/操作/偏好/显示风格/屏显/缩放/轨道）。
+ */
+public class LiveControlDialog extends BaseBottomSheetDialog {
+
+    private final String[] scale;
+    private DialogLiveControlBinding binding;
+    private ActivityLiveBinding parent;
+    private List<TextView> displays;
+
+    public LiveControlDialog() {
+        this.scale = ResUtil.getStringArray(R.array.select_scale);
+    }
+
+    public static LiveControlDialog create() {
+        return new LiveControlDialog();
+    }
+
+    public LiveControlDialog parent(ActivityLiveBinding parent) {
+        this.parent = parent;
+        return this;
+    }
+
+    public LiveControlDialog show(FragmentActivity activity) {
+        for (Fragment fragment : activity.getSupportFragmentManager().getFragments()) {
+            if (fragment instanceof LiveControlDialog) return this;
+        }
+        show(activity.getSupportFragmentManager(), "LiveControlDialog");
+        return this;
+    }
+
+    @NonNull
+    @Override
+    public Dialog onCreateDialog(Bundle savedInstanceState) {
+        Dialog dialog = super.onCreateDialog(savedInstanceState);
+        configureWindow(dialog);
+        return dialog;
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        configureWindow(getDialog());
+    }
+
+    @Override
+    protected ViewBinding getBinding(@NonNull LayoutInflater inflater, @Nullable ViewGroup container) {
+        binding = DialogLiveControlBinding.inflate(inflater, container, false);
+        displays = Arrays.asList(
+                binding.displayTime, binding.displayTraffic, binding.displaySize,
+                binding.displayTitle, binding.displayParams);
+        return binding;
+    }
+
+    @Override
+    protected void initView() {
+        if (parent == null) return;
+        try {
+            binding.player.setText(parent.control.action.player.getText());
+            binding.decode.setText(parent.control.action.decode.getText());
+            binding.invert.setSelected(parent.control.action.invert.isSelected());
+            binding.across.setSelected(parent.control.action.across.isSelected());
+            binding.change.setSelected(parent.control.action.change.isSelected());
+        } catch (Exception ignored) {}
+        setListStyleSelected();
+        setScaleText();
+        setDisplaySettings();
+        binding.controlScroll.post(() -> binding.controlScroll.scrollTo(0, 0));
+    }
+
+    @Override
+    protected void initEvent() {
+        binding.config.setOnClickListener(v -> {
+            listener().onLiveConfigPanel();
+            dismiss();
+        });
+        binding.source.setOnClickListener(v -> listener().onLiveSourcePanel());
+        binding.epg.setOnClickListener(v -> {
+            listener().onLiveEpgPanel();
+            dismiss();
+        });
+        binding.cast.setOnClickListener(v -> listener().onLiveCastPanel());
+        binding.pip.setOnClickListener(v -> {
+            listener().onLivePiPPanel();
+            dismiss();
+        });
+        binding.background.setOnClickListener(v -> {
+            listener().onLiveBackgroundPanel();
+            dismiss();
+        });
+        if (parent != null) {
+            binding.invert.setOnClickListener(v -> active(binding.invert, parent.control.action.invert));
+            binding.across.setOnClickListener(v -> active(binding.across, parent.control.action.across));
+            binding.change.setOnClickListener(v -> active(binding.change, parent.control.action.change));
+            binding.player.setOnClickListener(v -> dismiss(parent.control.action.player));
+            binding.decode.setOnClickListener(v -> dismiss(parent.control.action.decode));
+            binding.text.setOnClickListener(v -> dismiss(parent.control.action.text));
+            binding.audio.setOnClickListener(v -> dismiss(parent.control.action.audio));
+            binding.video.setOnClickListener(v -> dismiss(parent.control.action.video));
+        }
+        binding.listTransparent.setOnClickListener(v -> setListStyle(false)); // 通透 = glass
+        binding.listReadable.setOnClickListener(v -> setListStyle(true));     // 易读 = classic
+        binding.scale.setOnClickListener(v -> {
+            int next = (LiveSetting.getScale() + 1) % Math.max(1, scale.length);
+            setScale(next);
+        });
+        for (int i = 0; i < displays.size(); i++) {
+            final int index = i;
+            displays.get(i).setOnClickListener(v -> toggleDisplaySetting(index));
+        }
+    }
+
+    private void setScaleText() {
+        int mode = LiveSetting.getScale();
+        if (mode >= 0 && mode < scale.length) binding.scale.setText(scale[mode]);
+        else binding.scale.setText(String.valueOf(mode));
+    }
+
+    private void setListStyleSelected() {
+        boolean classic = LiveSetting.isListStyleClassic();
+        binding.listTransparent.setSelected(!classic);
+        binding.listReadable.setSelected(classic);
+    }
+
+    private void setDisplaySettings() {
+        boolean[] checked = LiveSetting.getLiveDisplayChecked();
+        for (int i = 0; i < displays.size(); i++) {
+            displays.get(i).setSelected(i < checked.length && checked[i]);
+        }
+    }
+
+    private void toggleDisplaySetting(int index) {
+        boolean[] checked = LiveSetting.getLiveDisplayChecked();
+        if (index < 0 || index >= checked.length) return;
+        checked[index] = !checked[index];
+        LiveSetting.putLiveDisplayChecked(checked);
+        setDisplaySettings();
+        listener().onLiveDisplayChanged();
+    }
+
+    private void setListStyle(boolean classic) {
+        listener().onLiveListStylePanel(classic);
+        setListStyleSelected();
+    }
+
+    private void setScale(int mode) {
+        listener().onLiveScalePanel(mode);
+        setScaleText();
+    }
+
+    private void active(TextView view, TextView target) {
+        if (target == null) return;
+        target.performClick();
+        view.setSelected(target.isSelected());
+    }
+
+    private void dismiss(View target) {
+        if (target != null) target.postDelayed(target::performClick, 200);
+        dismiss();
+    }
+
+    private void configureWindow(Dialog dialog) {
+        if (dialog == null || dialog.getWindow() == null) return;
+        Window window = dialog.getWindow();
+        window.clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND | WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        window.setDimAmount(0f);
+        window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_NOTHING);
+        WindowCompat.setDecorFitsSystemWindows(window, true);
+    }
+
+    @Override
+    protected boolean transparent() {
+        return true;
+    }
+
+    @Override
+    protected void setBehavior(BottomSheetDialog dialog) {
+        FrameLayout sheet = dialog.findViewById(com.google.android.material.R.id.design_bottom_sheet);
+        if (sheet == null) return;
+        sheet.setBackgroundColor(ResUtil.getColor(R.color.transparent));
+        int height = getPanelHeight();
+        ViewGroup.LayoutParams params = sheet.getLayoutParams();
+        params.height = height;
+        sheet.setLayoutParams(params);
+        BottomSheetBehavior<FrameLayout> behavior = BottomSheetBehavior.from(sheet);
+        behavior.setPeekHeight(height);
+        behavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+        behavior.setSkipCollapsed(true);
+        behavior.setDraggable(false);
+    }
+
+    private int getPanelHeight() {
+        int screen = ResUtil.getScreenHeight(requireContext());
+        if (ResUtil.isLand(requireContext())) {
+            return Math.max(ResUtil.dp2px(260), Math.min(ResUtil.dp2px(420), Math.round(screen * 0.82f)));
+        }
+        return Math.max(ResUtil.dp2px(330), Math.min(ResUtil.dp2px(520), Math.round(screen * 0.52f)));
+    }
+
+    private Listener listener() {
+        return (Listener) requireActivity();
+    }
+
+    public interface Listener {
+        void onLiveConfigPanel();
+        void onLiveSourcePanel();
+        void onLiveEpgPanel();
+        void onLiveCastPanel();
+        void onLivePiPPanel();
+        void onLiveBackgroundPanel();
+        void onLiveListStylePanel(boolean classic);
+        void onLiveDisplayChanged();
+        void onLiveScalePanel(int scale);
+        void onLiveTrackPanel(int type);
+    }
+}

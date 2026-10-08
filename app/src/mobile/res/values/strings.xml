@@ -61,4 +61,25 @@
 
     <string name="live_no_epg">暂无节目信息</string>
     <string name="live_control_source">直播源</string>
+
+    <string name="live_control_play">来源</string>
+    <string name="live_control_config">订阅接口</string>
+    <string name="live_control_source">直播源</string>
+    <string name="live_control_epg">EPG源</string>
+    <string name="live_control_action">操作</string>
+    <string name="live_control_cast">投屏</string>
+    <string name="live_control_pip">悬窗</string>
+    <string name="live_control_bg">后台播放</string>
+    <string name="live_control_pref">偏好</string>
+    <string name="live_control_style">显示风格</string>
+    <string name="live_control_style_glass">通透</string>
+    <string name="live_control_style_classic">易读</string>
+    <string name="live_control_display">屏显设置</string>
+    <string name="live_control_time">时间</string>
+    <string name="live_control_net">网速</string>
+    <string name="live_control_size">分辨率</string>
+    <string name="live_control_title">标题</string>
+    <string name="live_control_params">播放参数</string>
+    <string name="live_control_scale">缩放</string>
+    <string name="live_control_track">轨道</string>
 </resources>

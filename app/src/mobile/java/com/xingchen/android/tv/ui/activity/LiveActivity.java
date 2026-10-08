@@ -61,6 +61,7 @@ import com.xingchen.android.tv.ui.dialog.CastDialog;
 import com.xingchen.android.tv.ui.dialog.HistoryDialog;
 import com.xingchen.android.tv.ui.dialog.InfoDialog;
 import com.xingchen.android.tv.ui.dialog.LiveDialog;
+import com.xingchen.android.tv.ui.dialog.LiveControlDialog;
 import com.xingchen.android.tv.ui.dialog.PassDialog;
 import com.xingchen.android.tv.ui.dialog.SubtitleDialog;
 import com.xingchen.android.tv.ui.dialog.TrackDialog;
@@ -79,7 +80,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-public class LiveActivity extends PlaybackActivity implements CustomKeyDown.Listener, TrackDialog.Listener, Biometric.Callback, PassListener, ConfigListener, LiveListener, GroupAdapter.OnClickListener, ChannelAdapter.OnClickListener, EpgDataAdapter.OnClickListener, CastDialog.Listener, InfoDialog.Listener {
+public class LiveActivity extends PlaybackActivity implements CustomKeyDown.Listener, TrackDialog.Listener, Biometric.Callback, PassListener, ConfigListener, LiveListener, GroupAdapter.OnClickListener, ChannelAdapter.OnClickListener, EpgDataAdapter.OnClickListener, CastDialog.Listener, InfoDialog.Listener, LiveControlDialog.Listener {
 
     private ActivityLiveBinding mBinding;
     private ChannelAdapter mChannelAdapter;
@@ -174,6 +175,7 @@ public class LiveActivity extends PlaybackActivity implements CustomKeyDown.List
         mR3 = this::hideInfo;
         mPiP = new PiP();
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        applyLiveListStyle();
         setRecyclerView();
         setVideoView();
         setViewModel();
@@ -194,7 +196,7 @@ public class LiveActivity extends PlaybackActivity implements CustomKeyDown.List
             mBinding.liveSource.setOnClickListener(v -> LiveDialog.show(this));
         }
         if (mBinding.liveSetting != null) {
-            mBinding.liveSetting.setOnClickListener(v -> showControl());
+            mBinding.liveSetting.setOnClickListener(v -> onLiveSetting());
         }
         mBinding.control.action.text.setOnClickListener(this::onTrack);
         mBinding.control.action.audio.setOnClickListener(this::onTrack);
@@ -1213,4 +1215,83 @@ public class LiveActivity extends PlaybackActivity implements CustomKeyDown.List
         mViewModel.epg().removeObserver(mObserveEpg);
         super.onDestroy();
     }
+
+    private void onLiveSetting() {
+        LiveControlDialog.create().parent(mBinding).show(this);
+    }
+
+    private void applyLiveListStyle() {
+        boolean classic = LiveSetting.isListStyleClassic();
+        if (mBinding.recycler != null) {
+            mBinding.recycler.setBackgroundResource(classic ? R.color.transparent : R.drawable.shape_live_embedded_list);
+        }
+        if (mBinding.liveCurrent != null) {
+            mBinding.liveCurrent.setBackgroundResource(classic ? R.drawable.shape_live : R.drawable.shape_live_current);
+        }
+        // 刷新列表项样式
+        if (mGroupAdapter != null) mGroupAdapter.notifyDataSetChanged();
+        if (mChannelAdapter != null) mChannelAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void onLiveConfigPanel() {
+        try { if (mBinding.control != null) mBinding.control.action.config.performClick(); } catch (Exception ignored) {}
+    }
+
+    @Override
+    public void onLiveSourcePanel() {
+        LiveDialog.show(this);
+    }
+
+    @Override
+    public void onLiveEpgPanel() {
+        // 预留：EPG 源配置
+    }
+
+    @Override
+    public void onLiveCastPanel() {
+        try { onCast(); } catch (Exception ignored) {}
+    }
+
+    @Override
+    public void onLivePiPPanel() {
+        try {
+            if (service() != null && player().haveTrack(C.TRACK_TYPE_VIDEO)) {
+                mPiP.enter(this, player().getVideoWidth(), player().getVideoHeight(), LiveSetting.getScale());
+            }
+        } catch (Exception ignored) {}
+    }
+
+    @Override
+    public void onLiveBackgroundPanel() {
+        // 后台播放：交由播放服务现有逻辑
+    }
+
+    @Override
+    public void onLiveListStylePanel(boolean classic) {
+        LiveSetting.putListStyleClassic(classic);
+        applyLiveListStyle();
+    }
+
+    @Override
+    public void onLiveDisplayChanged() {
+        // 屏显开关已写入 LiveSetting，widget 侧可按需读取
+    }
+
+    @Override
+    public void onLiveScalePanel(int scale) {
+        LiveSetting.putScale(scale);
+        try {
+            if (mBinding.control != null) {
+                // 触发已有 scale 点击循环对齐
+                mBinding.control.action.scale.performClick();
+            }
+        } catch (Exception ignored) {}
+    }
+
+    @Override
+    public void onLiveTrackPanel(int type) {
+        // 轨道由 action text/audio/video 处理
+    }
+
 }

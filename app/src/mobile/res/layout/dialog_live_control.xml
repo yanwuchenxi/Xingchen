@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/shape_dialog_control_glass_panel">
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/shape_dialog_control_glass_scrim" />
+
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/controlScroll"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clipToPadding="false"
+        android:overScrollMode="never"
+        android:paddingStart="16dp"
+        android:paddingEnd="9dp"
+        android:paddingBottom="20dp">
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <com.google.android.material.textview.MaterialTextView
+                style="@style/ControlSheetTitle"
+                android:text="@string/live_control_play" />
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/config"
+                    style="@style/ControlSheetButton"
+                    android:text="@string/live_control_config" />
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/source"
+                    style="@style/ControlSheetButton"
+                    android:text="@string/live_control_source" />
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/epg"
+                    style="@style/ControlSheetButton"
+                    android:text="@string/live_control_epg" />
+            </androidx.appcompat.widget.LinearLayoutCompat>
+
+            <com.google.android.material.textview.MaterialTextView
+                style="@style/ControlSheetTitle"
+                android:text="@string/live_control_action" />
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/cast"
+                    style="@style/ControlSheetButton"
+                    android:text="@string/live_control_cast" />
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/pip"
+                    style="@style/ControlSheetButton"
+                    android:text="@string/live_control_pip" />
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/background"
+                    style="@style/ControlSheetButton"
+                    android:text="@string/live_control_bg" />
+            </androidx.appcompat.widget.LinearLayoutCompat>
+
+            <com.google.android.material.textview.MaterialTextView
+                style="@style/ControlSheetTitle"
+                android:text="@string/live_control_pref" />
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/invert"
+                    style="@style/ControlSheetButton"
+                    android:text="@string/play_invert" />
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/across"
+                    style="@style/ControlSheetButton"
+                    android:text="@string/play_across" />
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/change"
+                    style="@style/ControlSheetButton"
+                    android:text="@string/play_change" />
+            </androidx.appcompat.widget.LinearLayoutCompat>
+
+            <com.google.android.material.textview.MaterialTextView
+                style="@style/ControlSheetTitle"
+                android:text="@string/live_control_style" />
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/listTransparent"
+                    style="@style/ControlSheetButton"
+                    android:text="@string/live_control_style_glass" />
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/listReadable"
+                    style="@style/ControlSheetButton"
+                    android:text="@string/live_control_style_classic" />
+                <Space
+                    android:layout_width="0dp"
+                    android:layout_height="34dp"
+                    android:layout_marginEnd="7dp"
+                    android:layout_weight="1" />
+            </androidx.appcompat.widget.LinearLayoutCompat>
+
+            <com.google.android.material.textview.MaterialTextView
+                style="@style/ControlSheetTitle"
+                android:text="@string/live_control_display" />
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/displayTime"
+                    style="@style/ControlSheetButton"
+                    android:text="@string/live_control_time" />
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/displayTraffic"
+                    style="@style/ControlSheetButton"
+                    android:text="@string/live_control_net" />
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/displaySize"
+                    style="@style/ControlSheetButton"
+                    android:text="@string/live_control_size" />
+            </androidx.appcompat.widget.LinearLayoutCompat>
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="7dp"
+                android:orientation="horizontal">
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/displayTitle"
+                    style="@style/ControlSheetButton"
+                    android:text="@string/live_control_title" />
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/displayParams"
+                    style="@style/ControlSheetButton"
+                    android:text="@string/live_control_params" />
+                <Space
+                    android:layout_width="0dp"
+                    android:layout_height="34dp"
+                    android:layout_marginEnd="7dp"
+                    android:layout_weight="1" />
+            </androidx.appcompat.widget.LinearLayoutCompat>
+
+            <com.google.android.material.textview.MaterialTextView
+                style="@style/ControlSheetTitle"
+                android:text="@string/live_control_scale" />
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/scale"
+                    style="@style/ControlSheetButton"
+                    tools:text="16:9" />
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/player"
+                    style="@style/ControlSheetButton"
+                    android:text="@string/play_exo" />
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/decode"
+                    style="@style/ControlSheetButton"
+                    android:text="@string/play_decode" />
+            </androidx.appcompat.widget.LinearLayoutCompat>
+
+            <com.google.android.material.textview.MaterialTextView
+                style="@style/ControlSheetTitle"
+                android:text="@string/live_control_track" />
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/text"
+                    style="@style/ControlSheetButton"
+                    android:tag="3"
+                    android:text="@string/play_track_text" />
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/audio"
+                    style="@style/ControlSheetButton"
+                    android:tag="1"
+                    android:text="@string/play_track_audio" />
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/video"
+                    style="@style/ControlSheetButton"
+                    android:tag="2"
+                    android:text="@string/play_track_video" />
+            </androidx.appcompat.widget.LinearLayoutCompat>
+        </androidx.appcompat.widget.LinearLayoutCompat>
+    </androidx.core.widget.NestedScrollView>
+</FrameLayout>
