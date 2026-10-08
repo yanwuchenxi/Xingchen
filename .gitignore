@@ -24,3 +24,4 @@ nostr_副本*.html
 *.log
 third_party/sources/
 !app/xingchen.jks
+YingKe/
