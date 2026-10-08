@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.Gravity;
 import android.view.View;
+import android.view.ViewConfiguration;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
@@ -65,6 +66,8 @@ import com.xingchen.android.tv.ui.dialog.InfoDialog;
 import com.xingchen.android.tv.ui.dialog.LiveDialog;
 import com.xingchen.android.tv.ui.dialog.LiveControlDialog;
 import com.xingchen.android.tv.ui.dialog.LiveEpgDialog;
+import com.xingchen.android.tv.ui.dialog.LiveLineDialog;
+import com.xingchen.android.tv.ui.dialog.LiveProgramDialog;
 import com.xingchen.android.tv.setting.LiveEpgSetting;
 import com.xingchen.android.tv.ui.dialog.PassDialog;
 import com.xingchen.android.tv.ui.dialog.SubtitleDialog;
@@ -97,6 +100,9 @@ public class LiveActivity extends PlaybackActivity implements CustomKeyDown.List
     private List<Group> mHides;
     private String mPlaybackKey;
     private Channel mChannel;
+    private Channel lastLineClickChannel;
+    private long lastLineClickTime;
+    private boolean pendingShowProgram;
     private Group mGroup;
     private Runnable mR1;
     private Runnable mR2;
@@ -218,6 +224,9 @@ public class LiveActivity extends PlaybackActivity implements CustomKeyDown.List
         mBinding.control.action.video.setOnClickListener(this::onTrack);
         mBinding.control.action.home.setOnClickListener(view -> onHome());
         mBinding.control.action.line.setOnClickListener(view -> onLine());
+        if (mBinding.liveCurrent != null) mBinding.liveCurrent.setOnClickListener(view -> onLiveProgram());
+        if (mBinding.liveProgram != null) mBinding.liveProgram.setOnClickListener(view -> onLiveProgram());
+        if (mBinding.liveProgramNext != null) mBinding.liveProgramNext.setOnClickListener(view -> onLiveProgram());
         mBinding.control.action.scale.setOnClickListener(view -> onScale());
         mBinding.control.action.speed.setOnClickListener(view -> onSpeed());
         mBinding.control.action.config.setOnClickListener(view -> onConfig());
@@ -412,7 +421,8 @@ public class LiveActivity extends PlaybackActivity implements CustomKeyDown.List
     }
 
     private void onLine() {
-        nextLine(false);
+        if (mChannel != null && !mChannel.isOnly()) showLineDialog(mChannel);
+        else nextLine(false);
     }
 
     private void onScale() {
@@ -575,7 +585,7 @@ public class LiveActivity extends PlaybackActivity implements CustomKeyDown.List
         int w = Math.max(ResUtil.dp2px(280), Math.round(sw * 0.42f));
         FrameLayout.LayoutParams lp = new FrameLayout.LayoutParams(w, ViewGroup.LayoutParams.MATCH_PARENT, Gravity.START);
         video.addView(recycler, lp);
-        recycler.setBackgroundResource(R.drawable.shape_live_embedded_list);
+        recycler.setBackgroundResource(R.color.transparent);
     }
 
     /** YingKe：竖屏且非旋转全屏、非 PiP 时为嵌入式列表 UI */
@@ -718,8 +728,13 @@ public class LiveActivity extends PlaybackActivity implements CustomKeyDown.List
 
     @Override
     public void onItemClick(Channel item) {
+        if (item.isSelected() && mChannel != null && mChannel.equals(item) && mChannel.getGroup().equals(mGroup) && isLineDoubleClick(item)) {
+            showLineDialog(item);
+            return;
+        }
         if (!item.getData(mViewModel.getZoneId()).getList().isEmpty() && item.isSelected() && mChannel != null && mChannel.equals(item) && mChannel.getGroup().equals(mGroup)) {
             showEpg(item);
+            rememberLineClick(item);
         } else if (mGroup != null) {
             mGroup.setPosition(mChannelAdapter.setSelected(item.group(mGroup)));
             mChannel = item;
@@ -727,6 +742,7 @@ public class LiveActivity extends PlaybackActivity implements CustomKeyDown.List
             showInfo();
             hideUI();
             fetch();
+            rememberLineClick(item);
         }
     }
 
@@ -788,10 +804,17 @@ public class LiveActivity extends PlaybackActivity implements CustomKeyDown.List
     }
 
     private void setEpg(Epg epg) {
-        if (mChannel == null || !mChannel.getTvgId().equals(epg.getKey())) return;
+        if (mChannel == null || !mChannel.getTvgId().equals(epg.getKey())) {
+            pendingShowProgram = false;
+            return;
+        }
         EpgData data = epg.getEpgData();
         boolean hasTitle = !data.getTitle().isEmpty();
         mEpgDataAdapter.addAll(epg.getList());
+        if (pendingShowProgram) {
+            pendingShowProgram = false;
+            showLiveProgram();
+        }
         if (hasTitle) mBinding.control.title.setText(getString(R.string.detail_title, mChannel.getShow(), data.getTitle()));
         mBinding.widget.name.setMaxEms(hasTitle ? 12 : 48);
         mBinding.widget.play.setText(data.format());
@@ -1112,6 +1135,57 @@ public class LiveActivity extends PlaybackActivity implements CustomKeyDown.List
         fetch();
     }
 
+    private void setLine(int position) {
+        if (mChannel == null || position < 0 || position >= mChannel.getUrls().size()) return;
+        if (mChannel.getIndex() == position) return;
+        mChannel.setIndex(position);
+        setInfo();
+        fetch();
+    }
+
+    private boolean isLineDoubleClick(Channel item) {
+        long now = System.currentTimeMillis();
+        boolean result = lastLineClickChannel != null && lastLineClickChannel.equals(item)
+                && now - lastLineClickTime <= ViewConfiguration.getDoubleTapTimeout();
+        rememberLineClick(item, now);
+        return result && !item.isOnly();
+    }
+
+    private void rememberLineClick(Channel item) {
+        rememberLineClick(item, System.currentTimeMillis());
+    }
+
+    private void rememberLineClick(Channel item, long time) {
+        lastLineClickChannel = item;
+        lastLineClickTime = time;
+    }
+
+    private void showLineDialog(Channel item) {
+        if (item == null || item.isOnly()) return;
+        hideControl();
+        LiveLineDialog.create().channel(item).listener(this::setLine).show(this);
+    }
+
+    private void onLiveProgram() {
+        if (mChannel == null) return;
+        if (!mChannel.getDataList().isEmpty()) {
+            showLiveProgram();
+            return;
+        }
+        pendingShowProgram = true;
+        mViewModel.getEpg(mChannel);
+        Notify.show(R.string.live_program_empty);
+    }
+
+    private void showLiveProgram() {
+        if (mChannel == null || mChannel.getDataList().isEmpty()) {
+            Notify.show(R.string.live_program_empty);
+            return;
+        }
+        LiveProgramDialog.create().channel(mChannel).zoneId(mViewModel.getZoneId()).listener(this::onItemClick).show(this);
+        hideControl();
+    }
+
     private void onPaused() {
         controller().pause();
     }
@@ -1328,7 +1402,7 @@ public class LiveActivity extends PlaybackActivity implements CustomKeyDown.List
     private void applyLiveListStyle() {
         boolean classic = LiveSetting.isListStyleClassic();
         if (mBinding.recycler != null) {
-            mBinding.recycler.setBackgroundResource(classic ? R.color.transparent : R.drawable.shape_live_embedded_list);
+            mBinding.recycler.setBackgroundResource(classic ? R.color.transparent : R.color.transparent);
         }
         if (mBinding.liveCurrent != null) {
             mBinding.liveCurrent.setBackgroundResource(classic ? R.drawable.shape_live_classic : R.drawable.shape_live_current);

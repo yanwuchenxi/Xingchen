@@ -92,4 +92,6 @@
     <string name="live_epg_edit">编辑</string>
     <string name="live_epg_delete">删除</string>
     <string name="ysc_search_hint">Search title / actor / director</string>
+    <string name="live_program_empty">No program guide</string>
+    <string name="live_program_current">Live</string>
 </resources>

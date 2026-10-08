@@ -15,14 +15,14 @@
         android:layout_width="match_parent"
         android:layout_height="0.5dp"
         android:layout_above="@id/navigation"
-        android:background="#22FFFFFF" />
+        android:background="@android:color/transparent" />
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/navigation"
         android:layout_width="match_parent"
         android:layout_height="@dimen/ysc_bottom_nav_height"
         android:layout_alignParentBottom="true"
-        android:background="@drawable/shape_ysc_bottom_nav"
+        android:background="@android:color/transparent"
         app:elevation="0dp"
         app:itemBackground="@android:color/transparent"
         app:itemIconSize="24dp"

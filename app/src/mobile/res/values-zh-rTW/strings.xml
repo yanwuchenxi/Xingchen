@@ -60,4 +60,6 @@
     </string-array>
 
     <string name="ysc_search_hint">搜尋影片名/演員/導演</string>
+    <string name="live_program_empty">暫無節目預告</string>
+    <string name="live_program_current">直播中</string>
 </resources>
