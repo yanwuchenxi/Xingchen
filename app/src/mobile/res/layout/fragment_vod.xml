@@ -53,7 +53,7 @@
         <androidx.appcompat.widget.LinearLayoutCompat
             android:id="@+id/typeBar"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/ysc_home_tab_height"
+            android:layout_height="36dp"
             android:layout_marginBottom="4dp"
             android:clipChildren="false"
             android:clipToPadding="false"
@@ -65,15 +65,15 @@
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/type"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:clipChildren="true"
-                android:clipToPadding="true"
+                android:clipChildren="false"
+                android:clipToPadding="false"
                 android:orientation="horizontal"
                 android:paddingStart="4dp"
                 android:paddingTop="0dp"
                 android:paddingEnd="0dp"
-                android:paddingBottom="8dp"
+                android:paddingBottom="2dp"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 tools:listitem="@layout/adapter_type" />
 
@@ -88,9 +88,9 @@
                 android:minHeight="0dp"
                 android:padding="8dp"
                 android:scaleType="center"
-                android:translationY="-4dp"
                 android:visibility="gone"
                 app:srcCompat="@drawable/ic_action_menu"
+                app:tint="@color/white"
                 tools:visibility="visible" />
 
         </androidx.appcompat.widget.LinearLayoutCompat>

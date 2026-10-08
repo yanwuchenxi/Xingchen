@@ -7,6 +7,9 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -127,7 +130,10 @@ public class VodFragment extends BaseFragment implements ConfigListener, SiteLis
         mBinding.type.setHasFixedSize(true);
         mBinding.type.setItemAnimator(null);
         mBinding.type.setAdapter(mAdapter = new TypeAdapter(this));
-        mBinding.typeMore.setVisibility(View.GONE);
+        mBinding.type.setItemAnimator(null);
+        applyStatusBarInset();
+        mBinding.typeMore.setOnClickListener(this::onTypeMore);
+        mBinding.type.post(this::updateTypeMoreVisible);
         mBinding.pager.setAdapter(new PageAdapter(getChildFragmentManager()));
     }
 
@@ -142,6 +148,7 @@ public class VodFragment extends BaseFragment implements ConfigListener, SiteLis
 
     private void setAdapter(Result result) {
         mAdapter.addAll(mResult = result);
+        mBinding.type.post(this::updateTypeMoreVisible);
         mBinding.pager.getAdapter().notifyDataSetChanged();
         setFabVisible(0);
         hideProgress();
