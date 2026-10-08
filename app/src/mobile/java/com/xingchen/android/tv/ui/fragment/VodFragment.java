@@ -46,6 +46,7 @@ import com.xingchen.android.tv.ui.dialog.LinkDialog;
 import com.xingchen.android.tv.ui.dialog.OneKeySyncDialog;
 import com.xingchen.android.tv.ui.dialog.ReceiveDialog;
 import com.xingchen.android.tv.ui.dialog.SiteDialog;
+import com.xingchen.android.tv.ui.dialog.TypeDialog;
 import com.xingchen.android.tv.utils.ImgUtil;
 import com.xingchen.android.tv.utils.Notify;
 import com.xingchen.android.tv.utils.ResUtil;
@@ -436,7 +437,7 @@ public class VodFragment extends BaseFragment implements ConfigListener, SiteLis
 
     private void onTypeMore(View view) {
         if (mAdapter != null && mAdapter.getItemCount() > 0) {
-            mBinding.type.smoothScrollToPosition(mAdapter.getItemCount() - 1);
+            TypeDialog.create().items(mAdapter.getItems()).show(this);
         }
     }
 
