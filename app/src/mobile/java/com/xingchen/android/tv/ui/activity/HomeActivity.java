@@ -68,7 +68,24 @@ public class HomeActivity extends BaseActivity implements NavigationBarView.OnIt
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
+        setIntent(intent);
         checkAction(intent);
+        applyTabIntent(intent);
+    }
+
+    /** 从直播页底栏回到首页/我的时，真正切换到对应 Fragment */
+    private void applyTabIntent(Intent intent) {
+        if (intent == null || mBinding == null || mManager == null) return;
+        int tab = intent.getIntExtra("tab", -1);
+        if (tab < 0) return;
+        intent.removeExtra("tab");
+        if (tab == 0) {
+            mManager.change(0);
+            mBinding.navigation.setSelectedItemId(R.id.vod);
+        } else if (tab == 1) {
+            mManager.change(1);
+            mBinding.navigation.setSelectedItemId(R.id.setting);
+        }
     }
 
     @Override
