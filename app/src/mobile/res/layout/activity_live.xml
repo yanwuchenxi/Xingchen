@@ -57,9 +57,9 @@
             android:id="@+id/liveCurrent"
             android:layout_width="match_parent"
             android:layout_height="86dp"
-            android:layout_marginStart="6dp"
+            android:layout_marginStart="4dp"
             android:layout_marginTop="8dp"
-            android:layout_marginEnd="6dp"
+            android:layout_marginEnd="4dp"
             android:layout_marginBottom="6dp"
             android:background="@drawable/shape_live"
             android:gravity="center_vertical"
@@ -107,7 +107,7 @@
                     android:ellipsize="end"
                     android:maxLines="1"
                     android:text="@string/live_no_epg"
-                    android:textColor="#CCFFFFFF"
+                    android:textColor="#F2FFFFFF"
                     android:textSize="13sp" />
 
                 <com.google.android.material.textview.MaterialTextView
@@ -118,7 +118,7 @@
                     android:ellipsize="end"
                     android:maxLines="1"
                     android:text="@string/live_no_epg"
-                    android:textColor="#99FFFFFF"
+                    android:textColor="#E6FFFFFF"
                     android:textSize="12sp" />
             </androidx.appcompat.widget.LinearLayoutCompat>
 
@@ -145,19 +145,19 @@
             android:layout_height="0dp"
             android:layout_weight="1"
             android:orientation="horizontal"
-            android:paddingStart="6dp"
+            android:paddingStart="4dp"
             android:paddingTop="4dp"
-            android:paddingEnd="6dp"
+            android:paddingEnd="4dp"
             android:paddingBottom="8dp">
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/group"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="28"
+                android:layout_weight="24"
                 android:clipChildren="false"
                 android:clipToPadding="false"
-                android:paddingEnd="3dp"
+                android:paddingEnd="2dp"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 tools:listitem="@layout/adapter_group" />
 
@@ -165,10 +165,10 @@
                 android:id="@+id/channel"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="72"
+                android:layout_weight="76"
                 android:clipChildren="false"
                 android:clipToPadding="false"
-                android:paddingStart="3dp"
+                android:paddingStart="2dp"
                 android:paddingEnd="0dp"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 tools:listitem="@layout/adapter_channel" />

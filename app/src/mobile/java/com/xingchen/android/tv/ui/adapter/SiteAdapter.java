@@ -92,19 +92,23 @@ public class SiteAdapter extends RecyclerView.Adapter<SiteAdapter.ViewHolder> {
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Site item = mItems.get(position);
         boolean on = !search || change;
-        holder.binding.text.setText(item.getName());
+        // 无痕关闭搜索时降低不透明度作提示
+        String name = item.getName() == null ? "" : item.getName();
+        if (!item.isSearchable()) name = name + " · 无痕";
+        holder.binding.text.setText(name);
         holder.binding.text.setEnabled(on);
         holder.binding.text.setFocusable(on);
         holder.binding.text.setSelected(on && item.isSelected());
-        holder.binding.search.setImageResource(getSearchIcon(item));
-        holder.binding.change.setImageResource(getChangeIcon(item));
-        holder.binding.search.setVisibility(search ? View.VISIBLE : View.GONE);
-        holder.binding.change.setVisibility(change ? View.VISIBLE : View.GONE);
+        holder.binding.text.setAlpha(item.isSearchable() ? 1f : 0.72f);
+        holder.binding.search.setVisibility(View.GONE);
+        holder.binding.change.setVisibility(View.GONE);
         holder.binding.text.setOnClickListener(v -> listener.onTextClick(item));
-        holder.binding.search.setOnClickListener(v -> listener.onSearchClick(position, item));
-        holder.binding.change.setOnClickListener(v -> listener.onChangeClick(position, item));
-        holder.binding.search.setOnLongClickListener(v -> listener.onSearchLongClick(item));
-        holder.binding.change.setOnLongClickListener(v -> listener.onChangeLongClick(item));
+        // 长按开启/关闭无痕（切换 searchable）
+        holder.binding.text.setOnLongClickListener(v -> {
+            item.setSearchable(!item.isSearchable()).save();
+            notifyItemChanged(position);
+            return true;
+        });
     }
 
     private int getSearchIcon(Site item) {

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
-    <!-- 选中：深色字配浅底；未选中：半透明白 -->
+    <!-- 选中：深色字配浅底；未选中：高对比白字 -->
     <item android:color="#FF1A1A1A" android:state_selected="true" />
     <item android:color="#FF1A1A1A" android:state_checked="true" />
-    <item android:color="#8FFFFFFF" />
+    <item android:color="#F2FFFFFF" />
 </selector>
