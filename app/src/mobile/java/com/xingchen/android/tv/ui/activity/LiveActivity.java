@@ -129,7 +129,8 @@ public class LiveActivity extends PlaybackActivity implements CustomKeyDown.List
 
     @Override
     protected boolean customWall() {
-        return false;
+        // 直播页跟随全局壁纸，列表区域保持透明
+        return true;
     }
 
     @Override

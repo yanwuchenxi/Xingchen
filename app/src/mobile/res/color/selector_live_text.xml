@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:color="#FFFFB40A" android:state_selected="true" />
-    <item android:color="#FFFFFFFF" />
+    <!-- 直播列表：选中纯白，未选中半透明白 -->
+    <item android:color="#FFFFFFFF" android:state_selected="true" />
+    <item android:color="#FFFFFFFF" android:state_checked="true" />
+    <item android:color="#8FFFFFFF" />
 </selector>

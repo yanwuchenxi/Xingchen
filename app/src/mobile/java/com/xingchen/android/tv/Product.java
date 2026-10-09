@@ -15,14 +15,17 @@ public class Product {
     }
 
     public static int getColumn(Context context) {
-        // 默认 size=2 → 竖屏 3 列（与影视仓接近）；size 可在设置中调节
+        // 默认 size=2 → 竖屏 3 列（与影视仓接近）；限制在 2~6，避免一列铺满
         int count = ResUtil.isLand(context) ? 7 : 5;
         count = count + (ResUtil.isPad() ? 1 : 0);
-        return Math.abs(PlayerSetting.getSize() - count);
+        int column = Math.abs(PlayerSetting.getSize() - count);
+        return Math.max(2, Math.min(6, column));
     }
 
     public static int getColumn(Context context, Style style) {
-        return style.isLand() ? getColumn(context) - 1 : getColumn(context);
+        int column = getColumn(context);
+        if (style.isLand()) column = Math.max(2, column - 1);
+        return column;
     }
 
     public static int[] getSpec(Context context) {
