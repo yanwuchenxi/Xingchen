@@ -1,40 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:gravity="center_vertical"
-    android:orientation="horizontal">
+    android:orientation="horizontal"
+    android:padding="4dp">
 
-    <com.google.android.material.button.MaterialButton
+    <com.google.android.material.textview.MaterialTextView
         android:id="@+id/text"
-        style="?attr/materialButtonOutlinedStyle"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="44dp"
         android:layout_weight="1"
-        android:ellipsize="marquee"
+        android:background="@drawable/shape_live"
+        android:ellipsize="end"
+        android:gravity="center"
+        android:paddingStart="8dp"
+        android:paddingEnd="8dp"
         android:singleLine="true"
-        android:textColor="@color/selector_control"
-        android:textSize="14sp"
-        app:backgroundTint="@color/selector_button"
-        app:strokeColor="@color/selector_stroke"
-        tools:text="泥巴" />
+        android:textColor="@color/selector_live_text"
+        android:textSize="13sp"
+        tools:text="站点名称" />
 
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/search"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
+        android:layout_width="28dp"
+        android:layout_height="28dp"
+        android:layout_marginStart="6dp"
         android:background="?attr/selectableItemBackgroundBorderless"
-        android:src="@drawable/ic_site_search" />
+        android:padding="2dp"
+        android:visibility="gone"
+        tools:visibility="visible" />
 
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/change"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
+        android:layout_width="28dp"
+        android:layout_height="28dp"
+        android:layout_marginStart="4dp"
         android:background="?attr/selectableItemBackgroundBorderless"
-        android:src="@drawable/ic_site_change" />
+        android:padding="2dp"
+        android:visibility="gone"
+        tools:visibility="visible" />
 
 </androidx.appcompat.widget.LinearLayoutCompat>
