@@ -83,12 +83,10 @@ public abstract class BaseActivity extends AppCompatActivity {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) return;
         DisplayCutout cutout = ResUtil.getDisplay(this).getCutout();
         if (cutout == null) return;
-        int top = cutout.getSafeInsetTop();
+        // 只使用左右安全区，禁止把 top/bottom inset 按位或进水平 padding（否则竖屏列表会被整块挤向右侧）
         int left = cutout.getSafeInsetLeft();
         int right = cutout.getSafeInsetRight();
-        int bottom = cutout.getSafeInsetBottom();
-        int padding = left | right | top | bottom;
-        layout.setPadding(padding, 0, leftOnly ? 0 : padding, 0);
+        layout.setPadding(left, 0, leftOnly ? 0 : right, 0);
     }
 
     protected void noPadding(ViewGroup layout) {

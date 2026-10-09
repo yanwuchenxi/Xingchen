@@ -184,7 +184,8 @@ public class LiveActivity extends PlaybackActivity implements CustomKeyDown.List
         super.initView(savedInstanceState);
         mKeyDown = CustomKeyDown.create(this, mBinding.exo);
         setPadding(mBinding.control.getRoot());
-        setPadding(mBinding.recycler, true);
+        // 竖屏下列表不要套用 cutout 左 padding（会把整列挤向右侧）
+        noPadding(mBinding.recycler);
         mObserveEpg = this::setEpg;
         mObserveUrl = this::start;
         mHides = new ArrayList<>();
@@ -558,6 +559,7 @@ public class LiveActivity extends PlaybackActivity implements CustomKeyDown.List
             boolean embedded = isEmbeddedLiveUi();
             if (embedded) {
                 ensureRecyclerInRoot();
+                noPadding(mBinding.recycler);
                 // 按 16:9 固定播放器高度，消除画面与列表之间的黑边空白
                 int videoH = Math.round(ResUtil.getScreenWidth(this) * 9f / 16f);
                 androidx.appcompat.widget.LinearLayoutCompat.LayoutParams vp =
@@ -1236,7 +1238,9 @@ public class LiveActivity extends PlaybackActivity implements CustomKeyDown.List
             noPadding(mBinding.recycler);
             noPadding(mBinding.control.getRoot());
         } else {
-            setPadding(mBinding.recycler, true);
+            // 竖屏嵌入列表保持左右对称；横屏侧栏再按需处理
+            if (isEmbeddedLiveUi()) noPadding(mBinding.recycler);
+            else setPadding(mBinding.recycler, true);
             setPadding(mBinding.control.getRoot());
         }
     }
