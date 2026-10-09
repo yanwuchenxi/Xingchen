@@ -99,6 +99,7 @@ public class LiveActivity extends PlaybackActivity implements CustomKeyDown.List
     private LiveViewModel mViewModel;
     private CustomKeyDown mKeyDown;
     private float lastTapX;
+    private boolean mHomeNavGuard;
     private List<Group> mHides;
     private String mPlaybackKey;
     private Channel mChannel;
