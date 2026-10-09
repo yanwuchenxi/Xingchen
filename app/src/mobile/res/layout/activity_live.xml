@@ -57,10 +57,10 @@
             android:id="@+id/liveCurrent"
             android:layout_width="match_parent"
             android:layout_height="86dp"
-            android:layout_marginStart="12dp"
-            android:layout_marginTop="12dp"
-            android:layout_marginEnd="12dp"
-            android:layout_marginBottom="8dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginBottom="6dp"
             android:background="@drawable/shape_live"
             android:gravity="center_vertical"
             android:orientation="horizontal"
@@ -145,10 +145,10 @@
             android:layout_height="0dp"
             android:layout_weight="1"
             android:orientation="horizontal"
-            android:paddingStart="12dp"
-            android:paddingTop="6dp"
-            android:paddingEnd="12dp"
-            android:paddingBottom="10dp">
+            android:paddingStart="10dp"
+            android:paddingTop="4dp"
+            android:paddingEnd="10dp"
+            android:paddingBottom="8dp">
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/group"
@@ -157,7 +157,7 @@
                 android:layout_weight="31"
                 android:clipChildren="false"
                 android:clipToPadding="false"
-                android:paddingEnd="6dp"
+                android:paddingEnd="4dp"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 tools:listitem="@layout/adapter_group" />
 
@@ -168,8 +168,8 @@
                 android:layout_weight="57"
                 android:clipChildren="false"
                 android:clipToPadding="false"
-                android:paddingStart="6dp"
-                android:paddingEnd="6dp"
+                android:paddingStart="4dp"
+                android:paddingEnd="0dp"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 tools:listitem="@layout/adapter_channel" />
 

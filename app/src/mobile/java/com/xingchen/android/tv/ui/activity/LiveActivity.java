@@ -218,12 +218,14 @@ public class LiveActivity extends PlaybackActivity implements CustomKeyDown.List
         mBinding.control.right.rotate.setOnClickListener(view -> onRotate());
         if (mBinding.homeNav != null) {
             mBinding.homeNav.setOnItemSelectedListener(item -> {
+                if (mHomeNavGuard) return true;
                 int id = item.getItemId();
                 if (id == R.id.live) return true;
                 Intent intent = new Intent(this, HomeActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                 if (id == R.id.vod) intent.putExtra("tab", 0);
                 else if (id == R.id.setting) intent.putExtra("tab", 1);
+                intent.putExtra("from_live", true);
                 startActivity(intent);
                 finish();
                 return true;
@@ -555,12 +557,14 @@ public class LiveActivity extends PlaybackActivity implements CustomKeyDown.List
             boolean embedded = isEmbeddedLiveUi();
             if (embedded) {
                 ensureRecyclerInRoot();
+                // 按 16:9 固定播放器高度，消除画面与列表之间的黑边空白
+                int videoH = Math.round(ResUtil.getScreenWidth(this) * 9f / 16f);
                 androidx.appcompat.widget.LinearLayoutCompat.LayoutParams vp =
                         new androidx.appcompat.widget.LinearLayoutCompat.LayoutParams(
-                                ViewGroup.LayoutParams.MATCH_PARENT, 0, 9f);
+                                ViewGroup.LayoutParams.MATCH_PARENT, videoH);
                 androidx.appcompat.widget.LinearLayoutCompat.LayoutParams rp =
                         new androidx.appcompat.widget.LinearLayoutCompat.LayoutParams(
-                                ViewGroup.LayoutParams.MATCH_PARENT, 0, 14f);
+                                ViewGroup.LayoutParams.MATCH_PARENT, 0, 1f);
                 mBinding.video.setLayoutParams(vp);
                 mBinding.recycler.setLayoutParams(rp);
                 mBinding.recycler.setVisibility(View.VISIBLE);
@@ -568,7 +572,10 @@ public class LiveActivity extends PlaybackActivity implements CustomKeyDown.List
                 hideEpg();
                 if (mBinding.homeNav != null) {
                     mBinding.homeNav.setVisibility(View.VISIBLE);
+                    // 避免 setSelected 触发误跳转
+                    mHomeNavGuard = true;
                     mBinding.homeNav.setSelectedItemId(R.id.live);
+                    mHomeNavGuard = false;
                 }
             } else {
                 if (mBinding.homeNav != null) mBinding.homeNav.setVisibility(View.GONE);
@@ -1304,7 +1311,14 @@ public class LiveActivity extends PlaybackActivity implements CustomKeyDown.List
 
     @Override
     public void onSingleTap() {
-        // 横屏：左侧点频道列表，右侧点播控；竖屏保持切换面板
+        // 竖屏嵌入：单击播放器切换播控（不必双击）
+        if (isEmbeddedLiveUi()) {
+            if (isVisible(mBinding.control.getRoot())) hideControl();
+            else showControl();
+            hideInfo();
+            return;
+        }
+        // 横屏：左侧频道列表，右侧播控
         if (ResUtil.isLand(this) || isRotate()) {
             int half = ResUtil.getScreenWidth(this) / 2;
             if (lastTapX < half) {

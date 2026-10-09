@@ -364,4 +364,6 @@
     <string name="live_epg_delete">删除</string>
     <string name="live_source_select">Select Live Source</string>
     <string name="site_span_toggle">Toggle columns</string>
+    <string name="site_select_title">Select Site</string>
+    <string name="site_select_hint">Long press to toggle searchable</string>
 </resources>

@@ -87,9 +87,7 @@ public class HomeActivity extends BaseActivity implements NavigationBarView.OnIt
         PermissionUtil.requestFile(this, allGranted -> PermissionUtil.requestNotify(this));
         initFragment(savedInstanceState);
         initConfig();
-        int tab = getIntent() != null ? getIntent().getIntExtra("tab", -1) : -1;
-        if (tab == 0) mBinding.navigation.setSelectedItemId(R.id.vod);
-        else if (tab == 1) mBinding.navigation.setSelectedItemId(R.id.setting);
+        applyTabIntent(getIntent());
     }
 
     @Override

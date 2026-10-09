@@ -326,4 +326,6 @@
 
     <string name="live_source_select">选择直播源</string>
     <string name="site_span_toggle">切换单双列</string>
+    <string name="site_select_title">选择站点</string>
+    <string name="site_select_hint">长按开启/关闭无痕</string>
 </resources>

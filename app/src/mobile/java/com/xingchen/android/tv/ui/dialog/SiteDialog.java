@@ -1,25 +1,36 @@
 package com.xingchen.android.tv.ui.dialog;
 
+import android.app.Dialog;
+import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.LayoutInflater;
+import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
+import android.widget.FrameLayout;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.core.view.WindowCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.viewbinding.ViewBinding;
 
-import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.github.catvod.utils.Prefers;
+import com.google.android.material.bottomsheet.BottomSheetBehavior;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.xingchen.android.tv.R;
 import com.xingchen.android.tv.api.config.VodConfig;
 import com.xingchen.android.tv.bean.Site;
 import com.xingchen.android.tv.databinding.DialogSiteBinding;
 import com.xingchen.android.tv.impl.SiteListener;
-import com.github.catvod.utils.Prefers;
 import com.xingchen.android.tv.ui.adapter.SiteAdapter;
 import com.xingchen.android.tv.ui.custom.SpaceItemDecoration;
 import com.xingchen.android.tv.utils.ResUtil;
 
-public class SiteDialog extends BaseAlertDialog implements SiteAdapter.OnClickListener {
+public class SiteDialog extends BaseBottomSheetDialog implements SiteAdapter.OnClickListener {
 
     private static final String PREF_SITE_SPAN = "site_dialog_span";
 
@@ -29,7 +40,7 @@ public class SiteDialog extends BaseAlertDialog implements SiteAdapter.OnClickLi
     private SpaceItemDecoration decoration;
     private boolean search;
     private boolean change;
-    private int spanCount = 1;
+    private int spanCount = 2;
 
     public static SiteDialog create() {
         return new SiteDialog();
@@ -46,29 +57,53 @@ public class SiteDialog extends BaseAlertDialog implements SiteAdapter.OnClickLi
     }
 
     public void show(Fragment fragment) {
-        show(fragment.getChildFragmentManager(), null);
+        show(fragment.getChildFragmentManager(), "site");
         if (fragment instanceof SiteListener) listener = (SiteListener) fragment;
     }
 
     @Override
-    protected ViewBinding getBinding() {
-        return binding = DialogSiteBinding.inflate(getLayoutInflater());
+    protected boolean transparent() {
+        return true;
     }
 
     @Override
-    protected MaterialAlertDialogBuilder getBuilder() {
-        return builder().setView(getBinding().getRoot());
+    protected ViewBinding getBinding(@NonNull LayoutInflater inflater, @Nullable ViewGroup container) {
+        return binding = DialogSiteBinding.inflate(inflater, container, false);
+    }
+
+    @Override
+    protected void setBehavior(BottomSheetDialog dialog) {
+        super.setBehavior(dialog);
+        FrameLayout sheet = dialog.findViewById(com.google.android.material.R.id.design_bottom_sheet);
+        if (sheet == null) return;
+        sheet.getLayoutParams().height = ViewGroup.LayoutParams.WRAP_CONTENT;
+        BottomSheetBehavior<FrameLayout> behavior = BottomSheetBehavior.from(sheet);
+        behavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+        behavior.setSkipCollapsed(true);
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        Dialog dialog = getDialog();
+        if (dialog == null || dialog.getWindow() == null) return;
+        Window window = dialog.getWindow();
+        window.clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+        window.setDimAmount(0.35f);
+        WindowCompat.setDecorFitsSystemWindows(window, true);
+        if (adapter != null && adapter.getItemCount() == 0) dismiss();
     }
 
     @Override
     protected void initView() {
-        spanCount = Math.max(1, Math.min(2, Prefers.getInt(PREF_SITE_SPAN, 1)));
+        spanCount = Math.max(1, Math.min(2, Prefers.getInt(PREF_SITE_SPAN, 2)));
         adapter = new SiteAdapter(this);
         adapter.search(search).change(change);
         binding.recycler.setAdapter(adapter);
         binding.recycler.setItemAnimator(null);
         binding.recycler.setHasFixedSize(true);
         applySpan();
+        binding.recycler.setMaxHeight(ResUtil.getScreenHeight(requireContext()) * 55 / 100);
         binding.recycler.post(() -> binding.recycler.scrollToPosition(Math.max(VodConfig.getHomeIndex(), 0)));
         updateSpanIcon();
     }
@@ -137,12 +172,5 @@ public class SiteDialog extends BaseAlertDialog implements SiteAdapter.OnClickLi
         adapter.getItems().forEach(site -> site.setChangeable(result).save());
         adapter.notifyItemRangeChanged(0, adapter.getItemCount());
         return true;
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        if (adapter.getItemCount() == 0) dismiss();
-        else if (ResUtil.isLand(requireContext())) setWidth(0.5f);
     }
 }
