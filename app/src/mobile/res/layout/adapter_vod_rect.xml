@@ -8,7 +8,8 @@
     android:layout_marginStart="@dimen/ysc_grid_item_gap"
     android:layout_marginEnd="@dimen/ysc_grid_item_gap"
     android:layout_marginBottom="8dp"
-    android:foreground="@drawable/shape_vod">
+    android:foreground="@drawable/shape_vod"
+    android:clipChildren="true">
 
     <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/image"
@@ -16,6 +17,8 @@
         android:layout_height="140dp"
         android:background="@color/ysc_poster_placeholder"
         android:scaleType="centerCrop"
+        android:clipToOutline="true"
+        app:shapeAppearance="@style/Vod.Grid"
         app:shapeAppearanceOverlay="@style/Vod.Grid" />
 
     <!-- 影视仓 tvFlag：金黄渐变角标 -->

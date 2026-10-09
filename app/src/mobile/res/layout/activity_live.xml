@@ -182,4 +182,18 @@
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
         </androidx.appcompat.widget.LinearLayoutCompat>
     </androidx.appcompat.widget.LinearLayoutCompat>
+
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/homeNav"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/ysc_bottom_nav_height"
+        android:background="@android:color/transparent"
+        android:visibility="gone"
+        app:elevation="0dp"
+        app:itemBackground="@android:color/transparent"
+        app:itemIconSize="24dp"
+        app:itemIconTint="@color/selector_ysc_nav"
+        app:itemTextColor="@color/selector_ysc_nav"
+        app:labelVisibilityMode="unlabeled"
+        app:menu="@menu/menu_nav" />
 </androidx.appcompat.widget.LinearLayoutCompat>

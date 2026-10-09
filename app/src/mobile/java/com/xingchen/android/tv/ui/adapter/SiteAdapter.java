@@ -18,6 +18,7 @@ import java.util.List;
 public class SiteAdapter extends RecyclerView.Adapter<SiteAdapter.ViewHolder> {
 
     private final OnClickListener listener;
+    private final List<Site> mAll = new ArrayList<>();
     private final List<Site> mItems;
     private boolean search;
     private boolean change;
@@ -52,7 +53,24 @@ public class SiteAdapter extends RecyclerView.Adapter<SiteAdapter.ViewHolder> {
     }
 
     private void addAll() {
-        for (Site site : VodConfig.get().getSites()) if (!site.isHide()) mItems.add(site);
+        mAll.clear();
+        mItems.clear();
+        for (Site site : VodConfig.get().getSites()) if (!site.isHide()) mAll.add(site);
+        mItems.addAll(mAll);
+    }
+
+    public void filter(String keyword) {
+        String q = keyword == null ? "" : keyword.trim().toLowerCase();
+        mItems.clear();
+        if (q.isEmpty()) {
+            mItems.addAll(mAll);
+        } else {
+            for (Site site : mAll) {
+                String name = site.getName() == null ? "" : site.getName().toLowerCase();
+                if (name.contains(q)) mItems.add(site);
+            }
+        }
+        notifyDataSetChanged();
     }
 
     public List<Site> getItems() {

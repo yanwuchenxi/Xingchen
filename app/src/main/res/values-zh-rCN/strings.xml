@@ -324,4 +324,6 @@
         <item>选择字幕</item>
     </string-array>
 
+    <string name="live_source_select">选择直播源</string>
+    <string name="site_span_toggle">切换单双列</string>
 </resources>

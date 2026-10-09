@@ -63,6 +63,7 @@ import com.xingchen.android.tv.ui.custom.CustomSeekView;
 import com.xingchen.android.tv.ui.dialog.CastDialog;
 import com.xingchen.android.tv.ui.dialog.HistoryDialog;
 import com.xingchen.android.tv.ui.dialog.InfoDialog;
+import com.xingchen.android.tv.ui.activity.HomeActivity;
 import com.xingchen.android.tv.ui.dialog.LiveDialog;
 import com.xingchen.android.tv.ui.dialog.LiveControlDialog;
 import com.xingchen.android.tv.ui.dialog.LiveEpgDialog;
@@ -97,6 +98,7 @@ public class LiveActivity extends PlaybackActivity implements CustomKeyDown.List
     private Observer<Epg> mObserveEpg;
     private LiveViewModel mViewModel;
     private CustomKeyDown mKeyDown;
+    private float lastTapX;
     private List<Group> mHides;
     private String mPlaybackKey;
     private Channel mChannel;
@@ -214,6 +216,19 @@ public class LiveActivity extends PlaybackActivity implements CustomKeyDown.List
         mBinding.control.prev.setOnClickListener(view -> prevChannel());
         mBinding.control.right.lock.setOnClickListener(view -> onLock());
         mBinding.control.right.rotate.setOnClickListener(view -> onRotate());
+        if (mBinding.homeNav != null) {
+            mBinding.homeNav.setOnItemSelectedListener(item -> {
+                int id = item.getItemId();
+                if (id == R.id.live) return true;
+                Intent intent = new Intent(this, HomeActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                if (id == R.id.vod) intent.putExtra("tab", 0);
+                else if (id == R.id.setting) intent.putExtra("tab", 1);
+                startActivity(intent);
+                finish();
+                return true;
+            });
+        }
         if (mBinding.liveSource != null) {
             mBinding.liveSource.setOnClickListener(v -> LiveDialog.show(this));
         }
@@ -239,7 +254,10 @@ public class LiveActivity extends PlaybackActivity implements CustomKeyDown.List
         mBinding.control.action.text.setOnLongClickListener(view -> onTextLong());
         mBinding.control.action.speed.setOnLongClickListener(view -> onSpeedLong());
         mBinding.control.action.getRoot().setOnTouchListener(this::onActionTouch);
-        mBinding.video.setOnTouchListener((view, event) -> mKeyDown.onTouchEvent(event));
+        mBinding.video.setOnTouchListener((view, event) -> {
+            if (event.getActionMasked() == android.view.MotionEvent.ACTION_DOWN) lastTapX = event.getX();
+            return mKeyDown.onTouchEvent(event);
+        });
     }
 
     private void setRecyclerView() {
@@ -548,7 +566,12 @@ public class LiveActivity extends PlaybackActivity implements CustomKeyDown.List
                 mBinding.recycler.setVisibility(View.VISIBLE);
                 keepLiveMenuVisible();
                 hideEpg();
+                if (mBinding.homeNav != null) {
+                    mBinding.homeNav.setVisibility(View.VISIBLE);
+                    mBinding.homeNav.setSelectedItemId(R.id.live);
+                }
             } else {
+                if (mBinding.homeNav != null) mBinding.homeNav.setVisibility(View.GONE);
                 ensureRecyclerOverlayOnVideo();
                 androidx.appcompat.widget.LinearLayoutCompat.LayoutParams vp =
                         new androidx.appcompat.widget.LinearLayoutCompat.LayoutParams(
@@ -1281,6 +1304,21 @@ public class LiveActivity extends PlaybackActivity implements CustomKeyDown.List
 
     @Override
     public void onSingleTap() {
+        // 横屏：左侧点频道列表，右侧点播控；竖屏保持切换面板
+        if (ResUtil.isLand(this) || isRotate()) {
+            int half = ResUtil.getScreenWidth(this) / 2;
+            if (lastTapX < half) {
+                if (isVisible(mBinding.control.getRoot())) hideControl();
+                if (isVisible(mBinding.recycler)) hideUI();
+                else showUI();
+            } else {
+                if (isVisible(mBinding.recycler)) hideUI();
+                if (isVisible(mBinding.control.getRoot())) hideControl();
+                else showControl();
+            }
+            hideInfo();
+            return;
+        }
         onToggle();
     }
 

@@ -1,40 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:gravity="center_vertical"
-    android:orientation="horizontal">
+    android:padding="4dp">
 
-    <com.google.android.material.button.MaterialButton
+    <com.google.android.material.textview.MaterialTextView
         android:id="@+id/text"
-        style="?attr/materialButtonOutlinedStyle"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:ellipsize="marquee"
+        android:layout_width="match_parent"
+        android:layout_height="44dp"
+        android:background="@drawable/shape_live"
+        android:ellipsize="end"
+        android:gravity="center"
+        android:paddingStart="8dp"
+        android:paddingEnd="8dp"
         android:singleLine="true"
-        android:textColor="@color/selector_control"
-        android:textSize="14sp"
-        app:backgroundTint="@color/selector_button"
-        app:strokeColor="@color/selector_stroke"
-        tools:text="泥巴" />
+        android:textColor="@color/selector_live_text"
+        android:textSize="13sp"
+        tools:text="电视家" />
+
+    <!-- keep ids for boot/pass compatibility, hidden in source sheet -->
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/boot"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:visibility="gone" />
 
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/pass"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:background="?attr/selectableItemBackgroundBorderless"
-        android:src="@drawable/ic_live_pass" />
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:visibility="gone" />
 
-    <androidx.appcompat.widget.AppCompatImageView
-        android:id="@+id/boot"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:background="?attr/selectableItemBackgroundBorderless"
-        android:src="@drawable/ic_live_boot" />
-
-</androidx.appcompat.widget.LinearLayoutCompat>
+</FrameLayout>
