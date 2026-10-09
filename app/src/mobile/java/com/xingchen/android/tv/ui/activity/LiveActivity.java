@@ -735,6 +735,7 @@ public class LiveActivity extends PlaybackActivity implements CustomKeyDown.List
     }
 
     private void setArtwork() {
+        if (mChannel == null) return;
         ImgUtil.load(this, mChannel.getLogo(), new CustomTarget<>() {
             @Override
             public void onResourceReady(@NonNull Drawable resource, @Nullable Transition<? super Drawable> transition) {
@@ -817,6 +818,7 @@ public class LiveActivity extends PlaybackActivity implements CustomKeyDown.List
     }
 
     private void setInfo() {
+        if (mChannel == null) return;
         mViewModel.getEpg(mChannel);
         mBinding.widget.play.setText("");
         mBinding.widget.name.setMaxEms(48);
@@ -893,8 +895,10 @@ public class LiveActivity extends PlaybackActivity implements CustomKeyDown.List
     }
 
     private void start(Result result) {
+        if (result == null) return;
         mPlaybackKey = result.getRealUrl();
-        startPlayer(mPlaybackKey, result, false, getHome().getTimeout(), buildMetadata());
+        long timeout = getHome() != null ? getHome().getTimeout() : 0;
+        startPlayer(mPlaybackKey, result, false, timeout, buildMetadata());
     }
 
     private void checkControl() {
@@ -969,7 +973,9 @@ public class LiveActivity extends PlaybackActivity implements CustomKeyDown.List
 
     @Override
     protected void onReclaim() {
-        Result result = mViewModel.url().getValue();
+        // onResume 回收播放权时 mChannel 可能仍为 null，避免 getShow NPE
+        if (mChannel == null) return;
+        Result result = mViewModel != null ? mViewModel.url().getValue() : null;
         if (result != null) start(result);
     }
 
@@ -1098,11 +1104,22 @@ public class LiveActivity extends PlaybackActivity implements CustomKeyDown.List
     }
 
     private MediaMetadata buildMetadata() {
-        String artist = mBinding.widget.play.getText().toString();
+        if (mChannel == null) {
+            return PlayerManager.buildMetadata("", null, null);
+        }
+        String artist = "";
+        try {
+            if (mBinding != null && mBinding.widget != null && mBinding.widget.play != null
+                    && mBinding.widget.play.getText() != null) {
+                artist = mBinding.widget.play.getText().toString();
+            }
+        } catch (Throwable ignored) {
+        }
         return PlayerManager.buildMetadata(mChannel.getShow(), artist, mChannel.getLogo());
     }
 
     private void setMetadata() {
+        if (mChannel == null || player() == null) return;
         player().setMetadata(buildMetadata());
     }
 
