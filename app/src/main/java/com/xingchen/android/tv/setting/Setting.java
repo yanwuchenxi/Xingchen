@@ -238,4 +238,20 @@ public class Setting {
     public static boolean isTmdbReady() {
         return false;
     }
+
+    public static String getSubtitleSourceEnvironment(String sourceKey) {
+        return Prefers.getString("subtitle_src_env_" + (sourceKey == null ? "" : sourceKey), "");
+    }
+
+    public static void putSubtitleSourceEnvironment(String sourceKey, String json) {
+        Prefers.put("subtitle_src_env_" + (sourceKey == null ? "" : sourceKey), json == null ? "" : json);
+    }
+
+    public static String getSubtitlePreferredLanguage() {
+        return Prefers.getString("subtitle_preferred_language", "zh");
+    }
+
+    public static boolean isSubtitleAutoMatchEnabled() {
+        return Prefers.getBoolean("subtitle_auto_match", false);
+    }
 }

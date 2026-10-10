@@ -25,6 +25,23 @@ public class Sub {
     @SerializedName("flag")
     private int flag;
 
+
+    public static Sub create(String name, String lang, String url, String format) {
+        Sub sub = new Sub();
+        sub.name = name;
+        sub.lang = lang;
+        sub.url = url;
+        sub.format = format;
+        sub.flag = C.SELECTION_FLAG_DEFAULT;
+        return sub;
+    }
+
+    public Sub setUrl(String url) { this.url = url; return this; }
+    public Sub setName(String name) { this.name = name; return this; }
+    public Sub setLang(String lang) { this.lang = lang; return this; }
+    public Sub setFormat(String format) { this.format = format; return this; }
+    public Sub setFlag(int flag) { this.flag = flag; return this; }
+
     public static Sub from(String path) {
         Sub sub = new Sub();
         sub.url = path;
