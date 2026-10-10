@@ -34,6 +34,7 @@ public class SettingPlayerFragment extends BaseFragment implements UaListener, B
     private String[] caption;
     private String[] render;
     private String[] scale;
+    private String[] subtitleLang;
 
     public static SettingPlayerFragment newInstance() {
         return new SettingPlayerFragment();
@@ -64,6 +65,7 @@ public class SettingPlayerFragment extends BaseFragment implements UaListener, B
         mBinding.renderText.setText((render = ResUtil.getStringArray(R.array.select_render))[PlayerSetting.getRender()]);
         mBinding.captionText.setText((caption = ResUtil.getStringArray(R.array.select_caption))[PlayerSetting.isCaption() ? 1 : 0]);
         mBinding.backgroundText.setText((background = ResUtil.getStringArray(R.array.select_background))[PlayerSetting.getBackground()]);
+        mBinding.subtitleLangText.setText((subtitleLang = ResUtil.getStringArray(R.array.select_subtitle_lang))[Setting.getSubtitlePreferredLanguageIndex()]);
     }
 
     @Override
@@ -79,6 +81,7 @@ public class SettingPlayerFragment extends BaseFragment implements UaListener, B
         mBinding.adblock.setOnClickListener(this::setAdblock);
         mBinding.caption.setOnLongClickListener(this::onCaption);
         mBinding.background.setOnClickListener(this::onBackground);
+        mBinding.subtitleLang.setOnClickListener(this::onSubtitleLang);
         mBinding.audioDecode.setOnClickListener(this::setAudioDecode);
         mBinding.videoDecode.setOnClickListener(this::setVideoDecode);
     }
@@ -170,6 +173,14 @@ public class SettingPlayerFragment extends BaseFragment implements UaListener, B
     private void setVideoDecode(View view) {
         PlayerSetting.putVideoPrefer(!PlayerSetting.isVideoPrefer());
         mBinding.videoDecodeText.setText(getSwitch(PlayerSetting.isVideoPrefer()));
+    }
+
+    private void onSubtitleLang(View view) {
+        new MaterialAlertDialogBuilder(requireActivity()).setTitle(R.string.player_subtitle_lang).setNegativeButton(R.string.dialog_negative, null).setSingleChoiceItems(subtitleLang, Setting.getSubtitlePreferredLanguageIndex(), (dialog, which) -> {
+            mBinding.subtitleLangText.setText(subtitleLang[which]);
+            Setting.putSubtitlePreferredLanguageIndex(which);
+            dialog.dismiss();
+        }).show();
     }
 
     @Override

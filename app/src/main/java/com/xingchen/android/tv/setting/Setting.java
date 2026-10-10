@@ -254,4 +254,23 @@ public class Setting {
     public static boolean isSubtitleAutoMatchEnabled() {
         return Prefers.getBoolean("subtitle_auto_match", false);
     }
+
+    private static final String[] SUBTITLE_LANG_CODES = {"zh", "en", "ja", "ko", ""};
+
+    public static int getSubtitlePreferredLanguageIndex() {
+        String code = getSubtitlePreferredLanguage();
+        for (int i = 0; i < SUBTITLE_LANG_CODES.length; i++) {
+            if (SUBTITLE_LANG_CODES[i].equals(code)) return i;
+        }
+        return 0;
+    }
+
+    public static void putSubtitlePreferredLanguageIndex(int index) {
+        if (index < 0 || index >= SUBTITLE_LANG_CODES.length) index = 0;
+        putSubtitlePreferredLanguage(SUBTITLE_LANG_CODES[index]);
+    }
+
+    public static void putSubtitlePreferredLanguage(String code) {
+        Prefers.put("subtitle_preferred_language", code == null ? "zh" : code);
+    }
 }

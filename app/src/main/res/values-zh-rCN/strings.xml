@@ -337,4 +337,13 @@
     <string name="online_subtitle_applying">正在加载字幕…</string>
     <string name="online_subtitle_applied">字幕已应用</string>
     <string name="online_subtitle_apply_fail">字幕加载失败</string>
+    <string name="player_subtitle_lang">字幕偏好语言</string>
+    <string name="online_subtitle_providers">在线源：迅雷 / 射手</string>
+    <string-array name="select_subtitle_lang">
+        <item>中文</item>
+        <item>英语</item>
+        <item>日语</item>
+        <item>韩语</item>
+        <item>自动</item>
+    </string-array>
 </resources>

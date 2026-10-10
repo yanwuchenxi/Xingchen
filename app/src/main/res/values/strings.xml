@@ -375,4 +375,13 @@
     <string name="online_subtitle_applying">Loading subtitle…</string>
     <string name="online_subtitle_applied">Subtitle applied</string>
     <string name="online_subtitle_apply_fail">Failed to load subtitle</string>
+    <string name="player_subtitle_lang">Subtitle language</string>
+    <string name="online_subtitle_providers">Online: Xunlei / Shooter</string>
+    <string-array name="select_subtitle_lang">
+        <item>Chinese</item>
+        <item>English</item>
+        <item>Japanese</item>
+        <item>Korean</item>
+        <item>Auto</item>
+    </string-array>
 </resources>

@@ -79,8 +79,12 @@ public final class OnlineSubtitleDialog extends BaseBottomSheetDialog {
         if (!TextUtils.isEmpty(seedTitle)) {
             binding.keyword.setText(seedTitle);
             binding.keyword.setSelection(seedTitle.length());
+            binding.status.setText(R.string.online_subtitle_searching);
+            // 有默认片名时自动搜一次
+            binding.getRoot().post(this::doSearch);
+        } else {
+            binding.status.setText(R.string.online_subtitle_hint);
         }
-        binding.status.setText("");
     }
 
     @Override
