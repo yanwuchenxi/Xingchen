@@ -176,7 +176,8 @@ public class LiveActivity extends PlaybackActivity implements CustomKeyDown.List
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Util.hideSystemUI(this);
+        // 竖屏显示状态栏，横屏/旋转全屏再沉浸
+        applySystemUiForOrientation();
     }
 
     @Override
@@ -556,6 +557,7 @@ public class LiveActivity extends PlaybackActivity implements CustomKeyDown.List
     private void applyOrientationLayout() {
         if (mBinding == null || mBinding.video == null || mBinding.recycler == null) return;
         try {
+            applySystemUiForOrientation();
             boolean embedded = isEmbeddedLiveUi();
             if (embedded) {
                 ensureRecyclerInRoot();
@@ -1403,14 +1405,14 @@ public class LiveActivity extends PlaybackActivity implements CustomKeyDown.List
     @Override
     public void onConfigurationChanged(@NonNull Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-        Util.hideSystemUI(this);
+        applySystemUiForOrientation();
         applyOrientationLayout();
     }
 
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
-        if (hasFocus) Util.hideSystemUI(this);
+        if (hasFocus) applySystemUiForOrientation();
     }
 
     @Override
