@@ -42,6 +42,7 @@ public final class TrackDialog extends BaseBottomSheetDialog implements TrackAda
     private final TrackAdapter adapter;
     private DialogTrackBinding binding;
     private PlayerManager player;
+    private String vodTitle = "";
     private int type;
 
     public static TrackDialog create() {
@@ -55,6 +56,11 @@ public final class TrackDialog extends BaseBottomSheetDialog implements TrackAda
 
     public TrackDialog player(PlayerManager player) {
         this.player = player;
+        return this;
+    }
+
+    public TrackDialog title(String title) {
+        this.vodTitle = title == null ? "" : title.trim();
         return this;
     }
 
@@ -96,6 +102,7 @@ public final class TrackDialog extends BaseBottomSheetDialog implements TrackAda
         binding.recycler.setVisibility(adapter.getItemCount() == 0 ? View.GONE : View.VISIBLE);
         binding.offset.setVisibility(hasText() || hasAudio() ? View.VISIBLE : View.GONE);
         binding.choose.setVisibility(hasChoose() ? View.VISIBLE : View.GONE);
+        binding.online.setVisibility(hasChoose() ? View.VISIBLE : View.GONE);
         binding.subtitle.setVisibility(hasText() ? View.VISIBLE : View.GONE);
     }
 
@@ -103,6 +110,7 @@ public final class TrackDialog extends BaseBottomSheetDialog implements TrackAda
     protected void initEvent() {
         binding.offset.setOnClickListener(this::onOffset);
         binding.choose.setOnClickListener(this::onChoose);
+        binding.online.setOnClickListener(this::onOnline);
         binding.subtitle.setOnClickListener(this::onSubtitle);
     }
 
@@ -114,6 +122,16 @@ public final class TrackDialog extends BaseBottomSheetDialog implements TrackAda
     private void onChoose(View view) {
         FileChooser.from(launcher).show(new String[]{MimeTypes.APPLICATION_SUBRIP, MimeTypes.TEXT_SSA, MimeTypes.TEXT_VTT, MimeTypes.APPLICATION_TTML, "audio/*", "text/*", "application/octet-stream"});
         player.pause();
+    }
+
+    private void onOnline(View view) {
+        String seed = vodTitle;
+        if ((seed == null || seed.isEmpty()) && player != null && player.getCurrentMediaItem() != null
+                && player.getCurrentMediaItem().mediaMetadata.title != null) {
+            seed = player.getCurrentMediaItem().mediaMetadata.title.toString();
+        }
+        OnlineSubtitleDialog.create().player(player).title(seed).show(requireActivity());
+        dismiss();
     }
 
     private void onSubtitle(View view) {

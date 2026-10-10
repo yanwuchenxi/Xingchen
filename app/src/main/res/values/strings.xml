@@ -366,4 +366,13 @@
     <string name="site_span_toggle">Toggle columns</string>
     <string name="site_select_title">Select Site</string>
     <string name="site_select_hint">Long press to toggle searchable</string>
+    <string name="online_subtitle_title">Online subtitles</string>
+    <string name="online_subtitle_hint">Title / keywords</string>
+    <string name="online_subtitle_search">Search</string>
+    <string name="online_subtitle_searching">Searching…</string>
+    <string name="online_subtitle_empty">No subtitles found</string>
+    <string name="online_subtitle_error">Search failed: %s</string>
+    <string name="online_subtitle_applying">Loading subtitle…</string>
+    <string name="online_subtitle_applied">Subtitle applied</string>
+    <string name="online_subtitle_apply_fail">Failed to load subtitle</string>
 </resources>

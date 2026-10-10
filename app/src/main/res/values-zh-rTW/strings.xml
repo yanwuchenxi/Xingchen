@@ -328,4 +328,13 @@
     <string name="site_span_toggle">切換單雙列</string>
     <string name="site_select_title">選擇站點</string>
     <string name="site_select_hint">長按開啟/關閉無痕</string>
+    <string name="online_subtitle_title">線上字幕</string>
+    <string name="online_subtitle_hint">片名 / 關鍵詞</string>
+    <string name="online_subtitle_search">搜尋</string>
+    <string name="online_subtitle_searching">正在搜尋…</string>
+    <string name="online_subtitle_empty">未找到字幕</string>
+    <string name="online_subtitle_error">搜尋失敗：%s</string>
+    <string name="online_subtitle_applying">正在載入字幕…</string>
+    <string name="online_subtitle_applied">字幕已套用</string>
+    <string name="online_subtitle_apply_fail">字幕載入失敗</string>
 </resources>

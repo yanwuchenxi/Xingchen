@@ -768,7 +768,8 @@ public class VideoActivity extends PlaybackActivity implements Clock.Callback, C
     }
 
     private void onTrack(View view) {
-        TrackDialog.create().type(Integer.parseInt(view.getTag().toString())).player(player()).show(this);
+        String seed = mBinding.control.title.getText() == null ? "" : mBinding.control.title.getText().toString();
+        TrackDialog.create().type(Integer.parseInt(view.getTag().toString())).player(player()).title(seed).show(this);
         hideControl();
     }
 
