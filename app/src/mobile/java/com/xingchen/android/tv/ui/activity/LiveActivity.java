@@ -74,7 +74,6 @@ import com.xingchen.android.tv.ui.dialog.LiveLineDialog;
 import com.xingchen.android.tv.ui.dialog.LiveProgramDialog;
 import com.xingchen.android.tv.setting.LiveEpgSetting;
 import com.xingchen.android.tv.ui.dialog.PassDialog;
-import com.xingchen.android.tv.ui.dialog.SubtitleDialog;
 import com.xingchen.android.tv.ui.dialog.TrackDialog;
 import com.xingchen.android.tv.utils.Biometric;
 import com.xingchen.android.tv.utils.ImgUtil;
@@ -437,7 +436,10 @@ public class LiveActivity extends PlaybackActivity implements CustomKeyDown.List
     }
 
     private void onTrack(View view) {
-        TrackDialog.create().type(Integer.parseInt(view.getTag().toString())).player(player()).show(this);
+        int trackType = Integer.parseInt(view.getTag().toString());
+        TrackDialog.create().type(trackType).player(player())
+                .subtitleView(trackType == androidx.media3.common.C.TRACK_TYPE_TEXT ? mBinding.exo.getSubtitleView() : null)
+                .show(this);
         hideControl();
     }
 
@@ -1062,9 +1064,11 @@ public class LiveActivity extends PlaybackActivity implements CustomKeyDown.List
 
     @Override
     public void onSubtitleClick() {
-        SubtitleDialog.create().view(mBinding.exo.getSubtitleView()).show(this);
+        TrackDialog.create().type(androidx.media3.common.C.TRACK_TYPE_TEXT).player(player())
+                .subtitleView(mBinding.exo.getSubtitleView()).show(this);
         hideControl();
     }
+
 
     @Override
     public void setConfig(Config config) {

@@ -38,7 +38,6 @@ public final class SubtitleProviderRegistry {
     }
 
     private void registerLegacyProviders() {
-        register(new AssrtSubtitleProvider());
         register(new XunleiSubtitleProvider());
         register(new ShooterSubtitleProvider());
     }

@@ -13,7 +13,7 @@
         android:orientation="horizontal"
         android:paddingHorizontal="24dp"
         android:paddingTop="24dp"
-        android:paddingBottom="16dp">
+        android:paddingBottom="12dp">
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/title"
@@ -29,6 +29,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="@string/online_subtitle_title"
             android:src="@drawable/ic_action_choose"
             android:visibility="gone"
             tools:visibility="visible" />
@@ -45,16 +46,6 @@
             tools:visibility="visible" />
 
         <androidx.appcompat.widget.AppCompatImageView
-            android:id="@+id/subtitle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:src="@drawable/ic_action_subtitle"
-            android:visibility="gone"
-            tools:visibility="visible" />
-
-        <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/offset"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -64,6 +55,59 @@
             android:visibility="gone"
             tools:visibility="visible" />
 
+    </androidx.appcompat.widget.LinearLayoutCompat>
+
+    <!-- 字幕样式：字号 / 位置（由原右侧弹窗并入） -->
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:id="@+id/styleRow"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:paddingHorizontal="16dp"
+        android:paddingBottom="8dp"
+        android:visibility="gone"
+        tools:visibility="visible">
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/large"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:padding="10dp"
+            android:src="@drawable/ic_subtitle_large" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/small"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:padding="10dp"
+            android:src="@drawable/ic_subtitle_small" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/up"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:padding="10dp"
+            android:src="@drawable/ic_subtitle_up" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/down"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:padding="10dp"
+            android:src="@drawable/ic_subtitle_down" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/reset"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:padding="10dp"
+            android:src="@drawable/ic_subtitle_reset" />
     </androidx.appcompat.widget.LinearLayoutCompat>
 
     <com.xingchen.android.tv.ui.custom.CustomRecyclerView

@@ -12,7 +12,7 @@ import java.util.List;
 
 /**
  * 在线字幕搜索入口（自 Silent1566/webhtv 适配）。
- * Assrt 等源需配置 Token（SubtitleSourceEnvironment / 环境变量）后才会启用。
+ * 当前启用迅雷（标题搜索）与射手（本地文件 hash）。
  */
 public final class OnlineSubtitle {
 

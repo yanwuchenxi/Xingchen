@@ -17,6 +17,7 @@ import androidx.media3.common.Format;
 import androidx.media3.common.MimeTypes;
 import androidx.media3.common.Tracks;
 import androidx.media3.ui.DefaultTrackNameProvider;
+import androidx.media3.ui.SubtitleView;
 import androidx.media3.ui.TrackNameProvider;
 import androidx.viewbinding.ViewBinding;
 
@@ -27,6 +28,7 @@ import com.xingchen.android.tv.bean.Track;
 import com.xingchen.android.tv.databinding.DialogTrackBinding;
 import com.xingchen.android.tv.player.PlayerHelper;
 import com.xingchen.android.tv.player.PlayerManager;
+import com.xingchen.android.tv.setting.PlayerSetting;
 import com.xingchen.android.tv.ui.adapter.TrackAdapter;
 import com.xingchen.android.tv.ui.custom.SpaceItemDecoration;
 import com.xingchen.android.tv.utils.FileChooser;
@@ -42,6 +44,7 @@ public final class TrackDialog extends BaseBottomSheetDialog implements TrackAda
     private final TrackAdapter adapter;
     private DialogTrackBinding binding;
     private PlayerManager player;
+    private SubtitleView subtitleView;
     private String vodTitle = "";
     private int type;
 
@@ -56,6 +59,11 @@ public final class TrackDialog extends BaseBottomSheetDialog implements TrackAda
 
     public TrackDialog player(PlayerManager player) {
         this.player = player;
+        return this;
+    }
+
+    public TrackDialog subtitleView(SubtitleView subtitleView) {
+        this.subtitleView = subtitleView;
         return this;
     }
 
@@ -75,15 +83,15 @@ public final class TrackDialog extends BaseBottomSheetDialog implements TrackAda
     }
 
     private boolean hasChoose() {
-        return type == C.TRACK_TYPE_TEXT && player.isVod();
+        return type == C.TRACK_TYPE_TEXT && player != null && player.isVod();
     }
 
-    private boolean hasText() {
-        return type == C.TRACK_TYPE_TEXT && player.haveTrack(type);
+    private boolean hasStyle() {
+        return type == C.TRACK_TYPE_TEXT && subtitleView != null;
     }
 
-    private boolean hasAudio() {
-        return type == C.TRACK_TYPE_AUDIO && player.haveTrack(type);
+    private boolean hasOffset() {
+        return (type == C.TRACK_TYPE_TEXT || type == C.TRACK_TYPE_AUDIO) && player != null && player.haveTrack(type);
     }
 
     @Override
@@ -100,10 +108,10 @@ public final class TrackDialog extends BaseBottomSheetDialog implements TrackAda
         binding.title.setText(ResUtil.getStringArray(R.array.select_track)[type - 1]);
         binding.recycler.post(() -> binding.recycler.scrollToPosition(adapter.getSelected()));
         binding.recycler.setVisibility(adapter.getItemCount() == 0 ? View.GONE : View.VISIBLE);
-        binding.offset.setVisibility(hasText() || hasAudio() ? View.VISIBLE : View.GONE);
+        binding.offset.setVisibility(hasOffset() ? View.VISIBLE : View.GONE);
         binding.choose.setVisibility(hasChoose() ? View.VISIBLE : View.GONE);
         binding.online.setVisibility(hasChoose() ? View.VISIBLE : View.GONE);
-        binding.subtitle.setVisibility(hasText() ? View.VISIBLE : View.GONE);
+        binding.styleRow.setVisibility(hasStyle() ? View.VISIBLE : View.GONE);
     }
 
     @Override
@@ -111,7 +119,11 @@ public final class TrackDialog extends BaseBottomSheetDialog implements TrackAda
         binding.offset.setOnClickListener(this::onOffset);
         binding.choose.setOnClickListener(this::onChoose);
         binding.online.setOnClickListener(this::onOnline);
-        binding.subtitle.setOnClickListener(this::onSubtitle);
+        binding.large.setOnClickListener(this::onLarge);
+        binding.small.setOnClickListener(this::onSmall);
+        binding.up.setOnClickListener(this::onUp);
+        binding.down.setOnClickListener(this::onDown);
+        binding.reset.setOnClickListener(this::onReset);
     }
 
     private void onOffset(View view) {
@@ -134,10 +146,35 @@ public final class TrackDialog extends BaseBottomSheetDialog implements TrackAda
         dismiss();
     }
 
-    private void onSubtitle(View view) {
-        Listener listener = (Listener) requireActivity();
-        App.post(listener::onSubtitleClick, 100);
-        dismiss();
+    private void onLarge(View view) {
+        if (subtitleView == null) return;
+        subtitleView.addTextSize(0.002f);
+        PlayerSetting.putSubtitleTextSize(subtitleView.getTextSize());
+    }
+
+    private void onSmall(View view) {
+        if (subtitleView == null) return;
+        subtitleView.subTextSize(0.002f);
+        PlayerSetting.putSubtitleTextSize(subtitleView.getTextSize());
+    }
+
+    private void onUp(View view) {
+        if (subtitleView == null) return;
+        subtitleView.addPosition(0.005f);
+        PlayerSetting.putSubtitlePosition(subtitleView.getPosition());
+    }
+
+    private void onDown(View view) {
+        if (subtitleView == null) return;
+        subtitleView.subPosition(0.005f);
+        PlayerSetting.putSubtitlePosition(subtitleView.getPosition());
+    }
+
+    private void onReset(View view) {
+        if (subtitleView == null) return;
+        PlayerSetting.putSubtitleTextSize(0.0f);
+        PlayerSetting.putSubtitlePosition(0.0f);
+        subtitleView.reset();
     }
 
     private List<Track> getTrack() {
@@ -147,6 +184,7 @@ public final class TrackDialog extends BaseBottomSheetDialog implements TrackAda
     }
 
     private void addTrack(List<Track> items) {
+        if (player == null) return;
         List<Tracks.Group> groups = player.getCurrentTracks().getGroups();
         for (int i = 0; i < groups.size(); i++) {
             Tracks.Group trackGroup = groups.get(i);
@@ -174,7 +212,6 @@ public final class TrackDialog extends BaseBottomSheetDialog implements TrackAda
     });
 
     public interface Listener {
-
         void onSubtitleClick();
     }
 }
