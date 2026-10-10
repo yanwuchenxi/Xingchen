@@ -15,6 +15,9 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
 import androidx.annotation.NonNull;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -629,14 +632,47 @@ public class LiveActivity extends PlaybackActivity implements CustomKeyDown.List
         return !ResUtil.isLand(this) && !isRotate() && !isInPictureInPictureMode();
     }
 
-    /** 竖屏嵌入：显示状态栏；横屏/旋转全屏：沉浸隐藏系统栏 */
+    /** 竖屏嵌入：显示状态栏并把内容下移；横屏/旋转全屏：沉浸隐藏系统栏 */
     private void applySystemUiForOrientation() {
         try {
-            if (isEmbeddedLiveUi()) Util.showSystemUI(this);
-            else Util.hideSystemUI(this);
+            if (isEmbeddedLiveUi()) {
+                Util.showSystemUI(this);
+                applyEmbeddedTopInset();
+            } else {
+                Util.hideSystemUI(this);
+                clearEmbeddedTopInset();
+            }
         } catch (Throwable e) {
             e.printStackTrace();
         }
+    }
+
+    /** 与首页一致：内容避开状态栏，播放器+列表整体下移 */
+    private void applyEmbeddedTopInset() {
+        if (mBinding == null) return;
+        View root = mBinding.getRoot();
+        ViewCompat.setOnApplyWindowInsetsListener(root, (v, insets) -> {
+            Insets bars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+            // 仅竖屏嵌入时吃 top inset；底栏自行处理
+            v.setPadding(0, bars.top, 0, 0);
+            return insets;
+        });
+        ViewCompat.requestApplyInsets(root);
+        // 兜底：若 insets 尚未派发，用状态栏高度
+        int top = 0;
+        try {
+            int resId = getResources().getIdentifier("status_bar_height", "dimen", "android");
+            if (resId > 0) top = getResources().getDimensionPixelSize(resId);
+        } catch (Throwable ignored) {
+        }
+        if (root.getPaddingTop() == 0 && top > 0) root.setPadding(0, top, 0, 0);
+    }
+
+    private void clearEmbeddedTopInset() {
+        if (mBinding == null) return;
+        View root = mBinding.getRoot();
+        ViewCompat.setOnApplyWindowInsetsListener(root, null);
+        root.setPadding(0, 0, 0, 0);
     }
 
     private void keepLiveMenuVisible() {
