@@ -1,7 +1,7 @@
 package com.xingchen.android.tv.player.engine;
 
 import androidx.media3.common.MediaMetadata;
-import androidx.media3.common.MediaTitle;
+import androidx.media3.common.MediaEdition;
 import androidx.media3.common.PlaybackException;
 import androidx.media3.common.Player;
 import androidx.media3.common.Tracks;
@@ -57,7 +57,7 @@ public interface PlayerEngine {
     default void setRepeatOne(boolean repeat) {
     }
 
-    default List<MediaTitle> getCurrentMediaTitles() {
+    default List<MediaEdition> getCurrentMediaEditions() {
         return Collections.emptyList();
     }
 

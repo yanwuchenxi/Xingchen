@@ -6,7 +6,7 @@ import android.text.TextUtils;
 import androidx.annotation.NonNull;
 import androidx.media3.common.MediaItem;
 import androidx.media3.common.MediaMetadata;
-import androidx.media3.common.MediaTitle;
+import androidx.media3.common.MediaEdition;
 import androidx.media3.common.PlaybackException;
 import androidx.media3.common.Player;
 import androidx.media3.common.Tracks;
@@ -77,8 +77,8 @@ public class PlayerManager implements ParseCallback {
         return engine.getCurrentTracks();
     }
 
-    public List<MediaTitle> getCurrentMediaTitles() {
-        return engine.getCurrentMediaTitles();
+    public List<MediaEdition> getCurrentMediaEditions() {
+        return engine.getCurrentMediaEditions();
     }
 
     public MediaItem getCurrentMediaItem() {
@@ -208,10 +208,18 @@ public class PlayerManager implements ParseCallback {
         setMediaItem();
     }
 
-    public void setTitle(MediaTitle title) {
-        if (spec != null) spec.setUrl(spec.getUri().buildUpon().fragment("title=" + title.index).build().toString());
-        setMediaItem();
-        seekTo(0);
+    public void setTitle(MediaEdition title) {
+        if (title == null) return;
+        // Media3 1.11: MediaTitle -> MediaEdition
+        try {
+            if (player != null && player.selectEdition(title)) return;
+        } catch (Throwable ignored) {
+        }
+        if (spec != null) {
+            spec.setUrl(spec.getUri().buildUpon().fragment("title=" + title.index).build().toString());
+            setMediaItem();
+            seekTo(0);
+        }
     }
 
     public static MediaMetadata buildMetadata(String title, String artist, String artUri) {
@@ -479,7 +487,7 @@ public class PlayerManager implements ParseCallback {
         }
 
         @Override
-        public void onMediaTitlesChanged(@NonNull List<MediaTitle> titles) {
+        public void onMediaEditionsChanged(@NonNull List<MediaEdition> titles) {
             callback.onTitlesChanged();
         }
 
