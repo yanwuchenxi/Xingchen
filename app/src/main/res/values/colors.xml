@@ -45,7 +45,6 @@
     <color name="xingchen_badge_end">#FFFEE5A2</color>
     <color name="xingchen_chip_bg">#0FFFFFFF</color>
     <color name="ysc_accent">#FFFFB40A</color>
-</resources>
 
     <!-- 液态玻璃 -->
     <color name="glass_stroke">#55FFFFFF</color>
@@ -61,3 +60,4 @@
     <color name="glass_nav_end">#CC222648</color>
     <color name="glass_text_primary">#F2FFFFFF</color>
     <color name="glass_text_secondary">#CCFFFFFF</color>
+</resources>
