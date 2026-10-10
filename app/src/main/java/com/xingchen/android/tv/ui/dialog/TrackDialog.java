@@ -33,12 +33,16 @@ import com.xingchen.android.tv.ui.adapter.TrackAdapter;
 import com.xingchen.android.tv.ui.custom.SpaceItemDecoration;
 import com.xingchen.android.tv.utils.FileChooser;
 import com.xingchen.android.tv.utils.ResUtil;
+import com.google.android.material.slider.Slider;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
 
 public final class TrackDialog extends BaseBottomSheetDialog implements TrackAdapter.OnClickListener {
+
+    private static final long OFFSET_STEP_MS = 100;
 
     private final TrackNameProvider provider;
     private final TrackAdapter adapter;
@@ -91,7 +95,7 @@ public final class TrackDialog extends BaseBottomSheetDialog implements TrackAda
     }
 
     private boolean hasOffset() {
-        return (type == C.TRACK_TYPE_TEXT || type == C.TRACK_TYPE_AUDIO) && player != null && player.haveTrack(type);
+        return player != null && (type == C.TRACK_TYPE_TEXT || type == C.TRACK_TYPE_AUDIO);
     }
 
     @Override
@@ -108,27 +112,65 @@ public final class TrackDialog extends BaseBottomSheetDialog implements TrackAda
         binding.title.setText(ResUtil.getStringArray(R.array.select_track)[type - 1]);
         binding.recycler.post(() -> binding.recycler.scrollToPosition(adapter.getSelected()));
         binding.recycler.setVisibility(adapter.getItemCount() == 0 ? View.GONE : View.VISIBLE);
-        binding.offset.setVisibility(hasOffset() ? View.VISIBLE : View.GONE);
         binding.choose.setVisibility(hasChoose() ? View.VISIBLE : View.GONE);
         binding.online.setVisibility(hasChoose() ? View.VISIBLE : View.GONE);
         binding.styleRow.setVisibility(hasStyle() ? View.VISIBLE : View.GONE);
+        bindOffsetSection();
     }
 
     @Override
     protected void initEvent() {
-        binding.offset.setOnClickListener(this::onOffset);
         binding.choose.setOnClickListener(this::onChoose);
         binding.online.setOnClickListener(this::onOnline);
         binding.large.setOnClickListener(this::onLarge);
         binding.small.setOnClickListener(this::onSmall);
         binding.up.setOnClickListener(this::onUp);
         binding.down.setOnClickListener(this::onDown);
-        binding.reset.setOnClickListener(this::onReset);
+        binding.styleReset.setOnClickListener(this::onStyleReset);
+        binding.offsetMinus.setOnClickListener(v -> nudgeOffset(-OFFSET_STEP_MS));
+        binding.offsetPlus.setOnClickListener(v -> nudgeOffset(OFFSET_STEP_MS));
+        binding.offsetReset.setOnClickListener(v -> applyOffset(0));
+        binding.offsetSlider.addOnChangeListener((Slider slider, float value, boolean fromUser) -> {
+            if (!fromUser || player == null) return;
+            long ms = Math.round(value / OFFSET_STEP_MS) * OFFSET_STEP_MS;
+            applyOffset(ms);
+        });
     }
 
-    private void onOffset(View view) {
-        OffsetDialog.create().player(player).type(type).show(requireActivity());
-        dismiss();
+    private void bindOffsetSection() {
+        if (!hasOffset()) {
+            binding.offsetSection.setVisibility(View.GONE);
+            return;
+        }
+        binding.offsetSection.setVisibility(View.VISIBLE);
+        boolean text = type == C.TRACK_TYPE_TEXT;
+        binding.offsetLabel.setText(text ? R.string.offset_text : R.string.offset_audio);
+        long current = text ? player.getTextOffsetMs() : player.getAudioOffsetMs();
+        float clamped = Math.max(binding.offsetSlider.getValueFrom(), Math.min(binding.offsetSlider.getValueTo(), current));
+        binding.offsetSlider.setValue(clamped);
+        binding.offsetValue.setText(formatOffset(clamped));
+    }
+
+    private void nudgeOffset(long deltaMs) {
+        if (player == null) return;
+        long cur = type == C.TRACK_TYPE_TEXT ? player.getTextOffsetMs() : player.getAudioOffsetMs();
+        applyOffset(cur + deltaMs);
+    }
+
+    private void applyOffset(long offsetMs) {
+        if (player == null) return;
+        float from = binding.offsetSlider.getValueFrom();
+        float to = binding.offsetSlider.getValueTo();
+        long clamped = Math.round(Math.max(from, Math.min(to, offsetMs)));
+        clamped = Math.round(clamped / (double) OFFSET_STEP_MS) * OFFSET_STEP_MS;
+        if (type == C.TRACK_TYPE_TEXT) player.setTextOffsetMs(clamped);
+        else if (type == C.TRACK_TYPE_AUDIO) player.setAudioOffsetMs(clamped);
+        binding.offsetSlider.setValue(clamped);
+        binding.offsetValue.setText(formatOffset(clamped));
+    }
+
+    private String formatOffset(float valueMs) {
+        return String.format(Locale.getDefault(), "%+.1fs", valueMs / 1000f);
     }
 
     private void onChoose(View view) {
@@ -170,7 +212,7 @@ public final class TrackDialog extends BaseBottomSheetDialog implements TrackAda
         PlayerSetting.putSubtitlePosition(subtitleView.getPosition());
     }
 
-    private void onReset(View view) {
+    private void onStyleReset(View view) {
         if (subtitleView == null) return;
         PlayerSetting.putSubtitleTextSize(0.0f);
         PlayerSetting.putSubtitlePosition(0.0f);

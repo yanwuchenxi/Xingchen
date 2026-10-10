@@ -29,7 +29,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="?attr/selectableItemBackgroundBorderless"
-            android:contentDescription="@string/online_subtitle_title"
             android:src="@drawable/ic_action_choose"
             android:visibility="gone"
             tools:visibility="visible" />
@@ -45,19 +44,9 @@
             android:visibility="gone"
             tools:visibility="visible" />
 
-        <androidx.appcompat.widget.AppCompatImageView
-            android:id="@+id/offset"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:src="@drawable/ic_action_offset"
-            android:visibility="gone"
-            tools:visibility="visible" />
-
     </androidx.appcompat.widget.LinearLayoutCompat>
 
-    <!-- 字幕样式：字号 / 位置（由原右侧弹窗并入） -->
+    <!-- 字幕样式：字号 / 位置 -->
     <androidx.appcompat.widget.LinearLayoutCompat
         android:id="@+id/styleRow"
         android:layout_width="match_parent"
@@ -65,7 +54,7 @@
         android:gravity="center"
         android:orientation="horizontal"
         android:paddingHorizontal="16dp"
-        android:paddingBottom="8dp"
+        android:paddingBottom="4dp"
         android:visibility="gone"
         tools:visibility="visible">
 
@@ -102,12 +91,99 @@
             android:src="@drawable/ic_subtitle_down" />
 
         <androidx.appcompat.widget.AppCompatImageView
-            android:id="@+id/reset"
+            android:id="@+id/styleReset"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:padding="10dp"
             android:src="@drawable/ic_subtitle_reset" />
+    </androidx.appcompat.widget.LinearLayoutCompat>
+
+    <!-- 音轨/字幕 时间偏移（原 OffsetDialog 并入） -->
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:id="@+id/offsetSection"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingHorizontal="16dp"
+        android:paddingBottom="4dp"
+        android:visibility="gone"
+        tools:visibility="visible">
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingHorizontal="8dp">
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/offsetLabel"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/offset_text"
+                android:textColor="?attr/colorOnSurface"
+                android:textSize="14sp" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/offsetValue"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="?attr/colorPrimary"
+                android:textSize="14sp"
+                tools:text="0.0s" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/offsetReset"
+                style="@style/Widget.Material3.Button.TextButton"
+                android:layout_width="wrap_content"
+                android:layout_height="36dp"
+                android:minWidth="0dp"
+                android:text="@string/danmaku_reset"
+                android:textSize="12sp" />
+        </androidx.appcompat.widget.LinearLayoutCompat>
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/offsetMinus"
+                style="@style/Widget.Material3.Button.TonalButton"
+                android:layout_width="40dp"
+                android:layout_height="36dp"
+                android:insetTop="0dp"
+                android:insetBottom="0dp"
+                android:minWidth="0dp"
+                android:padding="0dp"
+                android:text="−"
+                android:textSize="18sp" />
+
+            <com.google.android.material.slider.Slider
+                android:id="@+id/offsetSlider"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:stepSize="100"
+                android:valueFrom="-10000"
+                android:valueTo="10000"
+                app:tickVisible="false" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/offsetPlus"
+                style="@style/Widget.Material3.Button.TonalButton"
+                android:layout_width="40dp"
+                android:layout_height="36dp"
+                android:insetTop="0dp"
+                android:insetBottom="0dp"
+                android:minWidth="0dp"
+                android:padding="0dp"
+                android:text="+"
+                android:textSize="18sp" />
+        </androidx.appcompat.widget.LinearLayoutCompat>
     </androidx.appcompat.widget.LinearLayoutCompat>
 
     <com.xingchen.android.tv.ui.custom.CustomRecyclerView
