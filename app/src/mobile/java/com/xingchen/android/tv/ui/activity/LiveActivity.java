@@ -629,6 +629,16 @@ public class LiveActivity extends PlaybackActivity implements CustomKeyDown.List
         return !ResUtil.isLand(this) && !isRotate() && !isInPictureInPictureMode();
     }
 
+    /** 竖屏嵌入：显示状态栏；横屏/旋转全屏：沉浸隐藏系统栏 */
+    private void applySystemUiForOrientation() {
+        try {
+            if (isEmbeddedLiveUi()) Util.showSystemUI(this);
+            else Util.hideSystemUI(this);
+        } catch (Throwable e) {
+            e.printStackTrace();
+        }
+    }
+
     private void keepLiveMenuVisible() {
         mBinding.recycler.setVisibility(View.VISIBLE);
         mBinding.group.setVisibility(View.VISIBLE);
