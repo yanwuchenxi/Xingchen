@@ -11,28 +11,19 @@
         android:layout_height="match_parent"
         android:layout_above="@+id/navigation" />
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="0.5dp"
-        android:layout_above="@id/navigation"
-        android:background="@android:color/transparent" />
-
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/navigation"
         android:layout_width="match_parent"
         android:layout_height="@dimen/ysc_bottom_nav_height"
         android:layout_alignParentBottom="true"
-        android:layout_marginStart="10dp"
-        android:layout_marginEnd="10dp"
-        android:layout_marginBottom="8dp"
         android:background="@drawable/shape_glass_nav"
-        android:paddingTop="4dp"
-        android:paddingBottom="4dp"
         app:elevation="0dp"
         app:itemBackground="@android:color/transparent"
-        app:itemIconSize="24dp"
+        app:itemIconSize="26dp"
         app:itemIconTint="@color/selector_ysc_nav"
         app:itemTextColor="@color/selector_ysc_nav"
+        app:itemPaddingTop="10dp"
+        app:itemPaddingBottom="10dp"
         app:labelVisibilityMode="unlabeled"
         app:menu="@menu/menu_nav" />
 

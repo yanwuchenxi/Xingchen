@@ -1,14 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- 底部导航 -->
-<shape xmlns:android="http://schemas.android.com/apk/res/android">
-    <gradient
-        android:angle="90"
-        android:endColor="@color/glass_nav_end"
-        android:startColor="@color/glass_nav_start" />
-    <corners
-        android:topLeftRadius="20dp"
-        android:topRightRadius="20dp" />
-    <stroke
-        android:width="1dp"
-        android:color="@color/glass_stroke_soft" />
-</shape>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- 顶部分割高光 -->
+    <item android:height="1dp" android:gravity="top">
+        <shape>
+            <solid android:color="#33FFFFFF" />
+        </shape>
+    </item>
+    <item android:top="1dp">
+        <shape>
+            <gradient
+                android:angle="90"
+                android:endColor="#E6121628"
+                android:startColor="#CC1A2038" />
+        </shape>
+    </item>
+</layer-list>
