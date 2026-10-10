@@ -198,6 +198,14 @@ public class PlayerManager implements ParseCallback {
         return Util.timeMs(Math.max(0, getDuration()));
     }
 
+    public boolean supportsSubtitleStyle() {
+        return engine != null && engine.supportsSubtitleStyle();
+    }
+
+    public void setSubtitleStyle(float textSize, float position) {
+        if (engine != null) engine.setSubtitleStyle(textSize, position);
+    }
+
     public void setSub(Sub sub) {
         if (spec != null) spec.setSub(sub);
         setMediaItem();

@@ -28,21 +28,19 @@ import com.xingchen.android.tv.bean.Track;
 import com.xingchen.android.tv.databinding.DialogTrackBinding;
 import com.xingchen.android.tv.player.PlayerHelper;
 import com.xingchen.android.tv.player.PlayerManager;
-import com.xingchen.android.tv.setting.PlayerSetting;
 import com.xingchen.android.tv.ui.adapter.TrackAdapter;
 import com.xingchen.android.tv.ui.custom.SpaceItemDecoration;
 import com.xingchen.android.tv.utils.FileChooser;
 import com.xingchen.android.tv.utils.ResUtil;
-import com.google.android.material.slider.Slider;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Locale;
 
+/**
+ * 轨道面板（参照 Silent）：列表 + 工具栏图标（本地/在线/样式/偏移）
+ */
 public final class TrackDialog extends BaseBottomSheetDialog implements TrackAdapter.OnClickListener {
-
-    private static final long OFFSET_STEP_MS = 100;
 
     private final TrackNameProvider provider;
     private final TrackAdapter adapter;
@@ -90,12 +88,17 @@ public final class TrackDialog extends BaseBottomSheetDialog implements TrackAda
         return type == C.TRACK_TYPE_TEXT && player != null && player.isVod();
     }
 
+    private boolean hasSearch() {
+        return hasChoose();
+    }
+
     private boolean hasStyle() {
         return type == C.TRACK_TYPE_TEXT && subtitleView != null;
     }
 
     private boolean hasOffset() {
-        return player != null && (type == C.TRACK_TYPE_TEXT || type == C.TRACK_TYPE_AUDIO);
+        return player != null && (type == C.TRACK_TYPE_TEXT || type == C.TRACK_TYPE_AUDIO)
+                && player.haveTrack(type);
     }
 
     @Override
@@ -113,72 +116,24 @@ public final class TrackDialog extends BaseBottomSheetDialog implements TrackAda
         binding.recycler.setItemAnimator(null);
         binding.recycler.setHasFixedSize(true);
         binding.recycler.setAdapter(adapter.addAll(getTrack()));
-        binding.recycler.addItemDecoration(new SpaceItemDecoration(1, 16));
+        binding.recycler.addItemDecoration(new SpaceItemDecoration(1, 12));
         binding.title.setText(ResUtil.getStringArray(R.array.select_track)[type - 1]);
         binding.recycler.post(() -> binding.recycler.scrollToPosition(adapter.getSelected()));
         boolean empty = adapter.getItemCount() == 0;
         binding.recycler.setVisibility(empty ? View.GONE : View.VISIBLE);
-        binding.trackSectionTitle.setVisibility(empty ? View.GONE : View.VISIBLE);
         binding.emptyHint.setVisibility(empty && hasChoose() ? View.VISIBLE : View.GONE);
         binding.choose.setVisibility(hasChoose() ? View.VISIBLE : View.GONE);
-        binding.online.setVisibility(hasChoose() ? View.VISIBLE : View.GONE);
-        binding.styleRow.setVisibility(hasStyle() ? View.VISIBLE : View.GONE);
-        bindOffsetSection();
+        binding.search.setVisibility(hasSearch() ? View.VISIBLE : View.GONE);
+        binding.subtitle.setVisibility(hasStyle() ? View.VISIBLE : View.GONE);
+        binding.offset.setVisibility(hasOffset() ? View.VISIBLE : View.GONE);
     }
 
     @Override
     protected void initEvent() {
         binding.choose.setOnClickListener(this::onChoose);
-        binding.online.setOnClickListener(this::onOnline);
-        binding.large.setOnClickListener(this::onLarge);
-        binding.small.setOnClickListener(this::onSmall);
-        binding.up.setOnClickListener(this::onUp);
-        binding.down.setOnClickListener(this::onDown);
-        binding.styleReset.setOnClickListener(this::onStyleReset);
-        binding.offsetMinus.setOnClickListener(v -> nudgeOffset(-OFFSET_STEP_MS));
-        binding.offsetPlus.setOnClickListener(v -> nudgeOffset(OFFSET_STEP_MS));
-        binding.offsetReset.setOnClickListener(v -> applyOffset(0));
-        binding.offsetSlider.addOnChangeListener((Slider slider, float value, boolean fromUser) -> {
-            if (!fromUser || player == null) return;
-            long ms = Math.round(value / OFFSET_STEP_MS) * OFFSET_STEP_MS;
-            applyOffset(ms);
-        });
-    }
-
-    private void bindOffsetSection() {
-        if (!hasOffset()) {
-            binding.offsetSection.setVisibility(View.GONE);
-            return;
-        }
-        binding.offsetSection.setVisibility(View.VISIBLE);
-        boolean text = type == C.TRACK_TYPE_TEXT;
-        binding.offsetLabel.setText(text ? R.string.offset_text : R.string.offset_audio);
-        long current = text ? player.getTextOffsetMs() : player.getAudioOffsetMs();
-        float clamped = Math.max(binding.offsetSlider.getValueFrom(), Math.min(binding.offsetSlider.getValueTo(), current));
-        binding.offsetSlider.setValue(clamped);
-        binding.offsetValue.setText(formatOffset(clamped));
-    }
-
-    private void nudgeOffset(long deltaMs) {
-        if (player == null) return;
-        long cur = type == C.TRACK_TYPE_TEXT ? player.getTextOffsetMs() : player.getAudioOffsetMs();
-        applyOffset(cur + deltaMs);
-    }
-
-    private void applyOffset(long offsetMs) {
-        if (player == null) return;
-        float from = binding.offsetSlider.getValueFrom();
-        float to = binding.offsetSlider.getValueTo();
-        long clamped = Math.round(Math.max(from, Math.min(to, offsetMs)));
-        clamped = Math.round(clamped / (double) OFFSET_STEP_MS) * OFFSET_STEP_MS;
-        if (type == C.TRACK_TYPE_TEXT) player.setTextOffsetMs(clamped);
-        else if (type == C.TRACK_TYPE_AUDIO) player.setAudioOffsetMs(clamped);
-        binding.offsetSlider.setValue(clamped);
-        binding.offsetValue.setText(formatOffset(clamped));
-    }
-
-    private String formatOffset(float valueMs) {
-        return String.format(Locale.getDefault(), "%+.1fs", valueMs / 1000f);
+        binding.search.setOnClickListener(this::onSearch);
+        binding.subtitle.setOnClickListener(this::onSubtitleStyle);
+        binding.offset.setOnClickListener(this::onOffset);
     }
 
     private void onChoose(View view) {
@@ -186,55 +141,38 @@ public final class TrackDialog extends BaseBottomSheetDialog implements TrackAda
         player.pause();
     }
 
-    private void onOnline(View view) {
+    private void onSearch(View view) {
+        openOnlineSearch();
+        dismiss();
+    }
+
+    private void onSubtitleStyle(View view) {
+        FragmentActivity activity = requireActivity();
+        SubtitleDialog.create()
+                .view(subtitleView)
+                .player(player)
+                .search(this::openOnlineSearch)
+                .show(activity);
+        dismiss();
+    }
+
+    private void onOffset(View view) {
+        OffsetDialog.create().player(player).type(type).show(requireActivity());
+        dismiss();
+    }
+
+    private void openOnlineSearch() {
         String seed = vodTitle;
         if ((seed == null || seed.isEmpty()) && player != null && player.getCurrentMediaItem() != null
                 && player.getCurrentMediaItem().mediaMetadata.title != null) {
             seed = player.getCurrentMediaItem().mediaMetadata.title.toString();
         }
         OnlineSubtitleDialog.create().player(player).title(seed).show(requireActivity());
-        dismiss();
-    }
-
-    private void onLarge(View view) {
-        if (subtitleView == null) return;
-        subtitleView.addTextSize(0.002f);
-        PlayerSetting.putSubtitleTextSize(subtitleView.getTextSize());
-    }
-
-    private void onSmall(View view) {
-        if (subtitleView == null) return;
-        subtitleView.subTextSize(0.002f);
-        PlayerSetting.putSubtitleTextSize(subtitleView.getTextSize());
-    }
-
-    private void onUp(View view) {
-        if (subtitleView == null) return;
-        subtitleView.addPosition(0.005f);
-        PlayerSetting.putSubtitlePosition(subtitleView.getPosition());
-    }
-
-    private void onDown(View view) {
-        if (subtitleView == null) return;
-        subtitleView.subPosition(0.005f);
-        PlayerSetting.putSubtitlePosition(subtitleView.getPosition());
-    }
-
-    private void onStyleReset(View view) {
-        if (subtitleView == null) return;
-        PlayerSetting.putSubtitleTextSize(0.0f);
-        PlayerSetting.putSubtitlePosition(0.0f);
-        subtitleView.reset();
     }
 
     private List<Track> getTrack() {
         List<Track> items = new ArrayList<>();
-        addTrack(items);
-        return items;
-    }
-
-    private void addTrack(List<Track> items) {
-        if (player == null) return;
+        if (player == null) return items;
         List<Tracks.Group> groups = player.getCurrentTracks().getGroups();
         for (int i = 0; i < groups.size(); i++) {
             Tracks.Group trackGroup = groups.get(i);
@@ -247,6 +185,7 @@ public final class TrackDialog extends BaseBottomSheetDialog implements TrackAda
                 items.add(item);
             }
         }
+        return items;
     }
 
     @Override

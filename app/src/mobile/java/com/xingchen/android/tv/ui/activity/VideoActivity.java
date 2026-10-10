@@ -86,6 +86,8 @@ import com.xingchen.android.tv.ui.dialog.EpisodeListDialog;
 import com.xingchen.android.tv.ui.dialog.InfoDialog;
 import com.xingchen.android.tv.ui.dialog.ReceiveDialog;
 import com.xingchen.android.tv.ui.dialog.TitleDialog;
+import com.xingchen.android.tv.ui.dialog.OnlineSubtitleDialog;
+import com.xingchen.android.tv.ui.dialog.SubtitleDialog;
 import com.xingchen.android.tv.ui.dialog.TrackDialog;
 import com.xingchen.android.tv.utils.Clock;
 import com.xingchen.android.tv.utils.FileChooser;
@@ -1313,8 +1315,11 @@ public class VideoActivity extends PlaybackActivity implements Clock.Callback, C
     @Override
     public void onSubtitleClick() {
         String seed = mBinding.control.title.getText() == null ? "" : mBinding.control.title.getText().toString();
-        TrackDialog.create().type(androidx.media3.common.C.TRACK_TYPE_TEXT).player(player()).title(seed)
-                .subtitleView(mBinding.exo.getSubtitleView()).show(this);
+        SubtitleDialog.create()
+                .view(mBinding.exo.getSubtitleView())
+                .player(player())
+                .search(() -> OnlineSubtitleDialog.create().player(player()).title(seed).show(this))
+                .show(this);
         hideControl();
     }
 

@@ -61,6 +61,13 @@ public interface PlayerEngine {
         return Collections.emptyList();
     }
 
+    default boolean supportsSubtitleStyle() {
+        return false;
+    }
+
+    default void setSubtitleStyle(float textSize, float position) {
+    }
+
     String getErrorMessage(PlaybackException e);
 
     ErrorAction handleError(PlaybackException e);

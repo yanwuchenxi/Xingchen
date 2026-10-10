@@ -12,16 +12,28 @@ import androidx.fragment.app.FragmentActivity;
 import androidx.media3.ui.SubtitleView;
 import androidx.viewbinding.ViewBinding;
 
+import com.xingchen.android.tv.App;
 import com.xingchen.android.tv.databinding.DialogSubtitleBinding;
+import com.xingchen.android.tv.player.PlayerManager;
 import com.xingchen.android.tv.setting.PlayerSetting;
 import com.xingchen.android.tv.utils.ResUtil;
 import com.xingchen.android.tv.utils.Util;
 import com.github.bassaer.library.MDColor;
 
+/**
+ * 字幕样式工具条（参照 Silent）：字号 / 位置 / 重置，可选在线搜索入口
+ */
 public final class SubtitleDialog extends BaseBottomSheetDialog {
+
+    private static final float DEFAULT_TEXT_SIZE = 0.0533f;
+    private static final float TEXT_STEP = 0.002f;
+    private static final float POSITION_STEP = 0.005f;
+    private static final float NATIVE_POSITION_STEP = 0.05f;
 
     private DialogSubtitleBinding binding;
     private SubtitleView subtitleView;
+    private Runnable searchAction;
+    private PlayerManager player;
 
     public static SubtitleDialog create() {
         return new SubtitleDialog();
@@ -29,6 +41,16 @@ public final class SubtitleDialog extends BaseBottomSheetDialog {
 
     public SubtitleDialog view(SubtitleView subtitleView) {
         this.subtitleView = subtitleView;
+        return this;
+    }
+
+    public SubtitleDialog search(Runnable searchAction) {
+        this.searchAction = searchAction;
+        return this;
+    }
+
+    public SubtitleDialog player(PlayerManager player) {
+        this.player = player;
         return this;
     }
 
@@ -41,9 +63,13 @@ public final class SubtitleDialog extends BaseBottomSheetDialog {
         return Util.isFullscreen(getActivity());
     }
 
+    private boolean isNativeSubtitleStyle() {
+        return player != null && player.supportsSubtitleStyle();
+    }
+
     @Override
     protected boolean transparent() {
-        return isFull();
+        return true;
     }
 
     @Override
@@ -54,7 +80,16 @@ public final class SubtitleDialog extends BaseBottomSheetDialog {
     @Override
     protected void initView() {
         int count = binding.getRoot().getChildCount();
-        if (isFull()) for (int i = 0; i < count; i++) ((ImageView) binding.getRoot().getChildAt(i)).getDrawable().setTint(MDColor.WHITE);
+        for (int i = 0; i < count; i++) {
+            View child = binding.getRoot().getChildAt(i);
+            if (child instanceof ImageView) {
+                try {
+                    ((ImageView) child).getDrawable().setTint(MDColor.WHITE);
+                } catch (Throwable ignored) {
+                }
+            }
+        }
+        binding.search.setVisibility(searchAction != null ? View.VISIBLE : View.GONE);
     }
 
     @Override
@@ -64,37 +99,87 @@ public final class SubtitleDialog extends BaseBottomSheetDialog {
         binding.large.setOnClickListener(this::onLarge);
         binding.small.setOnClickListener(this::onSmall);
         binding.reset.setOnClickListener(this::onReset);
+        binding.search.setOnClickListener(this::onSearch);
     }
 
     private void onUp(View view) {
-        subtitleView.addPosition(0.005f);
+        if (isNativeSubtitleStyle()) {
+            setNativePosition(PlayerSetting.getSubtitlePosition() + NATIVE_POSITION_STEP);
+            return;
+        }
+        if (subtitleView == null) return;
+        subtitleView.addPosition(POSITION_STEP);
         PlayerSetting.putSubtitlePosition(subtitleView.getPosition());
     }
 
     private void onDown(View view) {
-        subtitleView.subPosition(0.005f);
+        if (isNativeSubtitleStyle()) {
+            setNativePosition(PlayerSetting.getSubtitlePosition() - NATIVE_POSITION_STEP);
+            return;
+        }
+        if (subtitleView == null) return;
+        subtitleView.subPosition(POSITION_STEP);
         PlayerSetting.putSubtitlePosition(subtitleView.getPosition());
     }
 
     private void onLarge(View view) {
-        subtitleView.addTextSize(0.002f);
+        if (isNativeSubtitleStyle()) {
+            setNativeTextSize(currentTextSize() + TEXT_STEP);
+            return;
+        }
+        if (subtitleView == null) return;
+        subtitleView.addTextSize(TEXT_STEP);
         PlayerSetting.putSubtitleTextSize(subtitleView.getTextSize());
     }
 
     private void onSmall(View view) {
-        subtitleView.subTextSize(0.002f);
+        if (isNativeSubtitleStyle()) {
+            setNativeTextSize(currentTextSize() - TEXT_STEP);
+            return;
+        }
+        if (subtitleView == null) return;
+        subtitleView.subTextSize(TEXT_STEP);
         PlayerSetting.putSubtitleTextSize(subtitleView.getTextSize());
     }
 
     private void onReset(View view) {
         PlayerSetting.putSubtitleTextSize(0.0f);
         PlayerSetting.putSubtitlePosition(0.0f);
-        subtitleView.reset();
+        if (isNativeSubtitleStyle()) {
+            player.setSubtitleStyle(0.0f, 0.0f);
+        } else if (subtitleView != null) {
+            subtitleView.reset();
+        }
+    }
+
+    private float currentTextSize() {
+        float value = PlayerSetting.getSubtitleTextSize();
+        return value <= 0 ? DEFAULT_TEXT_SIZE : value;
+    }
+
+    private void setNativeTextSize(float value) {
+        value = Math.max(0.02f, Math.min(0.12f, value));
+        PlayerSetting.putSubtitleTextSize(value);
+        player.setSubtitleStyle(value, PlayerSetting.getSubtitlePosition());
+    }
+
+    private void setNativePosition(float value) {
+        value = Math.max(-0.5f, Math.min(1.0f, value));
+        PlayerSetting.putSubtitlePosition(value);
+        player.setSubtitleStyle(PlayerSetting.getSubtitleTextSize(), value);
+    }
+
+    private void onSearch(View view) {
+        if (searchAction == null) return;
+        dismiss();
+        App.post(searchAction::run, 100);
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        getDialog().getWindow().setLayout(ResUtil.dp2px(isFull() ? 232 : 216), -1);
+        if (getDialog() != null && getDialog().getWindow() != null) {
+            getDialog().getWindow().setLayout(ResUtil.dp2px(isFull() ? 280 : 260), -2);
+        }
     }
 }

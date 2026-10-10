@@ -74,6 +74,8 @@ import com.xingchen.android.tv.ui.dialog.LiveLineDialog;
 import com.xingchen.android.tv.ui.dialog.LiveProgramDialog;
 import com.xingchen.android.tv.setting.LiveEpgSetting;
 import com.xingchen.android.tv.ui.dialog.PassDialog;
+import com.xingchen.android.tv.ui.dialog.OnlineSubtitleDialog;
+import com.xingchen.android.tv.ui.dialog.SubtitleDialog;
 import com.xingchen.android.tv.ui.dialog.TrackDialog;
 import com.xingchen.android.tv.utils.Biometric;
 import com.xingchen.android.tv.utils.ImgUtil;
@@ -1064,8 +1066,10 @@ public class LiveActivity extends PlaybackActivity implements CustomKeyDown.List
 
     @Override
     public void onSubtitleClick() {
-        TrackDialog.create().type(androidx.media3.common.C.TRACK_TYPE_TEXT).player(player())
-                .subtitleView(mBinding.exo.getSubtitleView()).show(this);
+        SubtitleDialog.create()
+                .view(mBinding.exo.getSubtitleView())
+                .player(player())
+                .show(this);
         hideControl();
     }
 
