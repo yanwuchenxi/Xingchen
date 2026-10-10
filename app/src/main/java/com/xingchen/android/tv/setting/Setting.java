@@ -233,4 +233,9 @@ public class Setting {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.R) return false;
         return new Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION, Uri.parse("package:" + App.get().getPackageName())).resolveActivity(App.get().getPackageManager()) != null || new Intent(Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION).resolveActivity(App.get().getPackageManager()) != null;
     }
+
+    /** 星辰暂未接完整 TMDB，字幕自动匹配不启用 TMDB 强校验 */
+    public static boolean isTmdbReady() {
+        return false;
+    }
 }
