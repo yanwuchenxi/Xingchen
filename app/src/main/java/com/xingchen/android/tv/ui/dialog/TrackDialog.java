@@ -99,6 +99,11 @@ public final class TrackDialog extends BaseBottomSheetDialog implements TrackAda
     }
 
     @Override
+    protected boolean transparent() {
+        return true;
+    }
+
+    @Override
     protected ViewBinding getBinding(@NonNull LayoutInflater inflater, @Nullable ViewGroup container) {
         return binding = DialogTrackBinding.inflate(inflater, container, false);
     }
@@ -111,7 +116,10 @@ public final class TrackDialog extends BaseBottomSheetDialog implements TrackAda
         binding.recycler.addItemDecoration(new SpaceItemDecoration(1, 16));
         binding.title.setText(ResUtil.getStringArray(R.array.select_track)[type - 1]);
         binding.recycler.post(() -> binding.recycler.scrollToPosition(adapter.getSelected()));
-        binding.recycler.setVisibility(adapter.getItemCount() == 0 ? View.GONE : View.VISIBLE);
+        boolean empty = adapter.getItemCount() == 0;
+        binding.recycler.setVisibility(empty ? View.GONE : View.VISIBLE);
+        binding.trackSectionTitle.setVisibility(empty ? View.GONE : View.VISIBLE);
+        binding.emptyHint.setVisibility(empty && hasChoose() ? View.VISIBLE : View.GONE);
         binding.choose.setVisibility(hasChoose() ? View.VISIBLE : View.GONE);
         binding.online.setVisibility(hasChoose() ? View.VISIBLE : View.GONE);
         binding.styleRow.setVisibility(hasStyle() ? View.VISIBLE : View.GONE);

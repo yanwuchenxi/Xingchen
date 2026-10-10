@@ -346,4 +346,9 @@
         <item>韓語</item>
         <item>自動</item>
     </string-array>
+    <string name="track_action_local">本地</string>
+    <string name="track_action_online">線上</string>
+    <string name="track_section_style">樣式</string>
+    <string name="track_section_list">軌道</string>
+    <string name="track_empty_hint">暫無軌道 · 可選擇本地或線上字幕</string>
 </resources>

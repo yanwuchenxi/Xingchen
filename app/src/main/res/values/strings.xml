@@ -384,4 +384,9 @@
         <item>Korean</item>
         <item>Auto</item>
     </string-array>
+    <string name="track_action_local">Local</string>
+    <string name="track_action_online">Online</string>
+    <string name="track_section_style">Style</string>
+    <string name="track_section_list">Tracks</string>
+    <string name="track_empty_hint">No tracks · use Local or Online</string>
 </resources>
