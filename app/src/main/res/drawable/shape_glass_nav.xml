@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 底部导航 -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <gradient
+        android:angle="90"
+        android:endColor="@color/glass_nav_end"
+        android:startColor="@color/glass_nav_start" />
+    <corners
+        android:topLeftRadius="20dp"
+        android:topRightRadius="20dp" />
+    <stroke
+        android:width="1dp"
+        android:color="@color/glass_stroke_soft" />
+</shape>

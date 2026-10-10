@@ -56,7 +56,8 @@ public abstract class BaseBottomSheetDialog extends BottomSheetDialogFragment {
     }
 
     protected boolean transparent() {
-        return false;
+        // 液态玻璃：默认透明底板，由内容 drawable 承担玻璃背景
+        return true;
     }
 
     protected void setBehavior(BottomSheetDialog dialog) {

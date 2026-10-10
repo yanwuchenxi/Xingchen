@@ -17,10 +17,12 @@
     <style name="Theme.App" parent="Theme.Base">
         <item name="colorPrimary">@color/xingchen_accent</item>
         <item name="colorSecondary">@color/xingchen_accent</item>
-        <item name="android:colorBackground">@color/xingchen_bg</item>
-        <item name="colorSurface">@color/xingchen_surface</item>
-        <item name="android:statusBarColor">@color/xingchen_bg</item>
-        <item name="android:navigationBarColor">@color/xingchen_bg</item>
+        <item name="android:colorBackground">@color/transparent</item>
+        <item name="colorSurface">@color/transparent</item>
+        <item name="android:statusBarColor">@color/transparent</item>
+        <item name="android:navigationBarColor">@color/transparent</item>
+        <item name="android:windowBackground">@color/transparent</item>
+        <item name="bottomSheetDialogTheme">@style/ThemeOverlay.App.BottomSheet</item>
     </style>
 
     <style name="Theme.Crash" parent="Theme.Base">
@@ -69,6 +71,25 @@
         <item name="android:textColor">@color/selector_control_sheet_text</item>
         <item name="android:textSize">13sp</item>
     </style>
+
+    <!-- 液态玻璃 BottomSheet -->
+    <style name="ThemeOverlay.App.BottomSheet" parent="ThemeOverlay.Material3.BottomSheetDialog">
+        <item name="bottomSheetStyle">@style/Widget.App.BottomSheet</item>
+        <item name="android:windowIsFloating">false</item>
+        <item name="android:navigationBarColor">@color/transparent</item>
+        <item name="android:statusBarColor">@color/transparent</item>
+    </style>
+
+    <style name="Widget.App.BottomSheet" parent="Widget.Material3.BottomSheet.Modal">
+        <item name="backgroundTint">@android:color/transparent</item>
+        <item name="shapeAppearance">@style/ShapeAppearance.App.GlassSheet</item>
+    </style>
+
+    <style name="ShapeAppearance.App.GlassSheet" parent="ShapeAppearance.Material3.LargeComponent">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">24dp</item>
+    </style>
+
 </resources>
 
 
