@@ -116,7 +116,7 @@ public final class TrackDialog extends BaseBottomSheetDialog implements TrackAda
         binding.recycler.setItemAnimator(null);
         binding.recycler.setHasFixedSize(true);
         binding.recycler.setAdapter(adapter.addAll(getTrack()));
-        binding.recycler.addItemDecoration(new SpaceItemDecoration(1, 12));
+        binding.recycler.addItemDecoration(new SpaceItemDecoration(1, 8));
         binding.title.setText(ResUtil.getStringArray(R.array.select_track)[type - 1]);
         binding.recycler.post(() -> binding.recycler.scrollToPosition(adapter.getSelected()));
         boolean empty = adapter.getItemCount() == 0;
