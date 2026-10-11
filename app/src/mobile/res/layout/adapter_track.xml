@@ -10,6 +10,6 @@
     android:maxLines="2"
     android:paddingHorizontal="12dp"
     android:paddingVertical="9dp"
-    android:textColor="#FFFFFFFF"
+    android:textColor="@color/glass_text_primary"
     android:textSize="13sp"
     tools:text="中文 · 外挂字幕.srt" />

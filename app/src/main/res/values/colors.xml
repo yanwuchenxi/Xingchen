@@ -46,18 +46,27 @@
     <color name="xingchen_chip_bg">#0FFFFFFF</color>
     <color name="ysc_accent">#FFFFB40A</color>
 
-    <!-- 液态玻璃 -->
-    <color name="glass_stroke">#55FFFFFF</color>
-    <color name="glass_stroke_soft">#33FFFFFF</color>
-    <color name="glass_highlight">#28FFFFFF</color>
-    <color name="glass_fill_start">#E62A2F5C</color>
-    <color name="glass_fill_center">#D6242860</color>
-    <color name="glass_fill_end">#CC30386A</color>
+    <!-- 液态玻璃三档 -->
+    <color name="glass_stroke">#66FFFFFF</color>
+    <color name="glass_stroke_soft">#40FFFFFF</color>
+    <color name="glass_stroke_bright">#99FFFFFF</color>
+    <color name="glass_highlight">#33FFFFFF</color>
+    <!-- light：底栏/芯片 -->
+    <color name="glass_light_fill">#22FFFFFF</color>
+    <!-- regular：字幕/偏移面板 -->
+    <color name="glass_regular_fill">#AA1A2038</color>
+    <!-- thick：强遮挡弹层 -->
+    <color name="glass_thick_fill">#CC1A2038</color>
+    <color name="glass_fill_start">#B32A2F5C</color>
+    <color name="glass_fill_center">#AA242860</color>
+    <color name="glass_fill_end">#A030386A</color>
     <color name="glass_fill_light">#33FFFFFF</color>
     <color name="glass_fill_mid">#22FFFFFF</color>
     <color name="glass_fill_deep">#40000000</color>
-    <color name="glass_nav_start">#E61A1E3A</color>
-    <color name="glass_nav_end">#CC222648</color>
-    <color name="glass_text_primary">#F2FFFFFF</color>
-    <color name="glass_text_secondary">#CCFFFFFF</color>
+    <color name="glass_nav_start">#22FFFFFF</color>
+    <color name="glass_nav_end">#18FFFFFF</color>
+    <color name="glass_text_primary">#FFFFFFFF</color>
+    <color name="glass_text_secondary">#E6FFFFFF</color>
+    <color name="glass_text_hint">#CCFFFFFF</color>
+
 </resources>

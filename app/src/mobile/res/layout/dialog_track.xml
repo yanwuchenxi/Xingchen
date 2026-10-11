@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/shape_subtitle_glass_panel"
+    android:background="@drawable/shape_glass_regular"
     android:orientation="vertical">
 
     <View
@@ -28,7 +28,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:textColor="#FFFFFFFF"
+            android:textColor="@color/glass_text_primary"
             android:textSize="14sp"
             android:textStyle="bold"
             tools:text="选择字幕" />
@@ -107,7 +107,7 @@
         android:paddingEnd="14dp"
         android:paddingBottom="14dp"
         android:text="@string/track_empty_hint"
-        android:textColor="#E6FFFFFF"
+        android:textColor="@color/glass_text_secondary"
         android:textSize="12sp"
         android:visibility="gone"
         tools:visibility="visible" />
