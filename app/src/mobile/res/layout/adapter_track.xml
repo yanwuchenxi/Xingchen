@@ -8,8 +8,8 @@
     android:ellipsize="end"
     android:gravity="center_vertical"
     android:maxLines="2"
-    android:paddingHorizontal="14dp"
-    android:paddingVertical="12dp"
-    android:textColor="@color/selector_control"
-    android:textSize="14sp"
+    android:paddingHorizontal="12dp"
+    android:paddingVertical="9dp"
+    android:textColor="#FFFFFFFF"
+    android:textSize="13sp"
     tools:text="中文 · 外挂字幕.srt" />

@@ -4,50 +4,50 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/shape_dialog_control_glass_panel"
+    android:background="@drawable/shape_subtitle_glass_panel"
     android:orientation="vertical"
-    android:paddingBottom="24dp">
+    android:paddingBottom="16dp">
 
     <View
-        android:layout_width="40dp"
-        android:layout_height="4dp"
+        android:layout_width="32dp"
+        android:layout_height="3dp"
         android:layout_gravity="center_horizontal"
-        android:layout_marginTop="12dp"
-        android:background="#55FFFFFF" />
+        android:layout_marginTop="8dp"
+        android:background="#88FFFFFF" />
 
     <androidx.appcompat.widget.LinearLayoutCompat
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
         android:orientation="horizontal"
-        android:paddingStart="22dp"
-        android:paddingTop="14dp"
-        android:paddingEnd="16dp"
-        android:paddingBottom="8dp">
+        android:paddingStart="14dp"
+        android:paddingTop="10dp"
+        android:paddingEnd="10dp"
+        android:paddingBottom="6dp">
 
         <com.google.android.material.textview.MaterialTextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="@string/offset_setting"
-            android:textColor="@android:color/white"
-            android:textSize="17sp"
+            android:textColor="#FFFFFFFF"
+            android:textSize="14sp"
             android:textStyle="bold" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/reset"
             style="@style/Widget.Material3.Button.TonalButton"
             android:layout_width="wrap_content"
-            android:layout_height="36dp"
+            android:layout_height="30dp"
             android:insetTop="0dp"
             android:insetBottom="0dp"
-            android:minWidth="64dp"
-            android:paddingHorizontal="16dp"
+            android:minWidth="52dp"
+            android:paddingHorizontal="12dp"
             android:text="@string/danmaku_reset"
             android:textColor="#FF1A1A2E"
-            android:textSize="13sp"
-            app:backgroundTint="#E8E8F0"
-            app:cornerRadius="18dp" />
+            android:textSize="12sp"
+            app:backgroundTint="#F0F0F8"
+            app:cornerRadius="15dp" />
     </androidx.appcompat.widget.LinearLayoutCompat>
 
     <androidx.appcompat.widget.LinearLayoutCompat
@@ -55,7 +55,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:paddingHorizontal="8dp"
+        android:paddingHorizontal="4dp"
         android:visibility="gone"
         tools:visibility="gone">
 
@@ -64,23 +64,23 @@
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
             android:orientation="horizontal"
-            android:paddingHorizontal="14dp"
-            android:paddingVertical="6dp">
+            android:paddingHorizontal="10dp"
+            android:paddingVertical="4dp">
 
             <com.google.android.material.textview.MaterialTextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="@string/offset_audio"
-                android:textColor="#E6FFFFFF"
-                android:textSize="15sp" />
+                android:textColor="#FFFFFFFF"
+                android:textSize="13sp" />
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/audioValue"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="#B3FFFFFF"
-                android:textSize="14sp"
+                android:textColor="#FFFFFFFF"
+                android:textSize="13sp"
                 tools:text="+0.0s" />
         </androidx.appcompat.widget.LinearLayoutCompat>
 
@@ -88,16 +88,16 @@
             android:id="@+id/audioSlider"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="8dp"
+            android:layout_marginHorizontal="6dp"
             android:stepSize="100"
             android:valueFrom="-10000"
             android:valueTo="10000"
             app:haloColor="#332196F3"
             app:thumbColor="@android:color/white"
             app:tickVisible="false"
-            app:trackColorActive="#FF2196F3"
-            app:trackColorInactive="#66FFFFFF"
-            app:trackHeight="4dp" />
+            app:trackColorActive="#FF42A5F5"
+            app:trackColorInactive="#88FFFFFF"
+            app:trackHeight="3dp" />
     </androidx.appcompat.widget.LinearLayoutCompat>
 
     <androidx.appcompat.widget.LinearLayoutCompat
@@ -105,7 +105,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:paddingHorizontal="8dp"
+        android:paddingHorizontal="4dp"
         android:visibility="gone"
         tools:visibility="visible">
 
@@ -114,23 +114,23 @@
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
             android:orientation="horizontal"
-            android:paddingHorizontal="14dp"
-            android:paddingVertical="6dp">
+            android:paddingHorizontal="10dp"
+            android:paddingVertical="4dp">
 
             <com.google.android.material.textview.MaterialTextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="@string/offset_text"
-                android:textColor="#E6FFFFFF"
-                android:textSize="15sp" />
+                android:textColor="#FFFFFFFF"
+                android:textSize="13sp" />
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/textValue"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="#B3FFFFFF"
-                android:textSize="14sp"
+                android:textColor="#FFFFFFFF"
+                android:textSize="13sp"
                 tools:text="+0.0s" />
         </androidx.appcompat.widget.LinearLayoutCompat>
 
@@ -138,16 +138,16 @@
             android:id="@+id/textSlider"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="8dp"
+            android:layout_marginHorizontal="6dp"
             android:stepSize="100"
             android:valueFrom="-10000"
             android:valueTo="10000"
             app:haloColor="#332196F3"
             app:thumbColor="@android:color/white"
             app:tickVisible="false"
-            app:trackColorActive="#FF2196F3"
-            app:trackColorInactive="#66FFFFFF"
-            app:trackHeight="4dp" />
+            app:trackColorActive="#FF42A5F5"
+            app:trackColorInactive="#88FFFFFF"
+            app:trackHeight="3dp" />
     </androidx.appcompat.widget.LinearLayoutCompat>
 
 </androidx.appcompat.widget.LinearLayoutCompat>
