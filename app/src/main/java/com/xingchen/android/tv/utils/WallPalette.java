@@ -9,11 +9,11 @@ import android.view.View;
 import java.io.File;
 
 /**
- * 从壁纸采样不透明面板底色：跟随壁纸色调并压暗，保证白字可读。
+ * 面板底色：半透明白，略带壁纸色调。
  */
 public final class WallPalette {
 
-    private static final int FALLBACK = Color.parseColor("#FF1A1E2C");
+    private static final int FALLBACK = Color.parseColor("#D9FFFFFF");
 
     private WallPalette() {
     }
@@ -42,41 +42,35 @@ public final class WallPalette {
             }
             bitmap.recycle();
             if (count == 0) return FALLBACK;
-            // 压暗并略提对比，保证不透明且白字清晰
-            int rr = clamp((int) (r / count * 0.28f + 18));
-            int gg = clamp((int) (g / count * 0.28f + 20));
-            int bb = clamp((int) (b / count * 0.32f + 28));
-            return Color.argb(255, rr, gg, bb);
+            // 高亮半透明白：壁纸色占少量，整体偏白
+            int rr = clamp((int) (r / count * 0.12f + 235));
+            int gg = clamp((int) (g / count * 0.12f + 235));
+            int bb = clamp((int) (b / count * 0.12f + 238));
+            return Color.argb(0xD9, rr, gg, bb);
         } catch (Throwable ignored) {
             return FALLBACK;
         }
     }
 
     public static void applyOpaquePanel(View view) {
-        if (view == null) return;
-        int color = panelColor();
-        GradientDrawable gd = new GradientDrawable();
-        gd.setColor(color);
-        gd.setCornerRadii(new float[]{
-                dp(20), dp(20), dp(20), dp(20),
-                0, 0, 0, 0
-        });
-        view.setBackground(gd);
+        apply(view, true);
     }
 
     public static void applyOpaquePanelFull(View view) {
+        apply(view, false);
+    }
+
+    private static void apply(View view, boolean topOnly) {
         if (view == null) return;
         GradientDrawable gd = new GradientDrawable();
         gd.setColor(panelColor());
-        gd.setCornerRadius(dp(16));
+        float r = ResUtil.dp2px(20);
+        if (topOnly) gd.setCornerRadii(new float[]{r, r, r, r, 0, 0, 0, 0});
+        else gd.setCornerRadius(r);
         view.setBackground(gd);
     }
 
     private static int clamp(int v) {
-        return Math.max(12, Math.min(80, v));
-    }
-
-    private static float dp(int v) {
-        return ResUtil.dp2px(v);
+        return Math.max(200, Math.min(255, v));
     }
 }

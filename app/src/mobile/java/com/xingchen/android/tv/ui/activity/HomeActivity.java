@@ -193,7 +193,8 @@ public class HomeActivity extends BaseActivity implements NavigationBarView.OnIt
             e.printStackTrace();
             Notify.show(e.getMessage());
         }
-        return true;
+        // 直播是独立页：不选中 live，避免底栏指示异常；返回 false 保持原 Tab 选中
+        return false;
     }
 
     private boolean addShortcut(View view) {
