@@ -12,6 +12,7 @@ import com.xingchen.android.tv.bean.Filter;
 import com.xingchen.android.tv.databinding.DialogFilterBinding;
 import com.xingchen.android.tv.impl.FilterListener;
 import com.xingchen.android.tv.ui.adapter.FilterAdapter;
+import com.xingchen.android.tv.utils.WallPalette;
 
 import java.util.List;
 
@@ -48,6 +49,7 @@ public class FilterDialog extends BaseBottomSheetDialog {
 
     @Override
     protected void initView() {
+        WallPalette.applyOpaquePanel(binding.getRoot());
         binding.recycler.setHasFixedSize(true);
         binding.recycler.setAdapter(new FilterAdapter(listener, filter));
     }

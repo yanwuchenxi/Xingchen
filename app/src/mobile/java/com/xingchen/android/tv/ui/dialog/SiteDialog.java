@@ -29,6 +29,7 @@ import com.xingchen.android.tv.impl.SiteListener;
 import com.xingchen.android.tv.ui.adapter.SiteAdapter;
 import com.xingchen.android.tv.ui.custom.SpaceItemDecoration;
 import com.xingchen.android.tv.utils.ResUtil;
+import com.xingchen.android.tv.utils.WallPalette;
 
 public class SiteDialog extends BaseBottomSheetDialog implements SiteAdapter.OnClickListener {
 
@@ -96,6 +97,7 @@ public class SiteDialog extends BaseBottomSheetDialog implements SiteAdapter.OnC
 
     @Override
     protected void initView() {
+        WallPalette.applyOpaquePanel(binding.getRoot());
         spanCount = Math.max(1, Math.min(2, Prefers.getInt(PREF_SITE_SPAN, 2)));
         adapter = new SiteAdapter(this);
         adapter.search(search).change(change);

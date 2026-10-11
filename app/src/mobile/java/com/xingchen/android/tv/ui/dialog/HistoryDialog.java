@@ -7,12 +7,14 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.viewbinding.ViewBinding;
 
+import com.xingchen.android.tv.R;
 import com.xingchen.android.tv.bean.Config;
 import com.xingchen.android.tv.databinding.DialogHistoryBinding;
 import com.xingchen.android.tv.impl.ConfigListener;
 import com.xingchen.android.tv.ui.adapter.ConfigAdapter;
 import com.xingchen.android.tv.ui.custom.SpaceItemDecoration;
 import com.xingchen.android.tv.utils.ResUtil;
+import com.xingchen.android.tv.utils.WallPalette;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 public class HistoryDialog extends BaseAlertDialog implements ConfigAdapter.OnClickListener {
@@ -73,11 +75,13 @@ public class HistoryDialog extends BaseAlertDialog implements ConfigAdapter.OnCl
 
     @Override
     protected MaterialAlertDialogBuilder getBuilder() {
-        return builder().setView(getBinding().getRoot());
+        return new MaterialAlertDialogBuilder(requireActivity(), R.style.ThemeOverlay_App_Alert)
+                .setView(getBinding().getRoot());
     }
 
     @Override
     protected void initView() {
+        WallPalette.applyOpaquePanelFull(binding.getRoot());
         adapter = new ConfigAdapter(this);
         binding.recycler.setItemAnimator(null);
         binding.recycler.setHasFixedSize(false);
