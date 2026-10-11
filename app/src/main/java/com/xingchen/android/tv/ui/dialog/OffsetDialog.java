@@ -15,6 +15,9 @@ import com.xingchen.android.tv.player.PlayerManager;
 import com.xingchen.android.tv.utils.ResUtil;
 import com.xingchen.android.tv.utils.Util;
 
+/**
+ * 字幕/音轨偏移：与字幕轨道面板一致，底部滑出、同宽、高度自适应。
+ */
 public final class OffsetDialog {
 
     private PlayerManager player;
@@ -36,9 +39,15 @@ public final class OffsetDialog {
 
     public void show(FragmentActivity activity) {
         FragmentManager manager = activity.getSupportFragmentManager();
-        for (Fragment f : manager.getFragments()) if (f instanceof BottomSheet || f instanceof SideSheet) return;
-        if (Util.isFullscreenLand(activity) || Util.isLeanback()) new SideSheet(player, type).show(manager, null);
-        else new BottomSheet(player, type).show(manager, null);
+        for (Fragment f : manager.getFragments()) {
+            if (f instanceof BottomSheet || f instanceof SideSheet) return;
+        }
+        // 手机端统一底部滑出（与 TrackDialog 同位置同宽）；TV/横屏全屏仍可用侧栏
+        if (Util.isLeanback()) {
+            new SideSheet(player, type).show(manager, null);
+        } else {
+            new BottomSheet(player, type).show(manager, null);
+        }
     }
 
     private static DialogOffsetBinding inflate(LayoutInflater inflater, ViewGroup container) {
@@ -54,6 +63,11 @@ public final class OffsetDialog {
         BottomSheet(PlayerManager player, int type) {
             this.player = player;
             this.type = type;
+        }
+
+        @Override
+        protected boolean transparent() {
+            return true;
         }
 
         @Override

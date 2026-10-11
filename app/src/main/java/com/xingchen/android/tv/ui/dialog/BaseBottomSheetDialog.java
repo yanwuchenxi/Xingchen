@@ -65,7 +65,8 @@ public abstract class BaseBottomSheetDialog extends BottomSheetDialogFragment {
         if (sheet == null) return;
         if (transparent()) sheet.setBackgroundColor(ResUtil.getColor(R.color.transparent));
         BottomSheetBehavior<FrameLayout> behavior = BottomSheetBehavior.from(sheet);
-        behavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+        behavior.setFitToContents(true);
         behavior.setSkipCollapsed(true);
+        behavior.setState(BottomSheetBehavior.STATE_EXPANDED);
     }
 }

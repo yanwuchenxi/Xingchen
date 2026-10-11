@@ -6,7 +6,7 @@
     android:layout_height="wrap_content"
     android:background="@drawable/shape_dialog_control_glass_panel"
     android:orientation="vertical"
-    android:paddingBottom="28dp">
+    android:paddingBottom="24dp">
 
     <View
         android:layout_width="40dp"
@@ -21,9 +21,9 @@
         android:gravity="center_vertical"
         android:orientation="horizontal"
         android:paddingStart="22dp"
-        android:paddingTop="16dp"
+        android:paddingTop="14dp"
         android:paddingEnd="16dp"
-        android:paddingBottom="12dp">
+        android:paddingBottom="8dp">
 
         <com.google.android.material.textview.MaterialTextView
             android:layout_width="0dp"
@@ -31,7 +31,7 @@
             android:layout_weight="1"
             android:text="@string/offset_setting"
             android:textColor="@android:color/white"
-            android:textSize="18sp"
+            android:textSize="17sp"
             android:textStyle="bold" />
 
         <com.google.android.material.button.MaterialButton
@@ -50,7 +50,6 @@
             app:cornerRadius="18dp" />
     </androidx.appcompat.widget.LinearLayoutCompat>
 
-    <!-- 音频偏移 -->
     <androidx.appcompat.widget.LinearLayoutCompat
         android:id="@+id/audioSection"
         android:layout_width="match_parent"
@@ -101,7 +100,6 @@
             app:trackHeight="4dp" />
     </androidx.appcompat.widget.LinearLayoutCompat>
 
-    <!-- 字幕偏移（Silent 截图样式） -->
     <androidx.appcompat.widget.LinearLayoutCompat
         android:id="@+id/textSection"
         android:layout_width="match_parent"
