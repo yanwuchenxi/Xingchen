@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.xingchen.android.tv.R;
 import com.xingchen.android.tv.api.config.VodConfig;
 import com.xingchen.android.tv.bean.Site;
+import com.xingchen.android.tv.utils.Notify;
 import com.xingchen.android.tv.databinding.AdapterSiteBinding;
 
 import java.util.ArrayList;
@@ -103,10 +104,14 @@ public class SiteAdapter extends RecyclerView.Adapter<SiteAdapter.ViewHolder> {
         holder.binding.search.setVisibility(View.GONE);
         holder.binding.change.setVisibility(View.GONE);
         holder.binding.text.setOnClickListener(v -> listener.onTextClick(item));
-        // 长按开启/关闭无痕（切换 searchable）
+        // 长按：单站无痕开关（searchable 关=无痕/不参与搜索与记录倾向）
         holder.binding.text.setOnLongClickListener(v -> {
-            item.setSearchable(!item.isSearchable()).save();
+            boolean next = !item.isSearchable();
+            // 强制可切换，忽略锁定 0
+            item.setSearchable(next ? 1 : 2);
+            item.save();
             notifyItemChanged(position);
+            Notify.show(next ? R.string.site_incognito_off : R.string.site_incognito_on);
             return true;
         });
     }

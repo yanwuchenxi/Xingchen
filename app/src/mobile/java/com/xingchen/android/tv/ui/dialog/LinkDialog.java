@@ -36,7 +36,11 @@ public class LinkDialog extends BaseAlertDialog {
 
     @Override
     protected MaterialAlertDialogBuilder getBuilder() {
-        return builder().setTitle(R.string.play).setView(getBinding().getRoot()).setPositiveButton(R.string.dialog_positive, this::onPositive).setNegativeButton(R.string.dialog_negative, null);
+        return new MaterialAlertDialogBuilder(requireActivity(), R.style.ThemeOverlay_App_Alert)
+                .setTitle(R.string.play)
+                .setView(getBinding().getRoot())
+                .setPositiveButton(R.string.dialog_positive, this::onPositive)
+                .setNegativeButton(R.string.dialog_negative, null);
     }
 
     @Override

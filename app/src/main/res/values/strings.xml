@@ -391,4 +391,6 @@
     <string name="track_empty_hint">No tracks · use Local or Online</string>
     <string name="detail_recommend">Recommend</string>
     <string name="detail_share">Share</string>
+    <string name="site_incognito_on">Incognito on</string>
+    <string name="site_incognito_off">Incognito off</string>
 </resources>

@@ -353,4 +353,6 @@
     <string name="track_empty_hint">暫無軌道 · 可選擇本地或線上字幕</string>
     <string name="detail_recommend">相關推薦</string>
     <string name="detail_share">分享</string>
+    <string name="site_incognito_on">已開啟無痕</string>
+    <string name="site_incognito_off">已關閉無痕</string>
 </resources>

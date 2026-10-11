@@ -353,4 +353,6 @@
     <string name="track_empty_hint">暂无轨道 · 可选择本地或在线字幕</string>
     <string name="detail_recommend">相关推荐</string>
     <string name="detail_share">分享</string>
+    <string name="site_incognito_on">已开启无痕</string>
+    <string name="site_incognito_off">已关闭无痕</string>
 </resources>

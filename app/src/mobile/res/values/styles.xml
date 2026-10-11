@@ -90,6 +90,14 @@
         <item name="cornerSize">24dp</item>
     </style>
 
+
+    <style name="ThemeOverlay.App.Alert" parent="ThemeOverlay.Material3.MaterialAlertDialog">
+        <item name="android:background">@drawable/shape_panel_wall</item>
+        <item name="colorSurface">#B3141828</item>
+        <item name="colorOnSurface">#FFFFFFFF</item>
+        <item name="materialAlertDialogTitleTextStyle">@style/TextAppearance.Material3.TitleLarge</item>
+    </style>
 </resources>
+
 
 

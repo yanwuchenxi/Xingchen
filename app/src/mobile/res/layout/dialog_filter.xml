@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/shape_filter_panel"
+    android:background="@drawable/shape_panel_wall"
     android:orientation="vertical"
     android:paddingBottom="12dp">
 
