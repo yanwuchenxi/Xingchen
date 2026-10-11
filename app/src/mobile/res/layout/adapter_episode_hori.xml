@@ -8,9 +8,9 @@
     android:background="@drawable/shape_episode_chip"
     android:ellipsize="end"
     android:gravity="center"
-    android:minWidth="56dp"
-    android:minHeight="35dp"
+    android:minWidth="52dp"
+    android:minHeight="36dp"
     android:singleLine="true"
     android:textColor="@color/selector_episode_text"
     android:textSize="13sp"
-    tools:text="20" />
+    tools:text="12" />

@@ -7,7 +7,7 @@
     android:layout_marginEnd="8dp"
     android:background="@drawable/shape_episode_chip"
     android:gravity="center"
-    android:minHeight="30dp"
+    android:minHeight="32dp"
     android:textColor="@color/selector_episode_text"
     android:textSize="13sp"
     tools:text="线路1" />
