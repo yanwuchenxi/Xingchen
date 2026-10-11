@@ -91,11 +91,13 @@
     </style>
 
 
+    <!-- 勿设置 android:background，否则 m3_alert_dialog inflate 会缺 layout_width 崩溃 -->
     <style name="ThemeOverlay.App.Alert" parent="ThemeOverlay.Material3.MaterialAlertDialog">
-        <item name="android:background">@drawable/shape_panel_wall</item>
-        <item name="colorSurface">#B3141828</item>
+        <item name="colorSurface">#FF1A1E2C</item>
         <item name="colorOnSurface">#FFFFFFFF</item>
-        <item name="materialAlertDialogTitleTextStyle">@style/TextAppearance.Material3.TitleLarge</item>
+        <item name="colorOnSurfaceVariant">#E6FFFFFF</item>
+        <item name="colorPrimary">#FFFFFFFF</item>
+        <item name="materialAlertDialogBodyTextStyle">@style/TextAppearance.Material3.BodyMedium</item>
     </style>
 </resources>
 
