@@ -25,6 +25,11 @@ import com.xingchen.android.tv.R;
 import com.xingchen.android.tv.api.config.LiveConfig;
 import com.xingchen.android.tv.api.config.VodConfig;
 import com.xingchen.android.tv.api.config.WallConfig;
+import com.xingchen.android.tv.utils.FileUtil;
+import android.graphics.Color;
+import android.graphics.BitmapFactory;
+import android.graphics.Bitmap;
+import android.content.res.ColorStateList;
 import com.xingchen.android.tv.bean.Config;
 import com.xingchen.android.tv.databinding.ActivityHomeBinding;
 import com.xingchen.android.tv.db.AppDatabase;
@@ -101,6 +106,7 @@ public class HomeActivity extends BaseActivity implements NavigationBarView.OnIt
 
         orientation = getResources().getConfiguration().orientation;
         mBinding.navigation.setOnItemSelectedListener(this);
+        applyNavIconContrast();
         PermissionUtil.requestFile(this, allGranted -> PermissionUtil.requestNotify(this));
         initFragment(savedInstanceState);
         initConfig();
@@ -204,6 +210,7 @@ public class HomeActivity extends BaseActivity implements NavigationBarView.OnIt
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onConfigEvent(ConfigEvent event) {
+        applyNavIconContrast();
         switch (event.type()) {
             case VOD:
                 RefreshEvent.home();
@@ -281,6 +288,57 @@ public class HomeActivity extends BaseActivity implements NavigationBarView.OnIt
             return insets;
         });
         ViewCompat.requestApplyInsets(mBinding.getRoot());
+    }
+
+
+    private void applyNavIconContrast() {
+        new Thread(() -> {
+            boolean lightIcons = true;
+            try {
+                java.io.File cache = FileUtil.getWallCache();
+                if (cache != null && cache.exists()) {
+                    BitmapFactory.Options opts = new BitmapFactory.Options();
+                    opts.inSampleSize = 16;
+                    opts.inPreferredConfig = Bitmap.Config.RGB_565;
+                    Bitmap bitmap = BitmapFactory.decodeFile(cache.getAbsolutePath(), opts);
+                    if (bitmap != null) {
+                        long sum = 0;
+                        int count = 0;
+                        int stepX = Math.max(1, bitmap.getWidth() / 24);
+                        int stepY = Math.max(1, bitmap.getHeight() / 24);
+                        for (int y = 0; y < bitmap.getHeight(); y += stepY) {
+                            for (int x = 0; x < bitmap.getWidth(); x += stepX) {
+                                int p = bitmap.getPixel(x, y);
+                                float l = (0.299f * Color.red(p) + 0.587f * Color.green(p) + 0.114f * Color.blue(p)) / 255f;
+                                sum += (long) (l * 1000);
+                                count++;
+                            }
+                        }
+                        bitmap.recycle();
+                        if (count > 0) lightIcons = (sum / (float) count) < 550f;
+                    }
+                }
+            } catch (Throwable ignored) {
+            }
+            boolean finalLight = lightIcons;
+            App.post(() -> setNavIconTint(finalLight));
+        }).start();
+    }
+
+    private void setNavIconTint(boolean lightIcons) {
+        if (mBinding == null || mBinding.navigation == null) return;
+        int selected = lightIcons ? Color.WHITE : Color.parseColor("#FF1A1A2E");
+        int normal = lightIcons ? Color.parseColor("#E6FFFFFF") : Color.parseColor("#CC1A1A2E");
+        ColorStateList csl = new ColorStateList(
+                new int[][]{
+                        new int[]{android.R.attr.state_checked},
+                        new int[]{android.R.attr.state_selected},
+                        new int[]{}
+                },
+                new int[]{selected, selected, normal}
+        );
+        mBinding.navigation.setItemIconTintList(csl);
+        mBinding.navigation.setItemTextColor(csl);
     }
 
 }

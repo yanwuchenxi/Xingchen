@@ -46,13 +46,13 @@
     <color name="xingchen_chip_bg">#0FFFFFFF</color>
     <color name="ysc_accent">#FFFFB40A</color>
     <!-- 现代软玻璃体系 2026 -->
-    <color name="glass_stroke">#40FFFFFF</color>
-    <color name="glass_stroke_soft">#28FFFFFF</color>
+    <color name="glass_stroke">#55FFFFFF</color>
+    <color name="glass_stroke_soft">#40FFFFFF</color>
     <color name="glass_stroke_bright">#80FFFFFF</color>
     <color name="glass_highlight">#22FFFFFF</color>
-    <color name="glass_light_fill">#1AFFFFFF</color>
-    <color name="glass_regular_fill">#B3141828</color>
-    <color name="glass_thick_fill">#D6121624</color>
+    <color name="glass_light_fill">#28FFFFFF</color>
+    <color name="glass_regular_fill">#99101828</color>
+    <color name="glass_thick_fill">#B3121624</color>
     <color name="glass_fill_start">#C0181C2E</color>
     <color name="glass_fill_center">#B0161A2A</color>
     <color name="glass_fill_end">#A0141826</color>

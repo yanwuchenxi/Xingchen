@@ -80,9 +80,10 @@ public class TypeAdapter extends RecyclerView.Adapter<TypeAdapter.ViewHolder> {
         Class item = mItems.get(position);
         holder.binding.text.setText(item.getTypeName());
         holder.binding.text.setSelected(item.isSelected());
-        // 选中纯白加粗，未选中半透明白，无下划线
-        holder.binding.text.setTextSize(item.isSelected() ? 16f : 15f);
+        holder.binding.text.setActivated(item.isSelected());
+        holder.binding.text.setTextSize(item.isSelected() ? 15f : 14f);
         holder.binding.text.setTypeface(null, item.isSelected() ? Typeface.BOLD : Typeface.NORMAL);
+        holder.binding.text.setAlpha(1f);
         holder.binding.text.setOnClickListener(v -> listener.onItemClick(position, item));
     }
 

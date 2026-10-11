@@ -37,6 +37,11 @@ public class FilterDialog extends BaseBottomSheetDialog {
     }
 
     @Override
+    protected boolean transparent() {
+        return true;
+    }
+
+    @Override
     protected ViewBinding getBinding(@NonNull LayoutInflater inflater, @Nullable ViewGroup container) {
         return binding = DialogFilterBinding.inflate(inflater, container, false);
     }
