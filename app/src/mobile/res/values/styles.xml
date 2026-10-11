@@ -91,15 +91,40 @@
     </style>
 
 
-    <!-- 勿设置 android:background，否则 m3_alert_dialog inflate 会缺 layout_width 崩溃 -->
+<!-- 勿设置 android:background，否则 m3_alert_dialog inflate 会缺 layout_width 崩溃 -->
     <style name="ThemeOverlay.App.Alert" parent="ThemeOverlay.Material3.MaterialAlertDialog">
         <item name="colorSurface">#FF1A1E2C</item>
+        <item name="colorSurfaceContainer">#FF1A1E2C</item>
+        <item name="colorSurfaceContainerHigh">#FF1A1E2C</item>
         <item name="colorOnSurface">#FFFFFFFF</item>
         <item name="colorOnSurfaceVariant">#E6FFFFFF</item>
-        <item name="colorPrimary">#FFFFFFFF</item>
-        <item name="materialAlertDialogBodyTextStyle">@style/TextAppearance.Material3.BodyMedium</item>
+        <item name="colorPrimary">#FF7C9CFF</item>
+        <item name="colorSecondary">#FF7C9CFF</item>
+        <item name="buttonBarPositiveButtonStyle">@style/Widget.App.Alert.Button</item>
+        <item name="buttonBarNegativeButtonStyle">@style/Widget.App.Alert.Button</item>
     </style>
+
+    <style name="Widget.App.Alert.Button" parent="Widget.Material3.Button.TextButton.Dialog">
+        <item name="android:textColor">#FFFFFFFF</item>
+        <item name="android:textSize">15sp</item>
+    </style>
+
+    <!-- 无色半透明选中指示，避免 Dynamic Color 奶油色胶囊 -->
+    <style name="Widget.App.BottomNav.ActiveIndicator" parent="Widget.Material3.BottomNavigationView.ActiveIndicator">
+        <item name="android:color">#40FFFFFF</item>
+        <item name="android:width">64dp</item>
+        <item name="android:height">36dp</item>
+        <item name="marginHorizontal">0dp</item>
+        <item name="shapeAppearance">@style/ShapeAppearance.App.BottomNav.Indicator</item>
+    </style>
+
+    <style name="ShapeAppearance.App.BottomNav.Indicator" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">18dp</item>
+    </style>
+
 </resources>
+
 
 
 

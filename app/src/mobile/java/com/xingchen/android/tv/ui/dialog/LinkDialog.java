@@ -19,6 +19,7 @@ import com.xingchen.android.tv.ui.activity.VideoActivity;
 import com.xingchen.android.tv.utils.FileChooser;
 import com.xingchen.android.tv.utils.Sniffer;
 import com.xingchen.android.tv.utils.Util;
+import com.xingchen.android.tv.utils.WallPalette;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 public class LinkDialog extends BaseAlertDialog {
@@ -45,9 +46,22 @@ public class LinkDialog extends BaseAlertDialog {
 
     @Override
     protected void initView() {
-        CharSequence text = Util.getClipText();
+        WallPalette.applyOpaquePanelFull(binding.getRoot());
         binding.text.setFilters(new InputFilter[]{new InputFilter.LengthFilter(Integer.MAX_VALUE)});
-        if (!TextUtils.isEmpty(text)) binding.text.setText(Sniffer.getUrl(text.toString()));
+        fillFromClipboard();
+    }
+
+    private void fillFromClipboard() {
+        CharSequence text = Util.getClipText();
+        if (TextUtils.isEmpty(text)) return;
+        String raw = text.toString().trim();
+        // 忽略崩溃报告 / 过长文本，避免把错误信息填进播放地址
+        if (raw.length() > 800) return;
+        if (raw.contains("Stack trace") || raw.contains("Build version:") || raw.contains("Caused by:")) return;
+        String url = Sniffer.getUrl(raw);
+        if (TextUtils.isEmpty(url)) return;
+        if (!(url.startsWith("http") || url.startsWith("file") || url.startsWith("content") || url.contains("://"))) return;
+        binding.text.setText(url);
     }
 
     @Override
