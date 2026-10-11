@@ -6,8 +6,13 @@
     android:layout_height="wrap_content"
     android:layout_marginEnd="8dp"
     android:background="@drawable/shape_episode_chip"
+    android:ellipsize="end"
     android:gravity="center"
+    android:maxWidth="200dp"
     android:minHeight="32dp"
+    android:paddingHorizontal="12dp"
+    android:paddingVertical="6dp"
+    android:singleLine="true"
     android:textColor="@color/selector_episode_text"
     android:textSize="13sp"
-    tools:text="线路1" />
+    tools:text="线路名称可很长" />

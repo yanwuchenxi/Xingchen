@@ -389,4 +389,6 @@
     <string name="track_section_style">Style</string>
     <string name="track_section_list">Tracks</string>
     <string name="track_empty_hint">No tracks · use Local or Online</string>
+    <string name="detail_recommend">Recommend</string>
+    <string name="detail_share">Share</string>
 </resources>

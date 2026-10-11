@@ -32,6 +32,8 @@ import androidx.media3.common.MediaMetadata;
 import androidx.media3.common.Player;
 import androidx.media3.common.VideoSize;
 import androidx.media3.ui.PlayerView;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.transition.ChangeBounds;
 import androidx.transition.TransitionManager;
@@ -119,6 +121,7 @@ public class VideoActivity extends PlaybackActivity implements Clock.Callback, C
     private Observer<Result> mObservePlayer;
     private Observer<Result> mObserveSearch;
     private EpisodeAdapter mEpisodeAdapter;
+    private boolean mEpisodeExpanded;
     private QualityAdapter mQualityAdapter;
     private QuickAdapter mQuickAdapter;
     private ParseAdapter mParseAdapter;
@@ -321,6 +324,8 @@ public class VideoActivity extends PlaybackActivity implements Clock.Callback, C
     protected void initEvent() {
         mBinding.name.setOnClickListener(view -> onName());
         mBinding.more.setOnClickListener(view -> onMore());
+        mBinding.detailKeep.setOnClickListener(view -> onKeep());
+        mBinding.detailShare.setOnClickListener(view -> onDetailShare());
         mBinding.actor.setOnClickListener(view -> onActor());
         mBinding.content.setOnClickListener(view -> onContent());
         mBinding.reverse.setOnClickListener(view -> onReverse());
@@ -378,7 +383,7 @@ public class VideoActivity extends PlaybackActivity implements Clock.Callback, C
         mBinding.flag.addItemDecoration(new SpaceItemDecoration(8));
         mBinding.flag.setAdapter(mFlagAdapter = new FlagAdapter(this));
         mBinding.quick.setAdapter(mQuickAdapter = new QuickAdapter(this));
-        mBinding.episode.setHasFixedSize(true);
+        mBinding.episode.setHasFixedSize(false);
         mBinding.episode.setItemAnimator(null);
         mBinding.episode.addItemDecoration(new SpaceItemDecoration(8));
         mBinding.episode.setAdapter(mEpisodeAdapter = new EpisodeAdapter(this, ViewType.HORI));
@@ -639,6 +644,12 @@ public class VideoActivity extends PlaybackActivity implements Clock.Callback, C
         mBinding.reverse.setVisibility(items.size() < 2 ? View.GONE : View.VISIBLE);
         mBinding.episode.setVisibility(items.isEmpty() ? View.GONE : View.VISIBLE);
         mBinding.more.setVisibility(items.size() < 10 ? View.GONE : View.VISIBLE);
+        // 换线路时恢复横向，避免高度错乱
+        if (mEpisodeExpanded) {
+            mEpisodeExpanded = false;
+            mBinding.episode.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+            mBinding.episode.setAdapter(mEpisodeAdapter = new EpisodeAdapter(this, ViewType.HORI));
+        }
         mEpisodeAdapter.addAll(items);
     }
 
@@ -668,7 +679,28 @@ public class VideoActivity extends PlaybackActivity implements Clock.Callback, C
     }
 
     private void onMore() {
-        EpisodeGridDialog.create().reverse(mHistory.isRevSort()).episodes(mEpisodeAdapter.getItems()).show(this);
+        mEpisodeExpanded = !mEpisodeExpanded;
+        List<Episode> items = mEpisodeAdapter.getItems();
+        if (mEpisodeExpanded) {
+            mBinding.episode.setAdapter(mEpisodeAdapter = new EpisodeAdapter(this, ViewType.GRID, new ArrayList<>(items)));
+            mBinding.episode.setLayoutManager(new GridLayoutManager(this, 5));
+        } else {
+            mBinding.episode.setAdapter(mEpisodeAdapter = new EpisodeAdapter(this, ViewType.HORI, new ArrayList<>(items)));
+            mBinding.episode.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+        }
+        scrollToPosition(mBinding.episode, mEpisodeAdapter.getPosition());
+    }
+
+    private void onDetailShare() {
+        CharSequence title = mBinding.name.getText();
+        if (player() != null && player().getUrl() != null && !player().getUrl().isEmpty()) {
+            onShare(title);
+        } else {
+            android.content.Intent intent = new android.content.Intent(android.content.Intent.ACTION_SEND);
+            intent.setType("text/plain");
+            intent.putExtra(android.content.Intent.EXTRA_TEXT, title == null ? "" : title.toString());
+            startActivity(android.content.Intent.createChooser(intent, getString(R.string.detail_share)));
+        }
     }
 
     private void onActor() {
@@ -1149,7 +1181,9 @@ public class VideoActivity extends PlaybackActivity implements Clock.Callback, C
 
     private void checkKeepImg() {
         mBinding.control.keep.setImageResource(Keep.find(getHistoryKey()) == null ? R.drawable.ic_control_keep_off : R.drawable.ic_control_keep_on);
+            if (mBinding.detailKeep != null) mBinding.detailKeep.setImageResource(Keep.find(getHistoryKey()) != null ? R.drawable.ic_control_keep_on : R.drawable.ic_control_keep_off);
     }
+
 
     private void checkLockImg() {
         mBinding.control.right.lock.setImageResource(isLock() ? R.drawable.ic_control_lock_on : R.drawable.ic_control_lock_off);
@@ -1461,6 +1495,7 @@ public class VideoActivity extends PlaybackActivity implements Clock.Callback, C
 
     private void startSearch(String keyword) {
         mQuickAdapter.clear();
+        if (mBinding.quickSection != null) mBinding.quickSection.setVisibility(View.GONE);
         List<Site> sites = new ArrayList<>();
         for (Site item : VodConfig.get().getSites()) if (isPass(item)) sites.add(item);
         mViewModel.searchContent(sites, keyword, true);
@@ -1470,6 +1505,7 @@ public class VideoActivity extends PlaybackActivity implements Clock.Callback, C
         List<Vod> items = result.getList();
         items.removeIf(this::mismatch);
         mBinding.quick.setVisibility(View.VISIBLE);
+        mBinding.quickSection.setVisibility(View.VISIBLE);
         mQuickAdapter.addAll(items);
         if (isInitAuto()) nextSite();
         if (items.isEmpty()) return;

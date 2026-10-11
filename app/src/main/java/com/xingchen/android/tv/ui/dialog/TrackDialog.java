@@ -107,6 +107,11 @@ public final class TrackDialog extends BaseBottomSheetDialog implements TrackAda
     }
 
     @Override
+    protected float sheetWidthRatio() {
+        return 2f / 3f;
+    }
+
+    @Override
     protected ViewBinding getBinding(@NonNull LayoutInflater inflater, @Nullable ViewGroup container) {
         return binding = DialogTrackBinding.inflate(inflater, container, false);
     }

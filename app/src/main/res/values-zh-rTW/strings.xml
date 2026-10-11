@@ -351,4 +351,6 @@
     <string name="track_section_style">樣式</string>
     <string name="track_section_list">軌道</string>
     <string name="track_empty_hint">暫無軌道 · 可選擇本地或線上字幕</string>
+    <string name="detail_recommend">相關推薦</string>
+    <string name="detail_share">分享</string>
 </resources>

@@ -351,4 +351,6 @@
     <string name="track_section_style">样式</string>
     <string name="track_section_list">轨道</string>
     <string name="track_empty_hint">暂无轨道 · 可选择本地或在线字幕</string>
+    <string name="detail_recommend">相关推荐</string>
+    <string name="detail_share">分享</string>
 </resources>

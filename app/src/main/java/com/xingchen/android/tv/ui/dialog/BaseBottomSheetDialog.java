@@ -60,10 +60,29 @@ public abstract class BaseBottomSheetDialog extends BottomSheetDialogFragment {
         return true;
     }
 
+    /** 底部面板宽度占屏比，1f 为全宽 */
+    protected float sheetWidthRatio() {
+        return 1f;
+    }
+
     protected void setBehavior(BottomSheetDialog dialog) {
         FrameLayout sheet = dialog.findViewById(com.google.android.material.R.id.design_bottom_sheet);
         if (sheet == null) return;
         if (transparent()) sheet.setBackgroundColor(ResUtil.getColor(R.color.transparent));
+        float ratio = sheetWidthRatio();
+        if (ratio > 0f && ratio < 1f) {
+            int width = Math.round(ResUtil.getScreenWidth() * ratio);
+            ViewGroup.LayoutParams lp = sheet.getLayoutParams();
+            lp.width = width;
+            sheet.setLayoutParams(lp);
+            if (sheet.getParent() instanceof ViewGroup parent) {
+                if (parent instanceof android.widget.FrameLayout) {
+                    android.widget.FrameLayout.LayoutParams flp = (android.widget.FrameLayout.LayoutParams) sheet.getLayoutParams();
+                    flp.gravity = android.view.Gravity.BOTTOM | android.view.Gravity.CENTER_HORIZONTAL;
+                    sheet.setLayoutParams(flp);
+                }
+            }
+        }
         BottomSheetBehavior<FrameLayout> behavior = BottomSheetBehavior.from(sheet);
         behavior.setFitToContents(true);
         behavior.setSkipCollapsed(true);

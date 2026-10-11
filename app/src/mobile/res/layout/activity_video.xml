@@ -85,7 +85,7 @@
                 android:clipToPadding="false"
                 android:fillViewport="true"
                 android:overScrollMode="never"
-                android:paddingBottom="24dp">
+                android:paddingBottom="28dp">
 
                 <androidx.appcompat.widget.LinearLayoutCompat
                     android:layout_width="match_parent"
@@ -95,7 +95,6 @@
                     android:paddingTop="12dp"
                     android:paddingEnd="12dp">
 
-                    <!-- 标题区 -->
                     <com.google.android.material.textview.MaterialTextView
                         android:id="@+id/name"
                         android:layout_width="match_parent"
@@ -116,7 +115,6 @@
                         android:textSize="13sp"
                         tools:text="2014 · 9.2 · 科幻/冒险" />
 
-                    <!-- 元信息胶囊：站点 / 其它 -->
                     <androidx.appcompat.widget.LinearLayoutCompat
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -150,6 +148,30 @@
                             android:textColor="@color/glass_text_primary"
                             android:textSize="12sp"
                             tools:text="更新至第10集" />
+
+                        <View
+                            android:layout_width="0dp"
+                            android:layout_height="0dp"
+                            android:layout_weight="1" />
+
+                        <androidx.appcompat.widget.AppCompatImageView
+                            android:id="@+id/detailKeep"
+                            android:layout_width="36dp"
+                            android:layout_height="36dp"
+                            android:background="?attr/selectableItemBackgroundBorderless"
+                            android:padding="6dp"
+                            android:src="@drawable/ic_control_keep_off"
+                            app:tint="@color/glass_text_primary" />
+
+                        <androidx.appcompat.widget.AppCompatImageView
+                            android:id="@+id/detailShare"
+                            android:layout_width="36dp"
+                            android:layout_height="36dp"
+                            android:layout_marginStart="4dp"
+                            android:background="?attr/selectableItemBackgroundBorderless"
+                            android:padding="6dp"
+                            android:src="@drawable/ic_action_share"
+                            app:tint="@color/glass_text_primary" />
                     </androidx.appcompat.widget.LinearLayoutCompat>
 
                     <com.google.android.material.textview.MaterialTextView
@@ -162,7 +184,6 @@
                         android:textColor="@color/glass_text_secondary"
                         android:textSize="12sp"
                         android:visibility="gone"
-                        tools:text="导演：xxx"
                         tools:visibility="visible" />
 
                     <com.google.android.material.textview.MaterialTextView
@@ -175,14 +196,46 @@
                         android:textColor="@color/glass_text_secondary"
                         android:textSize="12sp"
                         android:visibility="gone"
-                        tools:text="主演：xxx"
                         tools:visibility="visible" />
+
+                    <!-- 简介：放在线路上方 -->
+                    <androidx.appcompat.widget.LinearLayoutCompat
+                        android:id="@+id/content_layout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:background="@drawable/shape_detail_section"
+                        android:orientation="vertical"
+                        android:paddingHorizontal="12dp"
+                        android:paddingTop="12dp"
+                        android:paddingBottom="10dp">
+
+                        <com.google.android.material.textview.MaterialTextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/detail_content"
+                            android:textColor="@color/glass_text_primary"
+                            android:textSize="14sp"
+                            android:textStyle="bold" />
+
+                        <com.google.android.material.textview.MaterialTextView
+                            android:id="@+id/content"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:ellipsize="end"
+                            android:lineSpacingExtra="3dp"
+                            android:maxLines="3"
+                            android:textColor="@color/glass_text_secondary"
+                            android:textSize="13sp"
+                            tools:text="简介…" />
+                    </androidx.appcompat.widget.LinearLayoutCompat>
 
                     <!-- 线路 -->
                     <androidx.appcompat.widget.LinearLayoutCompat
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="12dp"
+                        android:layout_marginTop="10dp"
                         android:background="@drawable/shape_detail_section"
                         android:orientation="vertical"
                         android:paddingHorizontal="12dp"
@@ -216,7 +269,6 @@
                             android:textColor="@color/glass_text_secondary"
                             android:textSize="12sp"
                             android:visibility="gone"
-                            tools:text="清晰度"
                             tools:visibility="visible" />
 
                         <androidx.recyclerview.widget.RecyclerView
@@ -233,8 +285,9 @@
                             tools:visibility="visible" />
                     </androidx.appcompat.widget.LinearLayoutCompat>
 
-                    <!-- 选集 -->
+                    <!-- 选集：高度随展开自适应 -->
                     <androidx.appcompat.widget.LinearLayoutCompat
+                        android:id="@+id/episodeSection"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
@@ -290,58 +343,48 @@
                             android:layout_marginTop="8dp"
                             android:clipChildren="false"
                             android:clipToPadding="false"
+                            android:nestedScrollingEnabled="false"
                             android:orientation="horizontal"
                             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                             tools:listitem="@layout/adapter_episode_hori" />
                     </androidx.appcompat.widget.LinearLayoutCompat>
 
-                    <!-- 简介 -->
+                    <!-- 同站推荐：横向海报 -->
                     <androidx.appcompat.widget.LinearLayoutCompat
-                        android:id="@+id/content_layout"
+                        android:id="@+id/quickSection"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
                         android:background="@drawable/shape_detail_section"
                         android:orientation="vertical"
-                        android:paddingHorizontal="12dp"
                         android:paddingTop="12dp"
-                        android:paddingBottom="10dp">
+                        android:paddingBottom="10dp"
+                        android:visibility="gone"
+                        tools:visibility="visible">
 
                         <com.google.android.material.textview.MaterialTextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="@string/detail_content"
+                            android:paddingHorizontal="12dp"
+                            android:text="@string/detail_recommend"
                             android:textColor="@color/glass_text_primary"
                             android:textSize="14sp"
                             android:textStyle="bold" />
 
-                        <com.google.android.material.textview.MaterialTextView
-                            android:id="@+id/content"
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/quick"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="8dp"
-                            android:ellipsize="end"
-                            android:lineSpacingExtra="3dp"
-                            android:maxLines="3"
-                            android:textColor="@color/glass_text_secondary"
-                            android:textSize="13sp"
-                            tools:text="简介内容…" />
+                            android:clipChildren="false"
+                            android:clipToPadding="false"
+                            android:nestedScrollingEnabled="false"
+                            android:orientation="horizontal"
+                            android:paddingStart="8dp"
+                            android:paddingEnd="8dp"
+                            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                            tools:listitem="@layout/adapter_quick" />
                     </androidx.appcompat.widget.LinearLayoutCompat>
-
-                    <!-- 推荐 -->
-                    <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/quick"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
-                        android:clipChildren="false"
-                        android:clipToPadding="false"
-                        android:nestedScrollingEnabled="false"
-                        android:visibility="gone"
-                        app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-                        app:spanCount="2"
-                        tools:listitem="@layout/adapter_quick"
-                        tools:visibility="visible" />
 
                 </androidx.appcompat.widget.LinearLayoutCompat>
             </androidx.core.widget.NestedScrollView>

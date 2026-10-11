@@ -9,6 +9,8 @@
     android:ellipsize="end"
     android:gravity="center"
     android:minHeight="36dp"
+    android:paddingHorizontal="6dp"
+    android:paddingVertical="8dp"
     android:singleLine="true"
     android:textColor="@color/selector_episode_text"
     android:textSize="13sp"

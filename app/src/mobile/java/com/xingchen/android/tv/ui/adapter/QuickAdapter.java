@@ -6,8 +6,10 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.xingchen.android.tv.bean.Vod;
 import com.xingchen.android.tv.databinding.AdapterQuickBinding;
+import com.xingchen.android.tv.utils.ImgUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,7 +25,6 @@ public class QuickAdapter extends RecyclerView.Adapter<QuickAdapter.ViewHolder> 
     }
 
     public interface OnClickListener {
-
         void onItemClick(Vod item);
     }
 
@@ -68,11 +69,17 @@ public class QuickAdapter extends RecyclerView.Adapter<QuickAdapter.ViewHolder> 
         holder.binding.name.setText(item.getName());
         holder.binding.site.setText(item.getSiteName());
         holder.binding.remark.setText(item.getRemarks());
+        holder.binding.site.setVisibility(item.getSiteVisible());
+        ImgUtil.load(item.getName(), item.getPic(), holder.binding.image);
         holder.binding.getRoot().setOnClickListener(v -> listener.onItemClick(item));
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    @Override
+    public void onViewRecycled(@NonNull ViewHolder holder) {
+        Glide.with(holder.binding.image).clear(holder.binding.image);
+    }
 
+    public class ViewHolder extends RecyclerView.ViewHolder {
         private final AdapterQuickBinding binding;
 
         ViewHolder(@NonNull AdapterQuickBinding binding) {

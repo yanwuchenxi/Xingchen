@@ -71,6 +71,11 @@ public final class OffsetDialog {
         }
 
         @Override
+        protected float sheetWidthRatio() {
+            return 2f / 3f;
+        }
+
+        @Override
         protected ViewBinding getBinding(@NonNull LayoutInflater inflater, @Nullable ViewGroup container) {
             return binding = OffsetDialog.inflate(inflater, container);
         }
