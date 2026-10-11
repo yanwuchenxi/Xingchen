@@ -6,11 +6,7 @@
 
     <style name="Vod.Grid" parent="Vod">
         <item name="cornerFamily">rounded</item>
-        <item name="cornerSize">8dp</item>
-        <item name="cornerSizeTopLeft">8dp</item>
-        <item name="cornerSizeTopRight">8dp</item>
-        <item name="cornerSizeBottomLeft">8dp</item>
-        <item name="cornerSizeBottomRight">8dp</item>
+        <item name="cornerSize">14dp</item>
     </style>
 
     <style name="Vod.Grid.Large" parent="Vod.Grid">

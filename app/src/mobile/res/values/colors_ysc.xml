@@ -1,24 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- 影视仓色板（从反编译 colors 对齐） -->
 <resources>
     <color name="ysc_bg">#00000000</color>
     <color name="ysc_surface">#00000000</color>
-    <color name="ysc_chip">#22FFFFFF</color>
-    <color name="ysc_chip_selected">#40FFFFFF</color>
-    <color name="ysc_text_secondary">#8FFFFFFF</color>
-    <color name="ysc_tab_unselected">#8FFFFFFF</color>
-    <color name="ysc_tab_selected">#FFFFFFFF</color>
-    <color name="ysc_divider">#1AFFFFFF</color>
-    <color name="ysc_search_bg">#2EFFFFFF</color>
-    <color name="ysc_poster_placeholder">#1AFFFFFF</color>
-    <!-- 影视仓 orange -->
-    <color name="ysc_accent">#FFFFB40A</color>
-    <color name="ysc_accent_text">#FF694000</color>
-    <color name="ysc_flag_start">#FFEDC75F</color>
-    <color name="ysc_flag_end">#FFFEE5A2</color>
+    <color name="ysc_chip">#18FFFFFF</color>
+    <color name="ysc_chip_selected">#337C9CFF</color>
+    <color name="ysc_text_secondary">#B3E8ECF8</color>
+    <color name="ysc_tab_unselected">#99A8B0C8</color>
+    <color name="ysc_tab_selected">#FFF5F7FF</color>
+    <color name="ysc_divider">#14FFFFFF</color>
+    <color name="ysc_search_bg">#1AFFFFFF</color>
+    <color name="ysc_poster_placeholder">#22182030</color>
+    <color name="ysc_accent">#FF7C9CFF</color>
+    <color name="ysc_accent_text">#FF1A2040</color>
+    <color name="ysc_flag_start">#FF9BB0FF</color>
+    <color name="ysc_flag_end">#FFC5D0FF</color>
     <color name="ysc_black_44">#8F000000</color>
     <color name="ysc_white_94">#0FFFFFFF</color>
     <color name="ysc_white_90">#1AFFFFFF</color>
     <color name="ysc_white_60">#66FFFFFF</color>
-    <color name="ysc_white_44">#8FFFFFFF</color>
+    <color name="ysc_white_44">#99A8B0C8</color>
 </resources>

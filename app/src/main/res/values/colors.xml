@@ -35,8 +35,8 @@
     <color name="xingchen_bg">#00000000</color>
     <color name="xingchen_surface">#00000000</color>
     <color name="xingchen_surface2">#FF242429</color>
-    <color name="xingchen_accent">#FFFFB40A</color>
-    <color name="xingchen_accent_dim">#33FFB40A</color>
+    <color name="xingchen_accent">#FF7C9CFF</color>
+    <color name="xingchen_accent_dim">#337C9CFF</color>
     <color name="xingchen_text_secondary">#B3FFFFFF</color>
     <color name="xingchen_text_hint">#80FFFFFF</color>
 
@@ -45,28 +45,28 @@
     <color name="xingchen_badge_end">#FFFEE5A2</color>
     <color name="xingchen_chip_bg">#0FFFFFFF</color>
     <color name="ysc_accent">#FFFFB40A</color>
-
-    <!-- 液态玻璃三档 -->
-    <color name="glass_stroke">#66FFFFFF</color>
-    <color name="glass_stroke_soft">#40FFFFFF</color>
-    <color name="glass_stroke_bright">#99FFFFFF</color>
-    <color name="glass_highlight">#33FFFFFF</color>
-    <!-- light：底栏/芯片 -->
-    <color name="glass_light_fill">#22FFFFFF</color>
-    <!-- regular：字幕/偏移面板 -->
-    <color name="glass_regular_fill">#AA1A2038</color>
-    <!-- thick：强遮挡弹层 -->
-    <color name="glass_thick_fill">#CC1A2038</color>
-    <color name="glass_fill_start">#B32A2F5C</color>
-    <color name="glass_fill_center">#AA242860</color>
-    <color name="glass_fill_end">#A030386A</color>
-    <color name="glass_fill_light">#33FFFFFF</color>
-    <color name="glass_fill_mid">#22FFFFFF</color>
-    <color name="glass_fill_deep">#40000000</color>
-    <color name="glass_nav_start">#22FFFFFF</color>
-    <color name="glass_nav_end">#18FFFFFF</color>
-    <color name="glass_text_primary">#FFFFFFFF</color>
-    <color name="glass_text_secondary">#E6FFFFFF</color>
-    <color name="glass_text_hint">#CCFFFFFF</color>
+    <!-- 现代软玻璃体系 2026 -->
+    <color name="glass_stroke">#40FFFFFF</color>
+    <color name="glass_stroke_soft">#28FFFFFF</color>
+    <color name="glass_stroke_bright">#80FFFFFF</color>
+    <color name="glass_highlight">#22FFFFFF</color>
+    <color name="glass_light_fill">#1AFFFFFF</color>
+    <color name="glass_regular_fill">#B3141828</color>
+    <color name="glass_thick_fill">#D6121624</color>
+    <color name="glass_fill_start">#C0181C2E</color>
+    <color name="glass_fill_center">#B0161A2A</color>
+    <color name="glass_fill_end">#A0141826</color>
+    <color name="glass_fill_light">#1FFFFFFF</color>
+    <color name="glass_fill_mid">#18FFFFFF</color>
+    <color name="glass_fill_deep">#66000000</color>
+    <color name="glass_nav_start">#1AFFFFFF</color>
+    <color name="glass_nav_end">#12FFFFFF</color>
+    <color name="glass_text_primary">#FFF5F7FF</color>
+    <color name="glass_text_secondary">#CCE8ECF8</color>
+    <color name="glass_text_hint">#99A8B0C8</color>
+    <color name="modern_accent">#FF7C9CFF</color>
+    <color name="modern_accent_soft">#337C9CFF</color>
+    <color name="modern_surface">#FF0C0E14</color>
+    <color name="modern_elevated">#E6181C28</color>
 
 </resources>
