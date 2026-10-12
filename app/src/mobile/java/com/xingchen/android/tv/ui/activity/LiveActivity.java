@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewConfiguration;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
+import android.widget.RelativeLayout;
 
 import androidx.annotation.NonNull;
 import androidx.core.graphics.Insets;
@@ -582,7 +583,14 @@ public class LiveActivity extends PlaybackActivity implements CustomKeyDown.List
                 mBinding.recycler.setVisibility(View.VISIBLE);
                 keepLiveMenuVisible();
                 hideEpg();
+                if (mBinding.liveContent != null) {
+                    RelativeLayout.LayoutParams clp = new RelativeLayout.LayoutParams(
+                            ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+                    clp.addRule(RelativeLayout.ABOVE, R.id.homeNav);
+                    mBinding.liveContent.setLayoutParams(clp);
+                }
                 if (mBinding.homeNav != null) {
+                    styleHomeNav();
                     mBinding.homeNav.setVisibility(View.VISIBLE);
                     // 避免 setSelected 触发误跳转
                     mHomeNavGuard = true;
@@ -591,6 +599,11 @@ public class LiveActivity extends PlaybackActivity implements CustomKeyDown.List
                 }
             } else {
                 if (mBinding.homeNav != null) mBinding.homeNav.setVisibility(View.GONE);
+                if (mBinding.liveContent != null) {
+                    RelativeLayout.LayoutParams clp = new RelativeLayout.LayoutParams(
+                            ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+                    mBinding.liveContent.setLayoutParams(clp);
+                }
                 ensureRecyclerOverlayOnVideo();
                 androidx.appcompat.widget.LinearLayoutCompat.LayoutParams vp =
                         new androidx.appcompat.widget.LinearLayoutCompat.LayoutParams(
@@ -607,13 +620,13 @@ public class LiveActivity extends PlaybackActivity implements CustomKeyDown.List
     }
 
     private void ensureRecyclerInRoot() {
-        ViewGroup root = (ViewGroup) mBinding.getRoot();
+        ViewGroup content = mBinding.liveContent != null ? mBinding.liveContent : (ViewGroup) mBinding.getRoot();
         View recycler = mBinding.recycler;
-        if (recycler.getParent() == root) return;
+        if (recycler.getParent() == content) return;
         ViewGroup parent = (ViewGroup) recycler.getParent();
         if (parent != null) parent.removeView(recycler);
-        int index = root.indexOfChild(mBinding.video);
-        root.addView(recycler, index < 0 ? -1 : index + 1,
+        int index = content.indexOfChild(mBinding.video);
+        content.addView(recycler, index < 0 ? -1 : index + 1,
                 new androidx.appcompat.widget.LinearLayoutCompat.LayoutParams(
                         ViewGroup.LayoutParams.MATCH_PARENT, 0, 14f));
     }
@@ -651,18 +664,23 @@ public class LiveActivity extends PlaybackActivity implements CustomKeyDown.List
         }
     }
 
-    /** 与首页一致：内容避开状态栏，播放器+列表整体下移 */
+    /** 与首页一致：内容避开状态栏；底栏上浮并避开系统导航条 */
     private void applyEmbeddedTopInset() {
         if (mBinding == null) return;
         View root = mBinding.getRoot();
         ViewCompat.setOnApplyWindowInsetsListener(root, (v, insets) -> {
             Insets bars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            // 仅竖屏嵌入时吃 top inset；底栏自行处理
             v.setPadding(0, bars.top, 0, 0);
+            if (mBinding.homeNav != null) {
+                ViewGroup.MarginLayoutParams lp = (ViewGroup.MarginLayoutParams) mBinding.homeNav.getLayoutParams();
+                lp.bottomMargin = bars.bottom + ResUtil.dp2px(14);
+                lp.leftMargin = ResUtil.dp2px(20);
+                lp.rightMargin = ResUtil.dp2px(20);
+                mBinding.homeNav.setLayoutParams(lp);
+            }
             return insets;
         });
         ViewCompat.requestApplyInsets(root);
-        // 兜底：若 insets 尚未派发，用状态栏高度
         int top = 0;
         try {
             int resId = getResources().getIdentifier("status_bar_height", "dimen", "android");
@@ -670,6 +688,22 @@ public class LiveActivity extends PlaybackActivity implements CustomKeyDown.List
         } catch (Throwable ignored) {
         }
         if (root.getPaddingTop() == 0 && top > 0) root.setPadding(0, top, 0, 0);
+        styleHomeNav();
+    }
+
+    private void styleHomeNav() {
+        if (mBinding == null || mBinding.homeNav == null) return;
+        mBinding.homeNav.setBackgroundResource(R.drawable.shape_glass_nav);
+        mBinding.homeNav.setItemBackgroundResource(android.R.color.transparent);
+        android.content.res.ColorStateList tint = androidx.core.content.ContextCompat.getColorStateList(this, R.color.selector_ysc_nav);
+        if (tint != null) {
+            mBinding.homeNav.setItemIconTintList(tint);
+            mBinding.homeNav.setItemTextColor(tint);
+        }
+        try {
+            mBinding.homeNav.setItemActiveIndicatorEnabled(true);
+        } catch (Throwable ignored) {
+        }
     }
 
     private void clearEmbeddedTopInset() {
