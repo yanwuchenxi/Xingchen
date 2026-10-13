@@ -89,6 +89,7 @@ import com.xingchen.android.tv.ui.dialog.InfoDialog;
 import com.xingchen.android.tv.ui.dialog.ReceiveDialog;
 import com.xingchen.android.tv.ui.dialog.TitleDialog;
 import com.xingchen.android.tv.ui.dialog.OnlineSubtitleDialog;
+import com.xingchen.android.tv.ui.dialog.PlayerSubtitleDialog;
 import com.xingchen.android.tv.ui.dialog.SubtitleDialog;
 import com.xingchen.android.tv.ui.dialog.TrackDialog;
 import com.xingchen.android.tv.utils.Clock;
@@ -803,9 +804,15 @@ public class VideoActivity extends PlaybackActivity implements Clock.Callback, C
     private void onTrack(View view) {
         String seed = mBinding.control.title.getText() == null ? "" : mBinding.control.title.getText().toString();
         int trackType = Integer.parseInt(view.getTag().toString());
-        TrackDialog.create().type(trackType).player(player()).title(seed)
-                .subtitleView(trackType == androidx.media3.common.C.TRACK_TYPE_TEXT ? mBinding.exo.getSubtitleView() : null)
-                .show(this);
+        if (trackType == androidx.media3.common.C.TRACK_TYPE_TEXT) {
+            PlayerSubtitleDialog.create()
+                    .player(player())
+                    .subtitleView(mBinding.exo.getSubtitleView())
+                    .title(seed)
+                    .show(this);
+        } else {
+            TrackDialog.create().type(trackType).player(player()).title(seed).show(this);
+        }
         hideControl();
     }
 
@@ -1349,10 +1356,10 @@ public class VideoActivity extends PlaybackActivity implements Clock.Callback, C
     @Override
     public void onSubtitleClick() {
         String seed = mBinding.control.title.getText() == null ? "" : mBinding.control.title.getText().toString();
-        SubtitleDialog.create()
-                .view(mBinding.exo.getSubtitleView())
+        PlayerSubtitleDialog.create()
                 .player(player())
-                .search(() -> OnlineSubtitleDialog.create().player(player()).title(seed).show(this))
+                .subtitleView(mBinding.exo.getSubtitleView())
+                .title(seed)
                 .show(this);
         hideControl();
     }

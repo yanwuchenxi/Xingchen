@@ -172,7 +172,11 @@ public final class TrackDialog extends BaseBottomSheetDialog implements TrackAda
                 && player.getCurrentMediaItem().mediaMetadata.title != null) {
             seed = player.getCurrentMediaItem().mediaMetadata.title.toString();
         }
-        OnlineSubtitleDialog.create().player(player).title(seed).show(requireActivity());
+        PlayerSubtitleDialog.create()
+                .player(player)
+                .subtitleView(subtitleView)
+                .title(seed)
+                .show(requireActivity());
     }
 
     private List<Track> getTrack() {
