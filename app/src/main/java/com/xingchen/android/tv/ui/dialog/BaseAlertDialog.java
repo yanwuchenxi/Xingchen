@@ -1,21 +1,22 @@
 package com.xingchen.android.tv.ui.dialog;
 
 import android.app.Dialog;
-import android.graphics.Color;
-import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
-import android.view.Window;
 import android.view.WindowManager;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.DialogFragment;
 import androidx.viewbinding.ViewBinding;
 
-import com.xingchen.android.tv.R;
+import com.xingchen.android.tv.utils.DarkAlert;
 import com.xingchen.android.tv.utils.ResUtil;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
+/**
+ * Alert 基类：强制 {@link DarkAlert} 主题，禁止无主题 Builder。
+ */
 public abstract class BaseAlertDialog extends DialogFragment {
 
     protected abstract ViewBinding getBinding();
@@ -25,7 +26,7 @@ public abstract class BaseAlertDialog extends DialogFragment {
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
-        Dialog dialog = getBuilder().create();
+        AlertDialog dialog = DarkAlert.create(getBuilder());
         initView();
         initEvent();
         return dialog;
@@ -34,26 +35,14 @@ public abstract class BaseAlertDialog extends DialogFragment {
     @Override
     public void onStart() {
         super.onStart();
-        applyDarkWindow();
+        if (getDialog() instanceof AlertDialog alert) {
+            DarkAlert.applyWindow(alert);
+        }
     }
 
-    /**
-     * 强制深色圆角窗体：覆盖 Dynamic Color 的浅色 surface，
-     * 避免「奶油外框 + 深色内容」叠层导致字看不清。
-     */
-    private void applyDarkWindow() {
-        Dialog dialog = getDialog();
-        if (dialog == null) return;
-        Window window = dialog.getWindow();
-        if (window == null) return;
-        GradientDrawable gd = new GradientDrawable();
-        gd.setColor(Color.parseColor("#E6121828"));
-        gd.setCornerRadius(ResUtil.dp2px(18));
-        window.setBackgroundDrawable(gd);
-    }
-
+    /** 唯一 Builder 入口 */
     protected MaterialAlertDialogBuilder builder() {
-        return new MaterialAlertDialogBuilder(requireActivity(), R.style.ThemeOverlay_App_Alert);
+        return DarkAlert.builder(requireActivity());
     }
 
     protected void initView() {

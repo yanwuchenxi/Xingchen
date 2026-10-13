@@ -41,7 +41,6 @@ import com.xingchen.android.tv.utils.PermissionUtil;
 import com.xingchen.android.tv.utils.ResUtil;
 import com.github.catvod.bean.Doh;
 import com.github.catvod.net.OkHttp;
-import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.xingchen.android.tv.utils.DarkAlert;
 
 import org.greenrobot.eventbus.EventBus;

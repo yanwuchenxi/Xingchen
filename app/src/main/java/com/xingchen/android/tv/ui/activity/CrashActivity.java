@@ -3,7 +3,7 @@ package com.xingchen.android.tv.ui.activity;
 import android.os.Bundle;
 import android.text.TextUtils;
 
-import androidx.appcompat.app.AlertDialog;
+import com.xingchen.android.tv.utils.DarkAlert;
 import androidx.viewbinding.ViewBinding;
 
 import com.xingchen.android.tv.R;
@@ -55,10 +55,9 @@ public class CrashActivity extends BaseActivity {
     }
 
     private void showError() {
-        new AlertDialog.Builder(this)
+        DarkAlert.show(DarkAlert.builder(this)
                 .setTitle(R.string.crash_details_title)
                 .setMessage(CustomActivityOnCrash.getAllErrorDetailsFromIntent(this, getIntent()))
-                .setPositiveButton(R.string.crash_details_close, null)
-                .show();
+                .setPositiveButton(R.string.crash_details_close, null));
     }
 }

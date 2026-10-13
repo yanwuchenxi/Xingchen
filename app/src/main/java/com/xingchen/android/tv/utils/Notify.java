@@ -15,7 +15,6 @@ import androidx.core.content.ContextCompat;
 
 import com.xingchen.android.tv.App;
 import com.xingchen.android.tv.databinding.ViewProgressBinding;
-import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 public class Notify {
 
@@ -69,7 +68,7 @@ public class Notify {
 
     private void create(Context context) {
         ViewProgressBinding binding = ViewProgressBinding.inflate(LayoutInflater.from(context));
-        mDialog = new MaterialAlertDialogBuilder(context).setView(binding.getRoot()).create();
+        mDialog = DarkAlert.create(DarkAlert.builder(context).setView(binding.getRoot()));
         mDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
         mDialog.show();
     }

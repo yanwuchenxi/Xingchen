@@ -22,7 +22,6 @@ import com.xingchen.android.tv.ui.dialog.BufferDialog;
 import com.xingchen.android.tv.ui.dialog.SpeedDialog;
 import com.xingchen.android.tv.ui.dialog.UaDialog;
 import com.xingchen.android.tv.utils.ResUtil;
-import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.xingchen.android.tv.utils.DarkAlert;
 
 import java.text.DecimalFormat;

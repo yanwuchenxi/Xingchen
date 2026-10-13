@@ -10,6 +10,7 @@ import com.xingchen.android.tv.databinding.DialogSyncPathBinding;
 import com.xingchen.android.tv.setting.Setting;
 import com.xingchen.android.tv.utils.SyncFiles;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.xingchen.android.tv.utils.DarkAlert;
 
 public class SyncPathDialog extends BaseAlertDialog {
 
@@ -29,7 +30,7 @@ public class SyncPathDialog extends BaseAlertDialog {
 
     @Override
     protected MaterialAlertDialogBuilder getBuilder() {
-        return new MaterialAlertDialogBuilder(requireActivity(), R.style.Theme_WebHTV_LightDialog).setView(getBinding().getRoot());
+        return DarkAlert.builder(requireActivity()).setView(getBinding().getRoot());
     }
 
     @Override

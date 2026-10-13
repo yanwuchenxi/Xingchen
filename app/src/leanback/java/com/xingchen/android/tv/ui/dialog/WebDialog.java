@@ -8,14 +8,14 @@ import androidx.appcompat.app.AlertDialog;
 
 import com.xingchen.android.tv.App;
 import com.xingchen.android.tv.utils.ResUtil;
-import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.xingchen.android.tv.utils.DarkAlert;
 
 public class WebDialog {
 
     private final AlertDialog dialog;
 
     private WebDialog(View view) {
-        this.dialog = new MaterialAlertDialogBuilder(App.activity()).setView(view).create();
+        this.dialog = DarkAlert.create(DarkAlert.builder(App.activity()).setView(view));
         this.dialog.setOnDismissListener((DialogInterface.OnDismissListener) view);
     }
 

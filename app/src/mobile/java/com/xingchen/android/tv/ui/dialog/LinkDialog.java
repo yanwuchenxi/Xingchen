@@ -21,6 +21,7 @@ import com.xingchen.android.tv.utils.Sniffer;
 import com.xingchen.android.tv.utils.Util;
 import com.xingchen.android.tv.utils.WallPalette;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.xingchen.android.tv.utils.DarkAlert;
 
 public class LinkDialog extends BaseAlertDialog {
 
@@ -37,7 +38,7 @@ public class LinkDialog extends BaseAlertDialog {
 
     @Override
     protected MaterialAlertDialogBuilder getBuilder() {
-        return new MaterialAlertDialogBuilder(requireActivity(), R.style.ThemeOverlay_App_Alert)
+        return DarkAlert.builder(requireActivity())
                 .setTitle(R.string.play)
                 .setView(getBinding().getRoot())
                 .setPositiveButton(R.string.dialog_positive, this::onPositive)

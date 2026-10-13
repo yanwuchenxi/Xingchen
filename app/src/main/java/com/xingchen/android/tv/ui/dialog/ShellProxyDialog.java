@@ -33,6 +33,7 @@ import com.xingchen.android.tv.utils.Notify;
 import com.xingchen.android.tv.utils.ResUtil;
 import com.github.catvod.utils.Json;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.xingchen.android.tv.utils.DarkAlert;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -77,7 +78,7 @@ public class ShellProxyDialog extends BaseAlertDialog {
 
     @Override
     protected MaterialAlertDialogBuilder getBuilder() {
-        return new MaterialAlertDialogBuilder(requireActivity(), R.style.ThemeOverlay_WebHTV_LightDialog).setView(getBinding().getRoot());
+        return DarkAlert.builder(requireActivity()).setView(getBinding().getRoot());
     }
 
     @Override

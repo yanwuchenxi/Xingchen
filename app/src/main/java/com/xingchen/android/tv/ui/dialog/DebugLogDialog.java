@@ -15,7 +15,7 @@ import com.xingchen.android.tv.R;
 import com.xingchen.android.tv.server.Server;
 import com.xingchen.android.tv.utils.Notify;
 import com.github.catvod.crawler.SpiderDebug;
-import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.xingchen.android.tv.utils.DarkAlert;
 
 public final class DebugLogDialog {
 
@@ -32,14 +32,14 @@ public final class DebugLogDialog {
         String lanUrl = Server.get().getAddress(false) + "/debug/logs";
         SpiderDebug.log("debug", "logs service ready url=%s lan=%s", localUrl, lanUrl);
         String message = activity.getString(R.string.debug_log_dialog_message, lanUrl, localUrl);
-        AlertDialog dialog = new MaterialAlertDialogBuilder(activity)
+        AlertDialog dialog = DarkAlert.create(DarkAlert.builder(activity)
                 .setTitle(R.string.setting_debug_log)
                 .setMessage(message)
                 .setNegativeButton(R.string.dialog_negative, null)
                 .setNeutralButton(R.string.debug_log_copy_url, null)
-                .setPositiveButton(R.string.debug_log_open_browser, null)
-                .create();
+                .setPositiveButton(R.string.debug_log_open_browser, null));
         dialog.setOnShowListener(d -> {
+            DarkAlert.applyWindow(dialog);
             dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(v -> open(activity, localUrl));
             dialog.getButton(AlertDialog.BUTTON_NEUTRAL).setOnClickListener(v -> copy(activity, lanUrl));
         });

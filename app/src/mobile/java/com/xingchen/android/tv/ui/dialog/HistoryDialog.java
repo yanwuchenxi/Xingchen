@@ -16,6 +16,7 @@ import com.xingchen.android.tv.ui.custom.SpaceItemDecoration;
 import com.xingchen.android.tv.utils.ResUtil;
 import com.xingchen.android.tv.utils.WallPalette;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.xingchen.android.tv.utils.DarkAlert;
 
 public class HistoryDialog extends BaseAlertDialog implements ConfigAdapter.OnClickListener {
 
@@ -75,7 +76,7 @@ public class HistoryDialog extends BaseAlertDialog implements ConfigAdapter.OnCl
 
     @Override
     protected MaterialAlertDialogBuilder getBuilder() {
-        return new MaterialAlertDialogBuilder(requireActivity(), R.style.ThemeOverlay_App_Alert)
+        return DarkAlert.builder(requireActivity())
                 .setView(getBinding().getRoot());
     }
 
