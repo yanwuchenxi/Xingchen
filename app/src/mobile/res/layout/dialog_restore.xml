@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="@drawable/shape_panel_dark"
     android:orientation="vertical">
 
     <androidx.appcompat.widget.LinearLayoutCompat
@@ -19,7 +20,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/restore_select"
-            android:textColor="?attr/colorOnSurface"
+            android:textColor="#FFFFFFFF"
             android:textSize="16sp" />
 
     </androidx.appcompat.widget.LinearLayoutCompat>

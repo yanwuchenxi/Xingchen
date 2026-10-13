@@ -23,6 +23,7 @@ import com.xingchen.android.tv.ui.dialog.SpeedDialog;
 import com.xingchen.android.tv.ui.dialog.UaDialog;
 import com.xingchen.android.tv.utils.ResUtil;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.xingchen.android.tv.utils.DarkAlert;
 
 import java.text.DecimalFormat;
 
@@ -102,11 +103,11 @@ public class SettingPlayerFragment extends BaseFragment implements UaListener, B
     }
 
     private void onScale(View view) {
-        new MaterialAlertDialogBuilder(requireActivity()).setTitle(R.string.player_scale).setNegativeButton(R.string.dialog_negative, null).setSingleChoiceItems(scale, PlayerSetting.getScale(), (dialog, which) -> {
+        DarkAlert.show(DarkAlert.builder(requireActivity()).setTitle(R.string.player_scale).setNegativeButton(R.string.dialog_negative, null).setSingleChoiceItems(scale, PlayerSetting.getScale(), (dialog, which) -> {
             mBinding.scaleText.setText(scale[which]);
             PlayerSetting.putScale(which);
             dialog.dismiss();
-        }).show();
+        }));
     }
 
     private void onSpeed(View view) {
@@ -158,11 +159,11 @@ public class SettingPlayerFragment extends BaseFragment implements UaListener, B
     }
 
     private void onBackground(View view) {
-        new MaterialAlertDialogBuilder(requireActivity()).setTitle(R.string.player_background).setNegativeButton(R.string.dialog_negative, null).setSingleChoiceItems(background, PlayerSetting.getBackground(), (dialog, which) -> {
+        DarkAlert.show(DarkAlert.builder(requireActivity()).setTitle(R.string.player_background).setNegativeButton(R.string.dialog_negative, null).setSingleChoiceItems(background, PlayerSetting.getBackground(), (dialog, which) -> {
             mBinding.backgroundText.setText(background[which]);
             PlayerSetting.putBackground(which);
             dialog.dismiss();
-        }).show();
+        }));
     }
 
     private void setAudioDecode(View view) {
@@ -176,11 +177,11 @@ public class SettingPlayerFragment extends BaseFragment implements UaListener, B
     }
 
     private void onSubtitleLang(View view) {
-        new MaterialAlertDialogBuilder(requireActivity()).setTitle(R.string.player_subtitle_lang).setNegativeButton(R.string.dialog_negative, null).setSingleChoiceItems(subtitleLang, Setting.getSubtitlePreferredLanguageIndex(), (dialog, which) -> {
+        DarkAlert.show(DarkAlert.builder(requireActivity()).setTitle(R.string.player_subtitle_lang).setNegativeButton(R.string.dialog_negative, null).setSingleChoiceItems(subtitleLang, Setting.getSubtitlePreferredLanguageIndex(), (dialog, which) -> {
             mBinding.subtitleLangText.setText(subtitleLang[which]);
             Setting.putSubtitlePreferredLanguageIndex(which);
             dialog.dismiss();
-        }).show();
+        }));
     }
 
     @Override

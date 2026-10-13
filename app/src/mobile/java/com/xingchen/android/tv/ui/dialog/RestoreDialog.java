@@ -14,6 +14,7 @@ import com.xingchen.android.tv.databinding.DialogRestoreBinding;
 import com.xingchen.android.tv.db.AppDatabase;
 import com.xingchen.android.tv.impl.Callback;
 import com.xingchen.android.tv.ui.adapter.RestoreAdapter;
+import com.xingchen.android.tv.utils.WallPalette;
 import com.xingchen.android.tv.ui.custom.SpaceItemDecoration;
 
 import java.io.File;
@@ -41,6 +42,7 @@ public class RestoreDialog extends BaseBottomSheetDialog implements RestoreAdapt
 
     @Override
     protected void initView() {
+        WallPalette.applyOpaquePanel(binding.getRoot());
         binding.recycler.setItemAnimator(null);
         binding.recycler.setHasFixedSize(false);
         binding.recycler.setAdapter(adapter = new RestoreAdapter(this));

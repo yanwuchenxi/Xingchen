@@ -103,6 +103,8 @@
         <item name="colorPrimary">#FF7C9CFF</item>
         <item name="colorSecondary">#FF7C9CFF</item>
         <item name="android:colorBackground">#E6121828</item>
+        <item name="android:textColorAlertDialogListItem">#FFFFFFFF</item>
+        <item name="colorControlActivated">#FF7C9CFF</item>
         <item name="buttonBarPositiveButtonStyle">@style/Widget.App.Alert.Button</item>
         <item name="buttonBarNegativeButtonStyle">@style/Widget.App.Alert.Button</item>
     </style>
@@ -126,7 +128,18 @@
         <item name="cornerSize">18dp</item>
     </style>
 
+
+    <style name="Widget.App.TextInput.Dark" parent="Widget.Material3.TextInputLayout.OutlinedBox">
+        <item name="boxStrokeColor">@color/selector_text_input_stroke</item>
+        <item name="boxStrokeWidth">1.5dp</item>
+        <item name="boxStrokeWidthFocused">2dp</item>
+        <item name="hintTextColor">#CCFFFFFF</item>
+        <item name="android:textColorHint">#99FFFFFF</item>
+        <item name="endIconTint">#FFFFFFFF</item>
+        <item name="cursorColor">#FFFFFFFF</item>
+    </style>
 </resources>
+
 
 
 

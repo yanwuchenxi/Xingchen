@@ -17,6 +17,10 @@
         android:stepSize="1"
         android:valueFrom="1"
         android:valueTo="10"
-        app:tickVisible="false" />
+        app:tickVisible="false"
+        app:trackColorActive="#FF7C9CFF"
+        app:trackColorInactive="#55FFFFFF"
+        app:thumbColor="#FFFFFFFF"
+        app:haloColor="#337C9CFF" />
 
 </androidx.appcompat.widget.LinearLayoutCompat>
