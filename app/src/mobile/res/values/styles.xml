@@ -95,10 +95,14 @@
     <style name="ThemeOverlay.App.Alert" parent="ThemeOverlay.Material3.MaterialAlertDialog">
         <item name="colorSurface">#E6121828</item>
         <item name="colorSurfaceContainer">#E6121828</item>
+        <item name="colorSurfaceContainerLow">#E6121828</item>
         <item name="colorSurfaceContainerHigh">#E6121828</item>
+        <item name="colorSurfaceContainerHighest">#E6121828</item>
         <item name="colorOnSurface">#FFFFFFFF</item>
         <item name="colorOnSurfaceVariant">#E6FFFFFF</item>
         <item name="colorPrimary">#FF7C9CFF</item>
+        <item name="colorSecondary">#FF7C9CFF</item>
+        <item name="android:colorBackground">#E6121828</item>
         <item name="buttonBarPositiveButtonStyle">@style/Widget.App.Alert.Button</item>
         <item name="buttonBarNegativeButtonStyle">@style/Widget.App.Alert.Button</item>
     </style>
