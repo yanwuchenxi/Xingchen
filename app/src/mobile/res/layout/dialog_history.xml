@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     
-    android:background="@drawable/shape_panel_white"
+    android:background="@drawable/shape_panel_dark"
     android:clipChildren="false"
     android:clipToPadding="false"
     android:overScrollMode="never"

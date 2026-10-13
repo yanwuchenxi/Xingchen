@@ -68,7 +68,15 @@ public abstract class BaseBottomSheetDialog extends BottomSheetDialogFragment {
     protected void setBehavior(BottomSheetDialog dialog) {
         FrameLayout sheet = dialog.findViewById(com.google.android.material.R.id.design_bottom_sheet);
         if (sheet == null) return;
-        if (transparent()) sheet.setBackgroundColor(ResUtil.getColor(R.color.transparent));
+        if (transparent()) {
+            sheet.setBackgroundColor(ResUtil.getColor(R.color.transparent));
+            sheet.setBackground(null);
+            sheet.setElevation(0f);
+            try {
+                sheet.setBackgroundTintList(null);
+            } catch (Throwable ignored) {
+            }
+        }
         float ratio = sheetWidthRatio();
         if (ratio > 0f && ratio < 1f) {
             int width = Math.round(ResUtil.getScreenWidth() * ratio);

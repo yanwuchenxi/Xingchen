@@ -1,10 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <shape xmlns:android="http://schemas.android.com/apk/res/android">
-    <solid android:color="@color/glass_thick_fill" />
+    <solid android:color="#F0121828" />
     <corners
-        android:topLeftRadius="24dp"
-        android:topRightRadius="24dp" />
-    <stroke
-        android:width="0.8dp"
-        android:color="@color/glass_stroke" />
+        android:topLeftRadius="22dp"
+        android:topRightRadius="22dp" />
 </shape>

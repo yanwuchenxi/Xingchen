@@ -1,7 +1,5 @@
 package com.xingchen.android.tv.ui.custom;
 
-import static androidx.fragment.app.FragmentTransaction.TRANSIT_FRAGMENT_OPEN;
-
 import android.view.ViewGroup;
 
 import androidx.fragment.app.Fragment;
@@ -24,16 +22,22 @@ public class FragmentStateManager {
         this.fm = fm;
     }
 
+    private FragmentTransaction beginFade() {
+        return fm.beginTransaction().setCustomAnimations(
+                android.R.anim.fade_in, android.R.anim.fade_out,
+                android.R.anim.fade_in, android.R.anim.fade_out);
+    }
+
     public boolean change(int position) {
         String tag = getTag(position);
         Fragment expected = factory.apply(position);
         if (expected == null) return false;
         Fragment fragment = fm.findFragmentByTag(tag);
-        FragmentTransaction ft = fm.beginTransaction().setTransition(TRANSIT_FRAGMENT_OPEN);
+        FragmentTransaction ft = beginFade();
         if (fragment != null && fragment.getClass() != expected.getClass()) {
             ft.remove(fragment).commitNowAllowingStateLoss();
             fragment = null;
-            ft = fm.beginTransaction().setTransition(TRANSIT_FRAGMENT_OPEN);
+            ft = beginFade();
         }
         if (fragment == null) {
             fragment = expected;

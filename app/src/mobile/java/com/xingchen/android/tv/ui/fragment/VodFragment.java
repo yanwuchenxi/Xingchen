@@ -166,11 +166,11 @@ public class VodFragment extends BaseFragment implements ConfigListener, SiteLis
         } else if (!mAdapter.get(position).getFilters().isEmpty()) {
             mBinding.top.setVisibility(View.INVISIBLE);
             mBinding.link.setVisibility(View.GONE);
-            mBinding.filter.show();
+            mBinding.filter.setVisibility(View.VISIBLE);
         } else if (position == 0 || mAdapter.get(position).getFilters().isEmpty()) {
             mBinding.top.setVisibility(View.INVISIBLE);
             mBinding.filter.setVisibility(View.GONE);
-            mBinding.link.show();
+            mBinding.link.setVisibility(View.VISIBLE);
         }
     }
 
@@ -191,8 +191,8 @@ public class VodFragment extends BaseFragment implements ConfigListener, SiteLis
     private void onTop(View view) {
         getFragment().scrollToTop();
         mBinding.top.setVisibility(View.INVISIBLE);
-        if (mBinding.filter.getVisibility() == View.INVISIBLE) mBinding.filter.show();
-        else if (mBinding.link.getVisibility() == View.INVISIBLE) mBinding.link.show();
+        if (mBinding.filter.getVisibility() == View.INVISIBLE) mBinding.filter.setVisibility(View.VISIBLE);
+        else if (mBinding.link.getVisibility() == View.INVISIBLE) mBinding.link.setVisibility(View.VISIBLE);
     }
 
     private boolean onLink(View view) {

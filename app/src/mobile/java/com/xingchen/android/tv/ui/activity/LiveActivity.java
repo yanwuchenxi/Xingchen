@@ -121,6 +121,9 @@ public class LiveActivity extends PlaybackActivity implements CustomKeyDown.List
 
     public static void start(Context context) {
         context.startActivity(new Intent(context, LiveActivity.class).putExtra("empty", LiveConfig.isEmpty()));
+        if (context instanceof android.app.Activity activity) {
+            activity.overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+        }
     }
 
     private boolean isEmpty() {
@@ -235,6 +238,7 @@ public class LiveActivity extends PlaybackActivity implements CustomKeyDown.List
                 else if (id == R.id.setting) intent.putExtra("tab", 1);
                 intent.putExtra("from_live", true);
                 startActivity(intent);
+                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
                 finish();
                 return true;
             });
