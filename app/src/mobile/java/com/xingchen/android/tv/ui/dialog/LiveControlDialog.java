@@ -207,7 +207,14 @@ public class LiveControlDialog extends BaseBottomSheetDialog {
     protected void setBehavior(BottomSheetDialog dialog) {
         FrameLayout sheet = dialog.findViewById(com.google.android.material.R.id.design_bottom_sheet);
         if (sheet == null) return;
+        // Material3 默认 backgroundTint 会留下浅色方底，需彻底清掉
+        sheet.setBackground(null);
         sheet.setBackgroundColor(ResUtil.getColor(R.color.transparent));
+        sheet.setElevation(0f);
+        try {
+            sheet.setBackgroundTintList(android.content.res.ColorStateList.valueOf(android.graphics.Color.TRANSPARENT));
+        } catch (Throwable ignored) {
+        }
         int height = getPanelHeight();
         ViewGroup.LayoutParams params = sheet.getLayoutParams();
         params.height = height;

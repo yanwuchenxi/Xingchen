@@ -69,11 +69,19 @@ public abstract class BaseBottomSheetDialog extends BottomSheetDialogFragment {
         FrameLayout sheet = dialog.findViewById(com.google.android.material.R.id.design_bottom_sheet);
         if (sheet == null) return;
         if (transparent()) {
-            sheet.setBackgroundColor(ResUtil.getColor(R.color.transparent));
             sheet.setBackground(null);
+            sheet.setBackgroundColor(ResUtil.getColor(R.color.transparent));
             sheet.setElevation(0f);
             try {
-                sheet.setBackgroundTintList(null);
+                sheet.setBackgroundTintList(android.content.res.ColorStateList.valueOf(android.graphics.Color.TRANSPARENT));
+            } catch (Throwable ignored) {
+            }
+            // 去掉 Material 默认圆角 shape 残留
+            try {
+                com.google.android.material.shape.MaterialShapeDrawable empty =
+                        new com.google.android.material.shape.MaterialShapeDrawable();
+                empty.setTint(android.graphics.Color.TRANSPARENT);
+                sheet.setBackground(empty);
             } catch (Throwable ignored) {
             }
         }
