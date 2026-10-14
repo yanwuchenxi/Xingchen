@@ -29,11 +29,13 @@ import okhttp3.Response;
 public class Global {
 
     private final ExecutorService executor;
+    private final ExecutorService callbackExecutor;
     private final QuickJSContext ctx;
     private final Timer timer;
 
     private Global(QuickJSContext ctx, ExecutorService executor) {
         this.executor = executor;
+        this.callbackExecutor = java.util.concurrent.Executors.newCachedThreadPool();
         this.timer = new Timer();
         this.ctx = ctx;
         setProperty();

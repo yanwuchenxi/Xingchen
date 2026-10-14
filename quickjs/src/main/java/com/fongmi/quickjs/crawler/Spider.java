@@ -53,15 +53,31 @@ public class Spider extends com.github.catvod.crawler.Spider {
     }
 
     private Object call(String func, Object... args) throws Exception {
-        return submit(() -> Async.run(jsObject, func, args)).get().get();
+        Object result = submit(() -> Async.run(jsObject, func, args)).get().get();
+        if (result == null) return null;
+        if (result instanceof String) return result;
+        if (result instanceof JSObject) {
+            try {
+                return submit(() -> ((JSObject) result).stringify()).get();
+            } catch (Throwable e) {
+                return result.toString();
+            }
+        }
+        return String.valueOf(result);
     }
 
     @Override
     public void init(Context context, String extend) throws Exception {
-        initializeJS();
-        // 远程规则文件在 Java 侧先拉取，避免仅依赖 JS request 时网络/线程问题
-        final String resolved = resolveExtend(extend);
-        call("init", submit(() -> getExt(resolved)).get());
+        final String resolved = resolveExtend(extend == null ? "" : extend);
+        // 初始化与 init 调用放同一条 JS 线程任务，避免跨线程碰 QuickJS 对象
+        submit(() -> {
+            createCtx();
+            createFun();
+            createObj();
+            Object extArg = getExt(resolved);
+            Async.run(jsObject, "init", extArg).get();
+            return null;
+        }).get();
     }
 
     private String resolveExtend(String extend) {
@@ -84,7 +100,10 @@ public class Spider extends com.github.catvod.crawler.Spider {
 
     @Override
     public String homeContent(boolean filter) throws Exception {
-        return (String) call("home", filter);
+        Object r = call("home", filter);
+        String s = r == null ? "" : String.valueOf(r);
+        SpiderDebug.log("js", "home api=%s len=%s", api, s.length());
+        return s;
     }
 
     @Override
@@ -213,7 +232,7 @@ public class Spider extends com.github.catvod.crawler.Spider {
         }
         cat = content.contains("__jsEvalReturn");
         ctx.evaluateModule(content.replace(spider, global), api);
-        ctx.evaluateModule(String.format(Asset.read("js/lib/spider.js"), api));
+        ctx.evaluateModule(Asset.read("js/lib/spider.js").replace("%s", api));
         jsObject = (JSObject) ctx.getProperty(ctx.getGlobalObject(), spider);
         if (jsObject == null) {
             throw new IllegalStateException("js spider object null: " + api);

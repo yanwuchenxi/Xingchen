@@ -6,7 +6,8 @@ public class Constant {
 
     public static final long INTERVAL_SEEK = TimeUnit.SECONDS.toMillis(10);
     public static final long INTERVAL_HIDE = TimeUnit.SECONDS.toMillis(5);
-    public static final long TIMEOUT_VOD = TimeUnit.SECONDS.toMillis(30);
+    /** JS 源首次要拉 api+多路 import+规则，30s 易空结果；影视仓侧体感更宽裕 */
+    public static final long TIMEOUT_VOD = TimeUnit.SECONDS.toMillis(90);
     public static final long TIMEOUT_LIVE = TimeUnit.SECONDS.toMillis(30);
     public static final long TIMEOUT_EPG = TimeUnit.SECONDS.toMillis(5);
     public static final long TIMEOUT_XML = TimeUnit.SECONDS.toMillis(15);
