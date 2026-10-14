@@ -9,7 +9,7 @@ import com.github.catvod.utils.Asset;
 
 public class Module {
 
-    private static final int MAX_SIZE = 50;
+    private static final int MAX_SIZE = 80;
     private final LruCache<String, String> cache;
 
     public Module() {
@@ -33,13 +33,19 @@ public class Module {
             SpiderDebug.log("js-module", "fetch fail name=%s err=%s", name, e.getMessage());
             content = "";
         }
+        content = stripBom(content);
         if (TextUtils.isEmpty(content)) {
             SpiderDebug.log("js-module", "empty content name=%s", name);
-            // 不缓存空结果，便于网络恢复后重试
             return "";
         }
         cache.put(name, content);
         return content;
+    }
+
+    private static String stripBom(String s) {
+        if (s == null || s.isEmpty()) return "";
+        if (s.charAt(0) == '\uFEFF') return s.substring(1);
+        return s;
     }
 
     public void clear() {

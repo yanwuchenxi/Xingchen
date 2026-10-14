@@ -9,6 +9,7 @@ import com.fongmi.quickjs.method.Local;
 import com.fongmi.quickjs.utils.Async;
 import com.fongmi.quickjs.utils.JSUtil;
 import com.fongmi.quickjs.utils.Module;
+import com.github.catvod.crawler.SpiderDebug;
 import com.github.catvod.utils.Asset;
 import com.github.catvod.utils.Json;
 import com.github.catvod.utils.UriUtil;
@@ -58,7 +59,27 @@ public class Spider extends com.github.catvod.crawler.Spider {
     @Override
     public void init(Context context, String extend) throws Exception {
         initializeJS();
-        call("init", submit(() -> getExt(extend)).get());
+        // 远程规则文件在 Java 侧先拉取，避免仅依赖 JS request 时网络/线程问题
+        final String resolved = resolveExtend(extend);
+        call("init", submit(() -> getExt(resolved)).get());
+    }
+
+    private String resolveExtend(String extend) {
+        if (extend == null || extend.isEmpty()) return "";
+        String e = extend.trim();
+        if (e.startsWith("http://") || e.startsWith("https://") || e.startsWith("file://")) {
+            try {
+                String body = Module.get().fetch(e.startsWith("file://") ? e : e);
+                if (body != null && !body.isEmpty()) {
+                    SpiderDebug.log("js", "ext prefetched len=%s url=%s", body.length(), e);
+                    return body;
+                }
+                SpiderDebug.log("js", "ext prefetch empty, pass url url=%s", e);
+            } catch (Throwable t) {
+                SpiderDebug.log("js", "ext prefetch fail url=%s err=%s", e, t.getMessage());
+            }
+        }
+        return e;
     }
 
     @Override
