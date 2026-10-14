@@ -44,9 +44,9 @@
             android:minWidth="52dp"
             android:paddingHorizontal="12dp"
             android:text="@string/danmaku_reset"
-            android:textColor="#FF1A1A2E"
+            android:textColor="@color/glass_text_primary"
             android:textSize="12sp"
-            app:backgroundTint="#F0F0F8"
+            app:backgroundTint="#33FFFFFF"
             app:cornerRadius="15dp" />
     </androidx.appcompat.widget.LinearLayoutCompat>
 

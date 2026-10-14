@@ -20,7 +20,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/detail_episode"
-            android:textColor="?attr/colorOnSurface"
+            android:textColor="@color/glass_text_primary"
             android:textSize="16sp" />
 
     </androidx.appcompat.widget.LinearLayoutCompat>
@@ -37,7 +37,7 @@
         app:tabIndicatorHeight="2dp"
         app:tabMode="scrollable"
         app:tabSelectedTextColor="?attr/colorPrimary"
-        app:tabTextColor="?attr/colorOnSurfaceVariant" />
+        app:tabTextColor="@color/glass_text_secondary" />
 
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/pager"

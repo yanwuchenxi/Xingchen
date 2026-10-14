@@ -12,7 +12,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/control_speed"
-        android:textColor="?attr/colorOnSurface"
+        android:textColor="@color/glass_text_primary"
         android:textSize="16sp" />
 
     <com.google.android.material.slider.Slider
@@ -32,7 +32,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
         android:text="@string/parse"
-        android:textColor="?attr/colorOnSurface"
+        android:textColor="@color/glass_text_primary"
         android:textSize="16sp"
         android:visibility="gone"
         tools:visibility="visible" />
@@ -57,7 +57,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
         android:text="@string/control_scale"
-        android:textColor="?attr/colorOnSurface"
+        android:textColor="@color/glass_text_primary"
         android:textSize="16sp" />
 
     <HorizontalScrollView
@@ -134,7 +134,7 @@
         android:layout_marginTop="16dp"
         android:layout_marginBottom="8dp"
         android:text="@string/play"
-        android:textColor="?attr/colorOnSurface"
+        android:textColor="@color/glass_text_primary"
         android:textSize="16sp" />
 
     <HorizontalScrollView
@@ -209,7 +209,7 @@
         android:layout_marginTop="16dp"
         android:layout_marginBottom="8dp"
         android:text="@string/control_track"
-        android:textColor="?attr/colorOnSurface"
+        android:textColor="@color/glass_text_primary"
         android:textSize="16sp"
         android:visibility="gone"
         tools:visibility="visible" />
@@ -266,7 +266,7 @@
         android:layout_marginTop="16dp"
         android:layout_marginBottom="8dp"
         android:text="@string/control_other"
-        android:textColor="?attr/colorOnSurface"
+        android:textColor="@color/glass_text_primary"
         android:textSize="16sp" />
 
     <androidx.appcompat.widget.LinearLayoutCompat
