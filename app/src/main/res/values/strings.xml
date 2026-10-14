@@ -393,4 +393,9 @@
     <string name="detail_share">Share</string>
     <string name="site_incognito_on">Incognito on</string>
     <string name="site_incognito_off">Incognito off</string>
+    <string name="detail_play">Play</string>
+    <string name="detail_flag">Source</string>
+    <string name="detail_episode">Episodes</string>
+    <string name="detail_quality">Quality</string>
+    <string name="share">Share</string>
 </resources>

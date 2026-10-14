@@ -355,4 +355,9 @@
     <string name="detail_share">分享</string>
     <string name="site_incognito_on">已开启无痕</string>
     <string name="site_incognito_off">已关闭无痕</string>
+    <string name="detail_play">立即播放</string>
+    <string name="detail_flag">线路</string>
+    <string name="detail_episode">选集</string>
+    <string name="detail_quality">画质</string>
+    <string name="share">分享</string>
 </resources>

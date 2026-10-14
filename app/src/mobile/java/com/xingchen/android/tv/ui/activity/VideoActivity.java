@@ -325,6 +325,7 @@ public class VideoActivity extends PlaybackActivity implements Clock.Callback, C
     protected void initEvent() {
         mBinding.name.setOnClickListener(view -> onName());
         mBinding.more.setOnClickListener(view -> onMore());
+        mBinding.detailPlay.setOnClickListener(view -> onDetailPlay());
         mBinding.detailKeep.setOnClickListener(view -> onKeep());
         mBinding.detailShare.setOnClickListener(view -> onDetailShare());
         mBinding.actor.setOnClickListener(view -> onActor());
@@ -585,7 +586,7 @@ public class VideoActivity extends PlaybackActivity implements Clock.Callback, C
         mBinding.swipeLayout.setRefreshing(false);
         setQualityVisible(result.getUrl().isMulti());
         result.getUrl().set(mQualityAdapter.getPosition());
-        if (result.hasArtwork()) setArtwork(result.getArtwork());
+        if (result.hasArtwork()) { setArtwork(result.getArtwork()); setDetailPic(result.getArtwork()); }
         if (result.hasPosition()) mHistory.setPosition(result.getPosition());
         if (result.hasDesc()) setText(mBinding.content, 0, result.getDesc());
         mBinding.control.parse.setVisibility(isUseParse() ? View.VISIBLE : View.GONE);
@@ -742,6 +743,16 @@ public class VideoActivity extends PlaybackActivity implements Clock.Callback, C
 
     private void onInfo() {
         InfoDialog.create().title(mBinding.control.title.getText()).headers(player().getHeaders()).url(player().getUrl()).show(this);
+    }
+
+    private void onDetailPlay() {
+        if (mEpisodeAdapter != null && !mEpisodeAdapter.getItems().isEmpty()) {
+            int pos = mEpisodeAdapter.getPosition();
+            if (pos < 0 || pos >= mEpisodeAdapter.getItemCount()) pos = 0;
+            onItemClick(mEpisodeAdapter.getItems().get(pos));
+            return;
+        }
+        checkPlay();
     }
 
     private void onKeep() {
@@ -1132,6 +1143,7 @@ public class VideoActivity extends PlaybackActivity implements Clock.Callback, C
         mBinding.control.action.speed.setText(player().setSpeed(mHistory.getSpeed()));
         mHistory.setVodName(item.getName());
         setArtwork(item.getPic());
+        setDetailPic(item.getPic());
         setScale(getScale());
     }
 
@@ -1142,7 +1154,7 @@ public class VideoActivity extends PlaybackActivity implements Clock.Callback, C
     private void showInitialPreview() {
         mBinding.progressLayout.showContent();
         mBinding.name.setText(getName());
-        if (!getPic().isEmpty()) setArtwork(getPic());
+        if (!getPic().isEmpty()) { setArtwork(getPic()); setDetailPic(getPic()); }
     }
 
     private History createHistory(Vod item) {
@@ -1186,9 +1198,22 @@ public class VideoActivity extends PlaybackActivity implements Clock.Callback, C
         if (isVisible(mBinding.control.getRoot())) showControl();
     }
 
+
+    private void setDetailPic(String pic) {
+        if (mBinding == null || mBinding.detailPic == null) return;
+        String name = mBinding.name.getText() == null ? "" : mBinding.name.getText().toString();
+        ImgUtil.load(name, pic == null ? "" : pic, mBinding.detailPic);
+    }
+
     private void checkKeepImg() {
-        mBinding.control.keep.setImageResource(Keep.find(getHistoryKey()) == null ? R.drawable.ic_control_keep_off : R.drawable.ic_control_keep_on);
-            if (mBinding.detailKeep != null) mBinding.detailKeep.setImageResource(Keep.find(getHistoryKey()) != null ? R.drawable.ic_control_keep_on : R.drawable.ic_control_keep_off);
+        boolean kept = Keep.find(getHistoryKey()) != null;
+        mBinding.control.keep.setImageResource(kept ? R.drawable.ic_control_keep_on : R.drawable.ic_control_keep_off);
+        if (mBinding.detailKeepIcon != null) {
+            mBinding.detailKeepIcon.setImageResource(kept ? R.drawable.ic_control_keep_on : R.drawable.ic_control_keep_off);
+        }
+        if (mBinding.detailKeepText != null) {
+            mBinding.detailKeepText.setText(kept ? R.string.keep_del : R.string.keep);
+        }
     }
 
 
@@ -1234,7 +1259,7 @@ public class VideoActivity extends PlaybackActivity implements Clock.Callback, C
         if (name) mBinding.name.setText(item.getName());
         if (name) mBinding.control.title.setText(item.getName());
         updateFlag(getFlag(), item.getFlags());
-        if (pic) setArtwork(item.getPic());
+        if (pic) { setArtwork(item.getPic()); setDetailPic(item.getPic()); }
         if (pic || name) setMetadata();
         if (pic || name) syncHistory();
         if (pic || name) updateKeep();
