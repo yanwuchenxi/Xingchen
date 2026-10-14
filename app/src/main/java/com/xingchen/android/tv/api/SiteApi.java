@@ -45,7 +45,12 @@ public class SiteApi {
     }
 
     private static boolean isSpider(@NonNull Site site) {
-        return site.getType() == 3;
+        // 与影视仓/FongMi 一致：type=3 为 Spider；api 形态也可识别，避免配置 type 写错导致走 CMS
+        if (site.getType() == 3) return true;
+        String api = site.getApi();
+        if (api == null || api.isEmpty()) return false;
+        String lower = api.toLowerCase();
+        return lower.contains(".js") || lower.contains(".py") || lower.startsWith("csp_");
     }
 
     private static String ac(int type) {

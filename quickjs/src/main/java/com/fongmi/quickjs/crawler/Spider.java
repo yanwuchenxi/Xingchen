@@ -187,10 +187,16 @@ public class Spider extends com.github.catvod.crawler.Spider {
         String spider = "__JS_SPIDER__";
         String global = "globalThis." + spider;
         String content = Module.get().fetch(api);
+        if (content == null || content.isEmpty()) {
+            throw new IllegalStateException("js empty: " + api);
+        }
         cat = content.contains("__jsEvalReturn");
         ctx.evaluateModule(content.replace(spider, global), api);
         ctx.evaluateModule(String.format(Asset.read("js/lib/spider.js"), api));
         jsObject = (JSObject) ctx.getProperty(ctx.getGlobalObject(), spider);
+        if (jsObject == null) {
+            throw new IllegalStateException("js spider object null: " + api);
+        }
     }
 
     private Object getExt(String ext) {

@@ -139,6 +139,11 @@ public class Site implements Parcelable {
             site.setApi(UrlUtil.convert(site.getApi()));
             site.setExt(UrlUtil.convert(site.getExt()));
             site.setHomePage(UrlUtil.convert(site.getHomePage()));
+            // 配置源常漏写 type=3：api 为 js/py 时自动按 Spider 处理（对齐影视仓实际行为）
+            String api = site.getApi().toLowerCase();
+            if (site.getType() != 3 && (api.contains(".js") || api.contains(".py"))) {
+                site.setType(3);
+            }
             return site.trans();
         } catch (Exception e) {
             return new Site();
@@ -214,6 +219,10 @@ public class Site implements Parcelable {
 
     public Integer getType() {
         return type == null ? 0 : type;
+    }
+
+    public void setType(Integer type) {
+        this.type = type;
     }
 
     public Integer getHide() {
