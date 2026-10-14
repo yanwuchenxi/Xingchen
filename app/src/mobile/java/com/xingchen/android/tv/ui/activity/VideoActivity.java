@@ -325,7 +325,6 @@ public class VideoActivity extends PlaybackActivity implements Clock.Callback, C
     protected void initEvent() {
         mBinding.name.setOnClickListener(view -> onName());
         mBinding.more.setOnClickListener(view -> onMore());
-        mBinding.detailPlay.setOnClickListener(view -> onDetailPlay());
         mBinding.detailKeep.setOnClickListener(view -> onKeep());
         mBinding.detailShare.setOnClickListener(view -> onDetailShare());
         mBinding.actor.setOnClickListener(view -> onActor());
@@ -745,15 +744,6 @@ public class VideoActivity extends PlaybackActivity implements Clock.Callback, C
         InfoDialog.create().title(mBinding.control.title.getText()).headers(player().getHeaders()).url(player().getUrl()).show(this);
     }
 
-    private void onDetailPlay() {
-        if (mEpisodeAdapter != null && !mEpisodeAdapter.getItems().isEmpty()) {
-            int pos = mEpisodeAdapter.getPosition();
-            if (pos < 0 || pos >= mEpisodeAdapter.getItemCount()) pos = 0;
-            onItemClick(mEpisodeAdapter.getItems().get(pos));
-            return;
-        }
-        checkPlay();
-    }
 
     private void onKeep() {
         Keep keep = Keep.find(getHistoryKey());

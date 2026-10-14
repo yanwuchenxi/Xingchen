@@ -198,7 +198,7 @@
                         </androidx.appcompat.widget.LinearLayoutCompat>
                     </androidx.appcompat.widget.LinearLayoutCompat>
 
-                    <!-- 操作：播放 / 收藏 / 分享 -->
+                    <!-- 操作：收藏 / 分享 -->
                     <androidx.appcompat.widget.LinearLayoutCompat
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -206,32 +206,14 @@
                         android:gravity="center_vertical"
                         android:orientation="horizontal">
 
-                        <com.google.android.material.button.MaterialButton
-                            android:id="@+id/detailPlay"
+                        <androidx.appcompat.widget.LinearLayoutCompat
+                            android:id="@+id/detailKeep"
                             android:layout_width="0dp"
                             android:layout_height="46dp"
                             android:layout_weight="1"
-                            android:background="@drawable/bg_detail_play"
-                            android:insetTop="0dp"
-                            android:insetBottom="0dp"
-                            android:text="@string/detail_play"
-                            android:textColor="#FFFFFFFF"
-                            android:textSize="15sp"
-                            android:textStyle="bold"
-                            app:backgroundTint="@null"
-                            app:icon="@drawable/ic_detail_play"
-                            app:iconGravity="textStart"
-                            app:iconPadding="8dp"
-                            app:iconTint="#FFFFFFFF" />
-
-                        <androidx.appcompat.widget.LinearLayoutCompat
-                            android:id="@+id/detailKeep"
-                            android:layout_width="72dp"
-                            android:layout_height="46dp"
-                            android:layout_marginStart="8dp"
                             android:background="@drawable/bg_detail_action"
                             android:gravity="center"
-                            android:orientation="vertical">
+                            android:orientation="horizontal">
 
                             <androidx.appcompat.widget.AppCompatImageView
                                 android:id="@+id/detailKeepIcon"
@@ -244,19 +226,21 @@
                                 android:id="@+id/detailKeepText"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
+                                android:layout_marginStart="6dp"
                                 android:text="@string/keep"
                                 android:textColor="#E6FFFFFF"
-                                android:textSize="11sp" />
+                                android:textSize="13sp" />
                         </androidx.appcompat.widget.LinearLayoutCompat>
 
                         <androidx.appcompat.widget.LinearLayoutCompat
                             android:id="@+id/detailShare"
-                            android:layout_width="72dp"
+                            android:layout_width="0dp"
                             android:layout_height="46dp"
-                            android:layout_marginStart="8dp"
+                            android:layout_marginStart="10dp"
+                            android:layout_weight="1"
                             android:background="@drawable/bg_detail_action"
                             android:gravity="center"
-                            android:orientation="vertical">
+                            android:orientation="horizontal">
 
                             <androidx.appcompat.widget.AppCompatImageView
                                 android:layout_width="22dp"
@@ -267,9 +251,10 @@
                             <com.google.android.material.textview.MaterialTextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
+                                android:layout_marginStart="6dp"
                                 android:text="@string/share"
                                 android:textColor="#E6FFFFFF"
-                                android:textSize="11sp" />
+                                android:textSize="13sp" />
                         </androidx.appcompat.widget.LinearLayoutCompat>
                     </androidx.appcompat.widget.LinearLayoutCompat>
 
