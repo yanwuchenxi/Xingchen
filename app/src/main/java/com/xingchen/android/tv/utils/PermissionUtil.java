@@ -1,6 +1,7 @@
 package com.xingchen.android.tv.utils;
 
 import android.Manifest;
+import android.os.Build;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
@@ -22,6 +23,7 @@ public class PermissionUtil {
         if (hasFileAccess(callback)) return;
         SpiderDebug.log("permission", "request file access managerAvailable=%s", Setting.hasFileManager());
         if (Setting.hasFileManager()) PermissionX.init(activity).permissions().requestManageExternalStoragePermissionNow(new PermissionCallback(result -> finishFileRequest(callback, result)));
+        else if (Build.VERSION.SDK_INT >= 33) PermissionX.init(activity).permissions(Manifest.permission.READ_MEDIA_VIDEO, Manifest.permission.READ_MEDIA_AUDIO, Manifest.permission.READ_MEDIA_IMAGES).request(new PermissionCallback(result -> finishFileRequest(callback, result)));
         else PermissionX.init(activity).permissions(Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE).request(new PermissionCallback(result -> finishFileRequest(callback, result)));
     }
 
@@ -29,6 +31,7 @@ public class PermissionUtil {
         if (hasFileAccess(callback)) return;
         SpiderDebug.log("permission", "request file access managerAvailable=%s", Setting.hasFileManager());
         if (Setting.hasFileManager()) PermissionX.init(fragment).permissions().requestManageExternalStoragePermissionNow(new PermissionCallback(result -> finishFileRequest(callback, result)));
+        else if (Build.VERSION.SDK_INT >= 33) PermissionX.init(fragment).permissions(Manifest.permission.READ_MEDIA_VIDEO, Manifest.permission.READ_MEDIA_AUDIO, Manifest.permission.READ_MEDIA_IMAGES).request(new PermissionCallback(result -> finishFileRequest(callback, result)));
         else PermissionX.init(fragment).permissions(Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE).request(new PermissionCallback(result -> finishFileRequest(callback, result)));
     }
 
