@@ -6,10 +6,13 @@ import androidx.annotation.NonNull;
 import com.fongmi.quickjs.bean.Req;
 import com.fongmi.quickjs.utils.Connect;
 import com.fongmi.quickjs.utils.Crypto;
+import com.fongmi.quickjs.utils.JSUtil;
+import com.fongmi.quickjs.utils.Parser;
 import com.github.catvod.Proxy;
 import com.github.catvod.utils.Trans;
 import com.github.catvod.utils.UriUtil;
 import com.orhanobut.logger.Logger;
+import com.whl.quickjs.wrapper.JSArray;
 import com.whl.quickjs.wrapper.JSFunction;
 import com.whl.quickjs.wrapper.JSMethod;
 import com.whl.quickjs.wrapper.JSObject;
@@ -31,6 +34,7 @@ public class Global {
     private final ExecutorService executor;
     private final ExecutorService callbackExecutor;
     private final QuickJSContext ctx;
+    private final Parser parser;
     private final Timer timer;
 
     private Global(QuickJSContext ctx, ExecutorService executor) {
@@ -38,6 +42,7 @@ public class Global {
         this.callbackExecutor = java.util.concurrent.Executors.newCachedThreadPool();
         this.timer = new Timer();
         this.ctx = ctx;
+        this.parser = new Parser();
         setProperty();
     }
 
@@ -48,6 +53,8 @@ public class Global {
     private void setProperty() {
         for (Method method : getClass().getMethods()) {
             if (!method.isAnnotationPresent(JSMethod.class)) continue;
+            // pd 支持 2～3 参数，单独绑定
+            if ("pd".equals(method.getName())) continue;
             ctx.getGlobalObject().setProperty(method.getName(), args -> {
                 try {
                     return method.invoke(this, args);
@@ -56,6 +63,11 @@ public class Global {
                 }
             });
         }
+        ctx.getGlobalObject().setProperty("pd", args -> {
+            if (args == null || args.length < 2) return "";
+            String urlKey = args.length > 2 && args[2] != null ? String.valueOf(args[2]) : "";
+            return pd(String.valueOf(args[0]), String.valueOf(args[1]), urlKey);
+        });
     }
 
     private void submit(Runnable runnable) {
@@ -126,6 +138,33 @@ public class Global {
     @JSMethod
     public String joinUrl(String parent, String child) {
         return UriUtil.resolve(parent, child);
+    }
+
+    /** drpy 内置解析：取文本/属性 */
+    @Keep
+    @JSMethod
+    public String pdfh(String html, String rule) {
+        return parser.pdfh(html, rule, "");
+    }
+
+    /** drpy 内置解析：取列表 */
+    @Keep
+    @JSMethod
+    public JSArray pdfa(String html, String rule) {
+        return JSUtil.toArray(ctx, parser.pdfa(html, rule));
+    }
+
+    /** drpy 内置解析：取链接（可拼 base） */
+    @Keep
+    @JSMethod
+    public String pd(String html, String rule, String urlKey) {
+        return parser.pdfh(html, rule, urlKey == null ? "" : urlKey);
+    }
+
+    @Keep
+    @JSMethod
+    public JSArray pdfl(String html, String rule, String texts, String urls, String urlKey) {
+        return JSUtil.toArray(ctx, parser.pdfl(html, rule, texts, urls, urlKey));
     }
 
     @Keep
