@@ -1,6 +1,8 @@
 package com.xingchen.android.tv.ui.activity;
 
+import com.xingchen.android.tv.ui.controller.LiveControlPanel;
 import com.xingchen.android.tv.ui.controller.LiveEmbeddedUi;
+import com.xingchen.android.tv.ui.controller.LiveOverlayUi;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -687,86 +689,50 @@ public class LiveActivity extends PlaybackActivity implements CustomKeyDown.List
     }
 
     private void keepLiveMenuVisible() {
-        mBinding.recycler.setVisibility(View.VISIBLE);
-        mBinding.group.setVisibility(View.VISIBLE);
-        mBinding.channel.setVisibility(View.VISIBLE);
+        LiveOverlayUi.keepMenuVisible(mBinding.recycler, mBinding.group, mBinding.channel);
     }
 
     private void showEpg(Channel item) {
         if (mChannel == null || mChannel.getData(mViewModel.getZoneId()).getList().isEmpty() || mEpgDataAdapter.getItemCount() == 0 || !mChannel.equals(item) || !mChannel.getGroup().equals(mGroup)) return;
         scrollToPosition(mBinding.epgData, item.getData(mViewModel.getZoneId()).getSelected());
-        mBinding.epgData.setVisibility(View.VISIBLE);
-        mBinding.channel.setVisibility(View.GONE);
-        mBinding.group.setVisibility(View.GONE);
+        LiveOverlayUi.showEpg(mBinding.epgData, mBinding.channel, mBinding.group);
     }
 
     private void hideEpg() {
-        mBinding.channel.setVisibility(View.VISIBLE);
-        mBinding.group.setVisibility(View.VISIBLE);
-        mBinding.epgData.setVisibility(View.GONE);
+        LiveOverlayUi.hideEpg(mBinding.epgData, mBinding.channel, mBinding.group);
     }
 
     private void showProgress() {
-        mBinding.progress.getRoot().setVisibility(View.VISIBLE);
-        App.post(mR2, 0);
-        hideError();
+        LiveOverlayUi.showProgress(mBinding.progress.getRoot(), mBinding.widget.error, mR2);
     }
 
     private void hideProgress() {
-        mBinding.progress.getRoot().setVisibility(View.GONE);
-        App.removeCallbacks(mR2);
-        Traffic.reset();
+        LiveOverlayUi.hideProgress(mBinding.progress.getRoot(), mR2);
     }
 
     private void showError(String text) {
-        mBinding.widget.error.setVisibility(View.VISIBLE);
-        mBinding.widget.error.setText(text);
-        hideProgress();
+        LiveOverlayUi.showError(mBinding.widget.error, text, mBinding.progress.getRoot(), mR2);
     }
 
     private void hideError() {
-        mBinding.widget.error.setVisibility(View.GONE);
-        mBinding.widget.error.setText("");
+        LiveOverlayUi.hideError(mBinding.widget.error);
     }
 
     private void showControl() {
         if (service() == null || isInPictureInPictureMode()) return;
-        boolean embedded = isEmbeddedLiveUi();
-        // 竖屏嵌入：不盖住下列表，隐藏底部 action 条；仅在播放器区域显示顶栏/中控
-        mBinding.control.info.setVisibility(player().isEmpty() ? View.GONE : View.VISIBLE);
-        mBinding.control.cast.setVisibility(player().isEmpty() || embedded ? View.GONE : View.VISIBLE);
-        mBinding.control.right.rotate.setVisibility(isLock() ? View.GONE : View.VISIBLE);
-        mBinding.control.center.setVisibility(isLock() ? View.GONE : View.VISIBLE);
-        mBinding.control.bottom.setVisibility(isLock() || embedded ? View.GONE : View.VISIBLE);
-        if (mBinding.control.action != null) {
-            mBinding.control.action.getRoot().setVisibility(embedded ? View.GONE : View.VISIBLE);
-        }
-        mBinding.control.back.setVisibility(isLock() ? View.GONE : View.VISIBLE);
-        mBinding.control.top.setVisibility(isLock() ? View.GONE : View.VISIBLE);
-        // 嵌入模式下播控背景更轻，避免整屏压黑
-        mBinding.control.getRoot().setBackgroundResource(embedded ? R.color.transparent : R.color.black_20);
-        mBinding.control.getRoot().setVisibility(View.VISIBLE);
-        setR1Callback();
-        hideInfo();
+        LiveControlPanel.show(mBinding, player().isEmpty(), isEmbeddedLiveUi(), isLock(), this::hideInfo, this::setR1Callback);
     }
 
     private void hideControl() {
-        mBinding.control.getRoot().setVisibility(View.GONE);
-        App.removeCallbacks(mR1);
+        LiveControlPanel.hide(mBinding, mR1);
     }
 
     private void showInfo() {
-        mBinding.widget.infoPip.setVisibility(isInPictureInPictureMode() ? View.VISIBLE : View.GONE);
-        mBinding.widget.info.setVisibility(isInPictureInPictureMode() ? View.GONE : View.VISIBLE);
-        setR3Callback();
-        hideControl();
-        setInfo();
+        LiveControlPanel.showInfoPip(mBinding, isInPictureInPictureMode(), this::setR3Callback, this::hideControl, this::setInfo);
     }
 
     private void hideInfo() {
-        mBinding.widget.infoPip.setVisibility(View.GONE);
-        mBinding.widget.info.setVisibility(View.GONE);
-        App.removeCallbacks(mR3);
+        LiveControlPanel.hideInfo(mBinding, mR3);
     }
 
     private void setTraffic() {
@@ -965,13 +931,11 @@ public class LiveActivity extends PlaybackActivity implements CustomKeyDown.List
     }
 
     private void checkLockImg() {
-        mBinding.control.right.lock.setImageResource(isLock() ? R.drawable.ic_control_lock_on : R.drawable.ic_control_lock_off);
+        LiveControlPanel.applyLockIcon(mBinding, isLock());
     }
 
     private void setSizeText() {
-        String text = player().getSizeText();
-        mBinding.control.size.setText(text);
-        mBinding.control.size.setVisibility(text.isEmpty() ? View.GONE : View.VISIBLE);
+        LiveControlPanel.setSizeText(mBinding, player().getSizeText());
     }
 
     private void resetAdapter() {

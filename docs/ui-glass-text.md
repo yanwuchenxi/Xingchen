@@ -12,3 +12,9 @@
 
 ## 扫尾
 修改弹窗 layout 后自检：深色底 + 白字；输入框 `textColor`/`hint` 为白系。
+
+## Live 控制器拆分（第 5 步）
+
+- `LiveEmbeddedUi`：竖屏 inset / 底栏
+- `LiveOverlayUi`：进度、错误、EPG 列表显隐
+- `LiveControlPanel`：播控条 / 信息条 / 锁定图标 / 分辨率文案
