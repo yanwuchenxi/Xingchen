@@ -91,6 +91,8 @@ import com.xingchen.android.tv.ui.dialog.TitleDialog;
 import com.xingchen.android.tv.ui.dialog.OnlineSubtitleDialog;
 import com.xingchen.android.tv.ui.dialog.PlayerSubtitleDialog;
 import com.xingchen.android.tv.ui.dialog.SubtitleDialog;
+import com.xingchen.android.tv.ui.controller.VideoControlPanel;
+import com.xingchen.android.tv.ui.controller.VideoOverlayUi;
 import com.xingchen.android.tv.ui.controller.VideoTypeRecommend;
 import com.xingchen.android.tv.ui.dialog.TrackDialog;
 import com.xingchen.android.tv.utils.Clock;
@@ -1017,26 +1019,19 @@ public class VideoActivity extends PlaybackActivity implements Clock.Callback, C
     }
 
     private void showProgress() {
-        mBinding.progress.getRoot().setVisibility(View.VISIBLE);
-        App.post(mR2, 0);
-        hideError();
+        VideoOverlayUi.showProgress(mBinding.progress.getRoot(), mBinding.widget.error, mR2);
     }
 
     private void hideProgress() {
-        mBinding.progress.getRoot().setVisibility(View.GONE);
-        App.removeCallbacks(mR2);
-        Traffic.reset();
+        VideoOverlayUi.hideProgress(mBinding.progress.getRoot(), mR2);
     }
 
     private void showError(String text) {
-        mBinding.widget.error.setVisibility(View.VISIBLE);
-        mBinding.widget.error.setText(text);
-        hideProgress();
+        VideoOverlayUi.showError(mBinding.widget.error, text, mBinding.progress.getRoot(), mR2);
     }
 
     private void hideError() {
-        mBinding.widget.error.setVisibility(View.GONE);
-        mBinding.widget.error.setText("");
+        VideoOverlayUi.hideError(mBinding.widget.error);
     }
 
     private void showDanmaku() {
@@ -1049,28 +1044,21 @@ public class VideoActivity extends PlaybackActivity implements Clock.Callback, C
 
     private void showControl() {
         if (service() == null || isInPictureInPictureMode()) return;
-        mBinding.control.danmaku.setVisibility(isLock() || !player().haveDanmaku() ? View.GONE : View.VISIBLE);
-        mBinding.control.setting.setVisibility(mHistory == null || isFullscreen() ? View.GONE : View.VISIBLE);
-        mBinding.control.right.rotate.setVisibility(isFullscreen() && !isLock() ? View.VISIBLE : View.GONE);
-        mBinding.control.fullscreen.setVisibility(isLock() ? View.GONE : View.VISIBLE);
-        mBinding.control.keep.setVisibility(mHistory == null || isFullscreen() ? View.GONE : View.VISIBLE);
-        mBinding.control.parse.setVisibility(isFullscreen() && isUseParse() ? View.VISIBLE : View.GONE);
-        mBinding.control.action.getRoot().setVisibility(isFullscreen() ? View.VISIBLE : View.GONE);
-        mBinding.control.right.lock.setVisibility(isFullscreen() ? View.VISIBLE : View.GONE);
-        mBinding.control.info.setVisibility(player().isEmpty() ? View.GONE : View.VISIBLE);
-        mBinding.control.cast.setVisibility(player().isEmpty() ? View.GONE : View.VISIBLE);
-        mBinding.control.center.setVisibility(isLock() ? View.GONE : View.VISIBLE);
-        mBinding.control.bottom.setVisibility(isLock() ? View.GONE : View.VISIBLE);
-        mBinding.control.back.setVisibility(isLock() ? View.GONE : View.VISIBLE);
-        mBinding.control.top.setVisibility(isLock() ? View.GONE : View.VISIBLE);
-        mBinding.control.getRoot().setVisibility(View.VISIBLE);
-        checkFullscreenImg();
-        setR1Callback();
+        VideoControlPanel.State state = new VideoControlPanel.State()
+                .locked(isLock())
+                .fullscreen(isFullscreen())
+                .playerEmpty(player().isEmpty())
+                .hasHistory(mHistory != null)
+                .useParse(isUseParse())
+                .haveDanmaku(player().haveDanmaku());
+        VideoControlPanel.show(mBinding, state, () -> {
+            checkFullscreenImg();
+            setR1Callback();
+        });
     }
 
     private void hideControl() {
-        mBinding.control.getRoot().setVisibility(View.GONE);
-        App.removeCallbacks(mR1);
+        VideoControlPanel.hide(mBinding, mR1);
     }
 
     private void hideSheet() {

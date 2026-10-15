@@ -18,3 +18,8 @@
 - `LiveEmbeddedUi`：竖屏 inset / 底栏
 - `LiveOverlayUi`：进度、错误、EPG 列表显隐
 - `LiveControlPanel`：播控条 / 信息条 / 锁定图标 / 分辨率文案
+
+## Video 控制器拆分（第 6 步）
+- `VideoOverlayUi`：进度、错误
+- `VideoControlPanel`：点播播控条显隐（全屏/锁定/弹幕/解析等）
+- `VideoTypeRecommend`：同类型推荐（第 2 步）
