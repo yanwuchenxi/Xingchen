@@ -35,6 +35,21 @@ public final class DarkAlert {
         gd.setColor(PANEL);
         gd.setCornerRadius(ResUtil.dp2px(18));
         window.setBackgroundDrawable(gd);
+        // 列表/标题/正文强制白字，避免主题 attr 在深色底上发灰或发黑
+        try {
+            int white = Color.WHITE;
+            int soft = Color.parseColor("#E6FFFFFF");
+            android.widget.TextView title = dialog.findViewById(androidx.appcompat.R.id.alertTitle);
+            if (title != null) title.setTextColor(white);
+            android.widget.TextView msg = dialog.findViewById(android.R.id.message);
+            if (msg != null) msg.setTextColor(soft);
+            android.widget.ListView list = dialog.getListView();
+            if (list != null) {
+                list.setCacheColorHint(Color.TRANSPARENT);
+                list.setSelector(android.R.color.transparent);
+            }
+        } catch (Throwable ignored) {
+        }
     }
 
     /** create + 深色窗体，不 show（供 DialogFragment） */

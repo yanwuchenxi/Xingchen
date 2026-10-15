@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- 深色玻璃面板上固定浅色，禁止 ?attr/colorOnSurface* 回潮 -->
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:color="?attr/colorOnSurfaceVariant" />
+    <item android:color="@color/glass_text_secondary" />
 </selector>
