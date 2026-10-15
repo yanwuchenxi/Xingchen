@@ -27,3 +27,7 @@
 ## Video 换源与图标（第 7 步）
 - `VideoSourceSwitch`：换源搜索站点过滤与结果匹配（与同类型推荐分离）
 - `VideoChromeUi`：收藏/锁定/全屏/弹幕/清晰度图标状态
+
+## 第 8 步
+- `PlayerOverlayUi`：点播/直播共用进度与错误浮层
+- `LiveLayoutHelper`：竖屏嵌入 / 横屏侧栏列表布局

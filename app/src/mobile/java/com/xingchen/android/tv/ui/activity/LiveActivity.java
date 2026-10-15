@@ -1,8 +1,10 @@
 package com.xingchen.android.tv.ui.activity;
 
 import com.xingchen.android.tv.ui.controller.LiveControlPanel;
+import com.xingchen.android.tv.ui.controller.LiveLayoutHelper;
 import com.xingchen.android.tv.ui.controller.LiveEmbeddedUi;
 import com.xingchen.android.tv.ui.controller.LiveOverlayUi;
+import com.xingchen.android.tv.ui.controller.PlayerOverlayUi;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -575,48 +577,21 @@ public class LiveActivity extends PlaybackActivity implements CustomKeyDown.List
         try {
             applySystemUiForOrientation();
             boolean embedded = isEmbeddedLiveUi();
+            ViewGroup content = mBinding.liveContent != null ? mBinding.liveContent : (ViewGroup) mBinding.getRoot();
             if (embedded) {
-                ensureRecyclerInRoot();
                 noPadding(mBinding.recycler);
-                // 按 16:9 固定播放器高度，消除画面与列表之间的黑边空白
-                int videoH = Math.round(ResUtil.getScreenWidth(this) * 9f / 16f);
-                androidx.appcompat.widget.LinearLayoutCompat.LayoutParams vp =
-                        new androidx.appcompat.widget.LinearLayoutCompat.LayoutParams(
-                                ViewGroup.LayoutParams.MATCH_PARENT, videoH);
-                androidx.appcompat.widget.LinearLayoutCompat.LayoutParams rp =
-                        new androidx.appcompat.widget.LinearLayoutCompat.LayoutParams(
-                                ViewGroup.LayoutParams.MATCH_PARENT, 0, 1f);
-                mBinding.video.setLayoutParams(vp);
-                mBinding.recycler.setLayoutParams(rp);
-                mBinding.recycler.setVisibility(View.VISIBLE);
+                LiveLayoutHelper.applyEmbedded(this, content, mBinding.video, mBinding.recycler, mBinding.liveContent, mBinding.homeNav);
                 keepLiveMenuVisible();
                 hideEpg();
-                if (mBinding.liveContent != null) {
-                    RelativeLayout.LayoutParams clp = new RelativeLayout.LayoutParams(
-                            ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-                    clp.addRule(RelativeLayout.ABOVE, R.id.homeNav);
-                    mBinding.liveContent.setLayoutParams(clp);
-                }
                 if (mBinding.homeNav != null) {
                     styleHomeNav();
-                    mBinding.homeNav.setVisibility(View.VISIBLE);
                     // 避免 setSelected 触发误跳转
                     mHomeNavGuard = true;
                     mBinding.homeNav.setSelectedItemId(R.id.live);
                     mHomeNavGuard = false;
                 }
             } else {
-                if (mBinding.homeNav != null) mBinding.homeNav.setVisibility(View.GONE);
-                if (mBinding.liveContent != null) {
-                    RelativeLayout.LayoutParams clp = new RelativeLayout.LayoutParams(
-                            ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-                    mBinding.liveContent.setLayoutParams(clp);
-                }
-                ensureRecyclerOverlayOnVideo();
-                androidx.appcompat.widget.LinearLayoutCompat.LayoutParams vp =
-                        new androidx.appcompat.widget.LinearLayoutCompat.LayoutParams(
-                                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT, 1f);
-                mBinding.video.setLayoutParams(vp);
+                LiveLayoutHelper.applyOverlay(this, mBinding.video, mBinding.recycler, mBinding.liveContent, mBinding.homeNav);
                 if (!isVisible(mBinding.control.getRoot())) {
                     mBinding.recycler.setVisibility(View.GONE);
                 }
@@ -625,31 +600,6 @@ public class LiveActivity extends PlaybackActivity implements CustomKeyDown.List
         } catch (Throwable e) {
             e.printStackTrace();
         }
-    }
-
-    private void ensureRecyclerInRoot() {
-        ViewGroup content = mBinding.liveContent != null ? mBinding.liveContent : (ViewGroup) mBinding.getRoot();
-        View recycler = mBinding.recycler;
-        if (recycler.getParent() == content) return;
-        ViewGroup parent = (ViewGroup) recycler.getParent();
-        if (parent != null) parent.removeView(recycler);
-        int index = content.indexOfChild(mBinding.video);
-        content.addView(recycler, index < 0 ? -1 : index + 1,
-                new androidx.appcompat.widget.LinearLayoutCompat.LayoutParams(
-                        ViewGroup.LayoutParams.MATCH_PARENT, 0, 14f));
-    }
-
-    private void ensureRecyclerOverlayOnVideo() {
-        ViewGroup video = mBinding.video;
-        View recycler = mBinding.recycler;
-        if (recycler.getParent() == video) return;
-        ViewGroup parent = (ViewGroup) recycler.getParent();
-        if (parent != null) parent.removeView(recycler);
-        int sw = ResUtil.getScreenWidth(this);
-        int w = Math.max(ResUtil.dp2px(280), Math.round(sw * 0.42f));
-        FrameLayout.LayoutParams lp = new FrameLayout.LayoutParams(w, ViewGroup.LayoutParams.MATCH_PARENT, Gravity.START);
-        video.addView(recycler, lp);
-        recycler.setBackgroundResource(R.color.transparent);
     }
 
     /** YingKe：竖屏且非旋转全屏、非 PiP 时为嵌入式列表 UI */
@@ -703,19 +653,19 @@ public class LiveActivity extends PlaybackActivity implements CustomKeyDown.List
     }
 
     private void showProgress() {
-        LiveOverlayUi.showProgress(mBinding.progress.getRoot(), mBinding.widget.error, mR2);
+        PlayerOverlayUi.showProgress(mBinding.progress.getRoot(), mBinding.widget.error, mR2);
     }
 
     private void hideProgress() {
-        LiveOverlayUi.hideProgress(mBinding.progress.getRoot(), mR2);
+        PlayerOverlayUi.hideProgress(mBinding.progress.getRoot(), mR2);
     }
 
     private void showError(String text) {
-        LiveOverlayUi.showError(mBinding.widget.error, text, mBinding.progress.getRoot(), mR2);
+        PlayerOverlayUi.showError(mBinding.widget.error, text, mBinding.progress.getRoot(), mR2);
     }
 
     private void hideError() {
-        LiveOverlayUi.hideError(mBinding.widget.error);
+        PlayerOverlayUi.hideError(mBinding.widget.error);
     }
 
     private void showControl() {

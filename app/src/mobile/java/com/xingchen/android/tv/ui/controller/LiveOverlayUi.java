@@ -3,11 +3,8 @@ package com.xingchen.android.tv.ui.controller;
 import android.view.View;
 import android.widget.TextView;
 
-import com.xingchen.android.tv.App;
-import com.xingchen.android.tv.utils.Traffic;
-
 /**
- * 直播页进度/错误/EPG 列表显隐。从 LiveActivity 抽出。
+ * 直播 EPG/频道列表显隐。进度/错误见 {@link PlayerOverlayUi}。
  */
 public final class LiveOverlayUi {
 
@@ -32,29 +29,23 @@ public final class LiveOverlayUi {
         if (epgData != null) epgData.setVisibility(View.GONE);
     }
 
+    /** @deprecated 使用 {@link PlayerOverlayUi#showProgress} */
     public static void showProgress(View progressRoot, TextView errorView, Runnable trafficTick) {
-        if (progressRoot != null) progressRoot.setVisibility(View.VISIBLE);
-        hideError(errorView);
-        if (trafficTick != null) App.post(trafficTick, 0);
+        PlayerOverlayUi.showProgress(progressRoot, errorView, trafficTick);
     }
 
+    /** @deprecated 使用 {@link PlayerOverlayUi#hideProgress} */
     public static void hideProgress(View progressRoot, Runnable trafficTick) {
-        if (progressRoot != null) progressRoot.setVisibility(View.GONE);
-        if (trafficTick != null) App.removeCallbacks(trafficTick);
-        Traffic.reset();
+        PlayerOverlayUi.hideProgress(progressRoot, trafficTick);
     }
 
+    /** @deprecated 使用 {@link PlayerOverlayUi#showError} */
     public static void showError(TextView errorView, String text, View progressRoot, Runnable trafficTick) {
-        if (errorView != null) {
-            errorView.setVisibility(View.VISIBLE);
-            errorView.setText(text == null ? "" : text);
-        }
-        hideProgress(progressRoot, trafficTick);
+        PlayerOverlayUi.showError(errorView, text, progressRoot, trafficTick);
     }
 
+    /** @deprecated 使用 {@link PlayerOverlayUi#hideError} */
     public static void hideError(TextView errorView) {
-        if (errorView == null) return;
-        errorView.setVisibility(View.GONE);
-        errorView.setText("");
+        PlayerOverlayUi.hideError(errorView);
     }
 }

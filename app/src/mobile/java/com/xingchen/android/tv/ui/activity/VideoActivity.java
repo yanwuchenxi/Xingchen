@@ -94,7 +94,7 @@ import com.xingchen.android.tv.ui.dialog.SubtitleDialog;
 import com.xingchen.android.tv.ui.controller.VideoChromeUi;
 import com.xingchen.android.tv.ui.controller.VideoControlPanel;
 import com.xingchen.android.tv.ui.controller.VideoSourceSwitch;
-import com.xingchen.android.tv.ui.controller.VideoOverlayUi;
+import com.xingchen.android.tv.ui.controller.PlayerOverlayUi;
 import com.xingchen.android.tv.ui.controller.VideoTypeRecommend;
 import com.xingchen.android.tv.ui.dialog.TrackDialog;
 import com.xingchen.android.tv.utils.Clock;
@@ -1020,19 +1020,19 @@ public class VideoActivity extends PlaybackActivity implements Clock.Callback, C
     }
 
     private void showProgress() {
-        VideoOverlayUi.showProgress(mBinding.progress.getRoot(), mBinding.widget.error, mR2);
+        PlayerOverlayUi.showProgress(mBinding.progress.getRoot(), mBinding.widget.error, mR2);
     }
 
     private void hideProgress() {
-        VideoOverlayUi.hideProgress(mBinding.progress.getRoot(), mR2);
+        PlayerOverlayUi.hideProgress(mBinding.progress.getRoot(), mR2);
     }
 
     private void showError(String text) {
-        VideoOverlayUi.showError(mBinding.widget.error, text, mBinding.progress.getRoot(), mR2);
+        PlayerOverlayUi.showError(mBinding.widget.error, text, mBinding.progress.getRoot(), mR2);
     }
 
     private void hideError() {
-        VideoOverlayUi.hideError(mBinding.widget.error);
+        PlayerOverlayUi.hideError(mBinding.widget.error);
     }
 
     private void showDanmaku() {
