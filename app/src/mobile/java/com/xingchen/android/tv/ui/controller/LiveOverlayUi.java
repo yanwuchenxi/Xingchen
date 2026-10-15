@@ -30,21 +30,25 @@ public final class LiveOverlayUi {
     }
 
     /** @deprecated 使用 {@link PlayerOverlayUi#showProgress} */
+    @Deprecated
     public static void showProgress(View progressRoot, TextView errorView, Runnable trafficTick) {
         PlayerOverlayUi.showProgress(progressRoot, errorView, trafficTick);
     }
 
     /** @deprecated 使用 {@link PlayerOverlayUi#hideProgress} */
+    @Deprecated
     public static void hideProgress(View progressRoot, Runnable trafficTick) {
         PlayerOverlayUi.hideProgress(progressRoot, trafficTick);
     }
 
     /** @deprecated 使用 {@link PlayerOverlayUi#showError} */
+    @Deprecated
     public static void showError(TextView errorView, String text, View progressRoot, Runnable trafficTick) {
         PlayerOverlayUi.showError(errorView, text, progressRoot, trafficTick);
     }
 
     /** @deprecated 使用 {@link PlayerOverlayUi#hideError} */
+    @Deprecated
     public static void hideError(TextView errorView) {
         PlayerOverlayUi.hideError(errorView);
     }

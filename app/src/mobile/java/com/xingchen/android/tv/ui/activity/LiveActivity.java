@@ -562,7 +562,7 @@ public class LiveActivity extends PlaybackActivity implements CustomKeyDown.List
             return;
         }
         if (mGroupAdapter.getItemCount() == 0) return;
-        ensureRecyclerOverlayOnVideo();
+        LiveLayoutHelper.ensureRecyclerOverlayOnVideo(this, mBinding.video, mBinding.recycler);
         mBinding.recycler.setVisibility(View.VISIBLE);
         keepLiveMenuVisible();
         mBinding.channel.requestFocus();
