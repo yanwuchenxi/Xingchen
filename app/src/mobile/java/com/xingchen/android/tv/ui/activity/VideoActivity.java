@@ -91,7 +91,9 @@ import com.xingchen.android.tv.ui.dialog.TitleDialog;
 import com.xingchen.android.tv.ui.dialog.OnlineSubtitleDialog;
 import com.xingchen.android.tv.ui.dialog.PlayerSubtitleDialog;
 import com.xingchen.android.tv.ui.dialog.SubtitleDialog;
+import com.xingchen.android.tv.ui.controller.VideoChromeUi;
 import com.xingchen.android.tv.ui.controller.VideoControlPanel;
+import com.xingchen.android.tv.ui.controller.VideoSourceSwitch;
 import com.xingchen.android.tv.ui.controller.VideoOverlayUi;
 import com.xingchen.android.tv.ui.controller.VideoTypeRecommend;
 import com.xingchen.android.tv.ui.dialog.TrackDialog;
@@ -668,8 +670,7 @@ public class VideoActivity extends PlaybackActivity implements Clock.Callback, C
     }
 
     private void setQualityVisible(boolean visible) {
-        mBinding.qualityText.setVisibility(visible ? View.VISIBLE : View.GONE);
-        mBinding.quality.setVisibility(visible ? View.VISIBLE : View.GONE);
+        VideoChromeUi.setQualityVisible(mBinding.qualityText, mBinding.quality, visible);
     }
 
     private void reverseEpisode(boolean scroll) {
@@ -1187,27 +1188,19 @@ public class VideoActivity extends PlaybackActivity implements Clock.Callback, C
     }
 
     private void checkKeepImg() {
-        boolean kept = Keep.find(getHistoryKey()) != null;
-        mBinding.control.keep.setImageResource(kept ? R.drawable.ic_control_keep_on : R.drawable.ic_control_keep_off);
-        if (mBinding.detailKeepIcon != null) {
-            mBinding.detailKeepIcon.setImageResource(kept ? R.drawable.ic_control_keep_on : R.drawable.ic_control_keep_off);
-        }
-        if (mBinding.detailKeepText != null) {
-            mBinding.detailKeepText.setText(kept ? R.string.keep_del : R.string.keep);
-        }
+        VideoChromeUi.applyKeep(mBinding, Keep.find(getHistoryKey()) != null);
     }
 
-
     private void checkLockImg() {
-        mBinding.control.right.lock.setImageResource(isLock() ? R.drawable.ic_control_lock_on : R.drawable.ic_control_lock_off);
+        VideoChromeUi.applyLock(mBinding.control.right.lock, isLock());
     }
 
     private void checkFullscreenImg() {
-        mBinding.control.fullscreen.setImageResource(isFullscreen() ? R.drawable.ic_control_fullscreen_exit : R.drawable.ic_control_fullscreen);
+        VideoChromeUi.applyFullscreen(mBinding.control.fullscreen, isFullscreen());
     }
 
     private void checkDanmakuImg() {
-        mBinding.control.danmaku.setImageResource(DanmakuSetting.isShow() ? R.drawable.ic_control_danmaku_on : R.drawable.ic_control_danmaku_off);
+        VideoChromeUi.applyDanmaku(mBinding.control.danmaku, DanmakuSetting.isShow());
     }
 
     private void createKeep() {
@@ -1531,36 +1524,23 @@ public class VideoActivity extends PlaybackActivity implements Clock.Callback, C
         startSearch(keyword);
     }
 
-    private boolean isPass(Site item) {
-        if (isAutoMode() && !item.isChangeable()) return false;
-        return item.isSearchable();
-    }
-
     private void startSearch(String keyword) {
         mQuickAdapter.clear();
         if (mBinding.quickSection != null) mBinding.quickSection.setVisibility(View.GONE);
-        List<Site> sites = new ArrayList<>();
-        for (Site item : VodConfig.get().getSites()) if (isPass(item)) sites.add(item);
+        List<Site> sites = VideoSourceSwitch.collectSites(isAutoMode());
         mViewModel.searchContent(sites, keyword, true);
     }
 
     private void setSearch(Result result) {
         List<Vod> items = result.getList();
-        items.removeIf(this::mismatch);
+        String keyword = mBinding.name.getText() == null ? "" : mBinding.name.getText().toString();
+        items.removeIf(item -> VideoSourceSwitch.mismatch(item, getId(), mBroken, keyword, isAutoMode()));
         mBinding.quick.setVisibility(View.VISIBLE);
         mBinding.quickSection.setVisibility(View.VISIBLE);
         mQuickAdapter.addAll(items);
         if (isInitAuto()) nextSite();
         if (items.isEmpty()) return;
         App.removeCallbacks(mR4);
-    }
-
-    private boolean mismatch(Vod item) {
-        if (getId().equals(item.getId())) return true;
-        if (mBroken.contains(item.getId())) return true;
-        String keyword = mBinding.name.getText().toString();
-        if (isAutoMode()) return !item.getName().equals(keyword);
-        else return !item.getName().contains(keyword);
     }
 
     private void nextParse(int position) {

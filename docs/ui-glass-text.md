@@ -23,3 +23,7 @@
 - `VideoOverlayUi`：进度、错误
 - `VideoControlPanel`：点播播控条显隐（全屏/锁定/弹幕/解析等）
 - `VideoTypeRecommend`：同类型推荐（第 2 步）
+
+## Video 换源与图标（第 7 步）
+- `VideoSourceSwitch`：换源搜索站点过滤与结果匹配（与同类型推荐分离）
+- `VideoChromeUi`：收藏/锁定/全屏/弹幕/清晰度图标状态
