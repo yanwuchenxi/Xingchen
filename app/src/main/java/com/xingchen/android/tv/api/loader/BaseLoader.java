@@ -24,6 +24,7 @@ public class BaseLoader {
     private final JarLoader jarLoader;
     private final PyLoader pyLoader;
     private final JsLoader jsLoader;
+    private volatile String lastError;
 
     private BaseLoader() {
         jarLoader = new JarLoader();
@@ -56,16 +57,28 @@ public class BaseLoader {
     }
 
     public Spider getSpider(String key, String api, String ext, String jar) {
+        lastError = null;
         if (isPy(api)) return pyLoader.getSpider(key, api, ext);
-        else if (isJs(api)) return jsLoader.getSpider(key, api, ext, jar);
-        else if (isCsp(api)) {
+        else if (isJs(api)) {
+            Spider spider = jsLoader.getSpider(key, api, ext, jar);
+            lastError = jsLoader.getLastError();
+            return spider;
+        } else if (isCsp(api)) {
             if (TextUtils.isEmpty(jar)) {
-                // 配置 spider 为空时 csp 无法加载（如本配置 csp_czjy / csp_Douban）
+                lastError = "未配置 spider.jar，csp 源无法加载（请在订阅里填写 spider 地址）";
                 com.github.catvod.crawler.SpiderDebug.log("csp", "empty spider jar, site=%s api=%s", key, api);
+                return new SpiderNull();
             }
             return jarLoader.getSpider(key, api, ext, jar);
         }
-        else return new SpiderNull();
+        else {
+            lastError = "无法识别的源类型: " + api;
+            return new SpiderNull();
+        }
+    }
+
+    public String getLastError() {
+        return lastError;
     }
 
     public Spider getSpider(String key) {

@@ -6,6 +6,7 @@ import androidx.annotation.NonNull;
 import androidx.collection.ArrayMap;
 
 import com.xingchen.android.tv.App;
+import com.xingchen.android.tv.api.loader.BaseLoader;
 import com.xingchen.android.tv.R;
 import com.xingchen.android.tv.api.config.VodConfig;
 import com.xingchen.android.tv.bean.Class;
@@ -16,6 +17,7 @@ import com.xingchen.android.tv.player.Source;
 import com.xingchen.android.tv.utils.ResUtil;
 import com.xingchen.android.tv.utils.Sniffer;
 import com.github.catvod.crawler.Spider;
+import com.github.catvod.crawler.SpiderNull;
 import com.github.catvod.crawler.SpiderDebug;
 import com.github.catvod.net.OkHttp;
 import com.github.catvod.utils.Prefers;
@@ -61,6 +63,12 @@ public class SiteApi {
     public static Result homeContent(@NonNull Site site) throws Exception {
         if (isSpider(site)) {
             Spider spider = site.recent().spider();
+            if (spider instanceof SpiderNull) {
+                String err = BaseLoader.get().getLastError();
+                if (err == null || err.isEmpty()) err = "脚本源初始化失败，请检查 api/spider 或网络";
+                SpiderDebug.log("home", "spider null site=%s err=%s", site.getKey(), err);
+                return Result.error(err);
+            }
             boolean crash = Prefers.getBoolean("crash");
             String home = crash ? "" : spider.homeContent(true);
             String video = crash ? "" : spider.homeVideoContent();
@@ -71,6 +79,10 @@ public class SiteApi {
             List<Vod> list = Result.fromJson(video).getList();
             if (!list.isEmpty()) result.setList(list);
             setTypes(site, result);
+            if (result.getTypes().isEmpty() && result.getList().isEmpty()) {
+                String err = BaseLoader.get().getLastError();
+                if (err != null && !err.isEmpty()) return Result.error(err);
+            }
             return result;
         } else if (site.getType() == 4) {
             ArrayMap<String, String> params = new ArrayMap<>();

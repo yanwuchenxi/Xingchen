@@ -3,6 +3,7 @@ package com.xingchen.android.tv.api.config;
 import android.text.TextUtils;
 
 import com.xingchen.android.tv.App;
+import com.xingchen.android.tv.utils.Task;
 import com.xingchen.android.tv.api.Decoder;
 import com.xingchen.android.tv.api.loader.BaseLoader;
 import com.xingchen.android.tv.bean.Config;
@@ -297,6 +298,24 @@ public class VodConfig extends BaseConfig {
         config.setHome(home.getKey());
         if (save) config.save();
         getSites().forEach(item -> item.setSelected(home));
+        warmJsHome(home);
+    }
+
+    /** 预拉首页 JS 源 api/ext 到磁盘缓存，降低首次进入白屏概率 */
+    private void warmJsHome(Site site) {
+        if (site == null) return;
+        final String api = site.getApi();
+        if (api == null || !api.toLowerCase().contains(".js")) return;
+        final String ext = site.getExt();
+        Task.execute(() -> {
+            try {
+                com.fongmi.quickjs.utils.Module.get().fetch(api);
+                if (ext != null && (ext.startsWith("http://") || ext.startsWith("https://"))) {
+                    com.fongmi.quickjs.utils.Module.get().fetch(ext);
+                }
+            } catch (Throwable ignored) {
+            }
+        });
     }
 
     private static class Loader {

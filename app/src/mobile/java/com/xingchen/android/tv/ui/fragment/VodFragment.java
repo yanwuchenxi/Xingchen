@@ -156,6 +156,15 @@ public class VodFragment extends BaseFragment implements ConfigListener, SiteLis
         setFabVisible(0);
         hideProgress();
         showContent();
+        // 脚本源/csp 失败时给出可读提示，避免只显示空白
+        if (result != null && result.hasMsg()) {
+            Notify.show(result.getMsg());
+        } else if (result != null && result.getTypes().isEmpty() && result.getList().isEmpty()) {
+            Site home = getHome();
+            if (home != null && home.getType() == 3) {
+                Notify.show(getString(R.string.error_spider_empty));
+            }
+        }
     }
 
     private void setFabVisible(int position) {

@@ -260,6 +260,7 @@
     <string name="error_play_timeout">Timed out</string>
     <string name="error_play_tvbus">Error code: <xliff:g name="name">%s</xliff:g></string>
     <string name="error_detail">No play data</string>
+    <string name="error_spider_empty">脚本源无数据，请检查 api、spider 或网络</string>
     <string name="error_empty">Nothing here 👀</string>
 
     <!-- Update -->
