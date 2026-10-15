@@ -91,6 +91,7 @@ import com.xingchen.android.tv.ui.dialog.TitleDialog;
 import com.xingchen.android.tv.ui.dialog.OnlineSubtitleDialog;
 import com.xingchen.android.tv.ui.dialog.PlayerSubtitleDialog;
 import com.xingchen.android.tv.ui.dialog.SubtitleDialog;
+import com.xingchen.android.tv.ui.controller.VideoTypeRecommend;
 import com.xingchen.android.tv.ui.dialog.TrackDialog;
 import com.xingchen.android.tv.utils.Clock;
 import com.xingchen.android.tv.utils.FileChooser;
@@ -1502,9 +1503,7 @@ public class VideoActivity extends PlaybackActivity implements Clock.Callback, C
     }
 
     /**
-     * 同类型推荐：优先当前站 home 分类匹配 typeName → categoryContent；
-     * 否则用 typeName / 片名在同站搜索，排除当前影片。
-     * 与换源用的 initSearch(auto) 分离，避免 nextSite 抽空列表。
+     * 同类型推荐：逻辑见 {@link VideoTypeRecommend}，与换源 auto-search 分离。
      */
     private void loadTypeRecommend(Vod vod) {
         if (vod == null) return;
@@ -1515,77 +1514,9 @@ public class VideoActivity extends PlaybackActivity implements Clock.Callback, C
         mQuickAdapter.clear();
         if (mBinding.quickSection != null) mBinding.quickSection.setVisibility(View.GONE);
         Task.execute(() -> {
-            List<Vod> items = fetchTypeRecommend(key, id, typeName, name);
+            List<Vod> items = VideoTypeRecommend.fetch(key, id, typeName, name);
             App.post(() -> applyTypeRecommend(items));
         });
-    }
-
-    private List<Vod> fetchTypeRecommend(String key, String id, String typeName, String name) {
-        List<Vod> out = new ArrayList<>();
-        try {
-            Site site = VodConfig.get().getSite(key);
-            if (site == null || site.getKey() == null || site.getKey().isEmpty()) return out;
-            Result result = null;
-            boolean fromCategory = false;
-            String tid = resolveTypeId(site, typeName);
-            if (tid != null && !tid.isEmpty()) {
-                try {
-                    result = SiteApi.categoryContent(key, tid, "1", false, new HashMap<>());
-                    fromCategory = result != null && !result.getList().isEmpty();
-                } catch (Throwable e) {
-                    e.printStackTrace();
-                }
-            }
-            if ((result == null || result.getList().isEmpty()) && site.isSearchable()) {
-                String kw = !typeName.isEmpty() ? typeName : name;
-                if (!kw.isEmpty()) {
-                    try {
-                        result = SiteApi.searchContent(site, kw, true, "1");
-                        fromCategory = false;
-                    } catch (Throwable e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-            if (result == null) return out;
-            for (Vod v : result.getList()) {
-                if (v == null) continue;
-                if (id != null && !id.isEmpty() && id.equals(v.getId())) continue;
-                if (!fromCategory && !typeName.isEmpty()) {
-                    String vt = v.getTypeName() == null ? "" : v.getTypeName().trim();
-                    if (!vt.isEmpty() && !vt.contains(typeName) && !typeName.contains(vt)) continue;
-                }
-                if (v.getSite() == null) v.setSite(site);
-                out.add(v);
-                if (out.size() >= 24) break;
-            }
-        } catch (Throwable e) {
-            e.printStackTrace();
-        }
-        return out;
-    }
-
-    private String resolveTypeId(Site site, String typeName) {
-        if (typeName == null || typeName.isEmpty()) return null;
-        try {
-            Result home = SiteApi.homeContent(site);
-            if (home == null || home.getTypes() == null) return null;
-            String exact = null, soft = null;
-            for (com.xingchen.android.tv.bean.Class c : home.getTypes()) {
-                if (c == null) continue;
-                String tn = c.getTypeName() == null ? "" : c.getTypeName().trim();
-                if (tn.isEmpty()) continue;
-                if (tn.equals(typeName)) {
-                    exact = c.getTypeId();
-                    break;
-                }
-                if (soft == null && (tn.contains(typeName) || typeName.contains(tn))) soft = c.getTypeId();
-            }
-            return exact != null ? exact : soft;
-        } catch (Throwable e) {
-            e.printStackTrace();
-            return null;
-        }
     }
 
     private void applyTypeRecommend(List<Vod> items) {

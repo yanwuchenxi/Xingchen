@@ -1,5 +1,7 @@
 package com.xingchen.android.tv.ui.activity;
 
+import com.xingchen.android.tv.ui.controller.LiveEmbeddedUi;
+
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
@@ -671,50 +673,17 @@ public class LiveActivity extends PlaybackActivity implements CustomKeyDown.List
     /** 与首页一致：内容避开状态栏；底栏上浮并避开系统导航条 */
     private void applyEmbeddedTopInset() {
         if (mBinding == null) return;
-        View root = mBinding.getRoot();
-        ViewCompat.setOnApplyWindowInsetsListener(root, (v, insets) -> {
-            Insets bars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(0, bars.top, 0, 0);
-            if (mBinding.homeNav != null) {
-                ViewGroup.MarginLayoutParams lp = (ViewGroup.MarginLayoutParams) mBinding.homeNav.getLayoutParams();
-                lp.bottomMargin = bars.bottom + ResUtil.dp2px(14);
-                lp.leftMargin = ResUtil.dp2px(20);
-                lp.rightMargin = ResUtil.dp2px(20);
-                mBinding.homeNav.setLayoutParams(lp);
-            }
-            return insets;
-        });
-        ViewCompat.requestApplyInsets(root);
-        int top = 0;
-        try {
-            int resId = getResources().getIdentifier("status_bar_height", "dimen", "android");
-            if (resId > 0) top = getResources().getDimensionPixelSize(resId);
-        } catch (Throwable ignored) {
-        }
-        if (root.getPaddingTop() == 0 && top > 0) root.setPadding(0, top, 0, 0);
-        styleHomeNav();
+        LiveEmbeddedUi.applyTopInset(mBinding.getRoot(), mBinding.homeNav);
     }
 
     private void styleHomeNav() {
-        if (mBinding == null || mBinding.homeNav == null) return;
-        mBinding.homeNav.setBackgroundResource(R.drawable.shape_glass_nav);
-        mBinding.homeNav.setItemBackgroundResource(android.R.color.transparent);
-        android.content.res.ColorStateList tint = androidx.core.content.ContextCompat.getColorStateList(this, R.color.selector_ysc_nav);
-        if (tint != null) {
-            mBinding.homeNav.setItemIconTintList(tint);
-            mBinding.homeNav.setItemTextColor(tint);
-        }
-        try {
-            mBinding.homeNav.setItemActiveIndicatorEnabled(true);
-        } catch (Throwable ignored) {
-        }
+        if (mBinding == null) return;
+        LiveEmbeddedUi.styleHomeNav(mBinding.getRoot(), mBinding.homeNav);
     }
 
     private void clearEmbeddedTopInset() {
         if (mBinding == null) return;
-        View root = mBinding.getRoot();
-        ViewCompat.setOnApplyWindowInsetsListener(root, null);
-        root.setPadding(0, 0, 0, 0);
+        LiveEmbeddedUi.clearTopInset(mBinding.getRoot());
     }
 
     private void keepLiveMenuVisible() {
