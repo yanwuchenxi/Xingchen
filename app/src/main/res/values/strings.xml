@@ -265,6 +265,8 @@
 
     <!-- Update -->
     <string name="update_version">New version <xliff:g name="name">%s</xliff:g></string>
+    <string name="update_latest">Already up to date</string>
+    <string name="update_check_fail">Update check failed</string>
     <string name="update_check">Checking for updates…</string>
     <string name="update_confirm">Update</string>
 

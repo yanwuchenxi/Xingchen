@@ -2,6 +2,7 @@ package com.xingchen.android.tv.ui.activity;
 
 import com.xingchen.android.tv.ui.controller.LiveControlPanel;
 import com.xingchen.android.tv.ui.controller.LiveLayoutHelper;
+import com.xingchen.android.tv.ui.controller.LiveWidthHelper;
 import com.xingchen.android.tv.ui.controller.LiveEmbeddedUi;
 import com.xingchen.android.tv.ui.controller.LiveOverlayUi;
 import com.xingchen.android.tv.ui.controller.PlayerOverlayUi;
@@ -359,36 +360,16 @@ public class LiveActivity extends PlaybackActivity implements CustomKeyDown.List
     }
 
     private void setWidth(Live live) {
-        int padding = ResUtil.dp2px(48);
-        if (live.getWidth() == 0) for (Group item : live.getGroups()) live.setWidth(Math.max(live.getWidth(), ResUtil.getTextWidth(item.getName(), 14)));
-        int width = live.getWidth() == 0 ? 0 : Math.min(live.getWidth() + padding, ResUtil.getScreenWidth() / 4);
-        setWidth(mBinding.group, width);
+        LiveWidthHelper.apply(mBinding.group, LiveWidthHelper.groupColumnWidth(live));
     }
 
     @Override
     public void setWidth(Group group) {
-        int logo = ResUtil.dp2px(56);
-        int padding = ResUtil.dp2px(60);
-        if (group.isKeep()) group.setWidth(0);
-        if (group.getWidth() == 0) for (Channel item : group.getChannel()) group.setWidth(Math.max(group.getWidth(), (item.getLogo().isEmpty() ? 0 : logo) + ResUtil.getTextWidth(item.getNumber() + item.getName(), 14)));
-        int width = group.getWidth() == 0 ? 0 : Math.min(group.getWidth() + padding, ResUtil.getScreenWidth() / 2);
-        setWidth(mBinding.channel, width);
+        LiveWidthHelper.apply(mBinding.channel, LiveWidthHelper.channelColumnWidth(group));
     }
 
     private void setWidth(Epg epg) {
-        int padding = ResUtil.dp2px(48);
-        if (epg.getList().isEmpty()) return;
-        int minWidth = ResUtil.getTextWidth(epg.getList().get(0).getTime(), 12);
-        if (epg.getWidth() == 0) for (EpgData item : epg.getList()) epg.setWidth(Math.max(epg.getWidth(), ResUtil.getTextWidth(item.getTitle(), 14)));
-        int width = epg.getWidth() == 0 ? 0 : Math.min(Math.max(epg.getWidth(), minWidth) + padding, ResUtil.getScreenWidth() / 2);
-        setWidth(mBinding.epgData, width);
-    }
-
-    private void setWidth(View view, int width) {
-        ViewGroup.LayoutParams params = view.getLayoutParams();
-        if (params.width == width) return;
-        params.width = width;
-        view.setLayoutParams(params);
+        LiveWidthHelper.apply(mBinding.epgData, LiveWidthHelper.epgColumnWidth(epg));
     }
 
     private void setPosition(int[] position) {
