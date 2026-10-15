@@ -12,6 +12,7 @@ import com.xingchen.android.tv.ui.dialog.UpdateDialog;
 import com.xingchen.android.tv.utils.DarkAlert;
 import com.xingchen.android.tv.utils.Download;
 import com.xingchen.android.tv.utils.FileUtil;
+import com.xingchen.android.tv.utils.Github;
 import com.xingchen.android.tv.utils.Notify;
 import com.xingchen.android.tv.utils.ResUtil;
 import com.xingchen.android.tv.utils.Task;
