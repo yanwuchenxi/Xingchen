@@ -318,6 +318,18 @@ public class SettingFragment extends BaseFragment implements ConfigListener, Sit
         });
     }
 
+    private void onExportXingchen(View view) {
+        PermissionUtil.requestFile(this, allGranted -> {
+            try {
+                java.io.File file = ConfigExporter.writeToTvDir();
+                Notify.show(getString(R.string.export_xingchen_success, file.getAbsolutePath()));
+            } catch (Throwable e) {
+                e.printStackTrace();
+                Notify.show(R.string.export_xingchen_fail);
+            }
+        });
+    }
+
     private void onBackup(View view) {
         PermissionUtil.requestFile(this, allGranted -> AppDatabase.backup(new Callback() {
             @Override
