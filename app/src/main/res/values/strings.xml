@@ -160,6 +160,10 @@
     <string name="restore_select">Select backup</string>
     <string name="restore_success">Restore successful</string>
     <string name="restore_fail">Restore failed</string>
+    <string name="export_xingchen">Export Xingchen config</string>
+    <string name="export_xingchen_success">Xingchen config exported:
+%s</string>
+    <string name="export_xingchen_fail">Export failed</string>
     <string name="backup_success">Backup successful</string>
     <string name="backup_fail">Backup failed</string>
 

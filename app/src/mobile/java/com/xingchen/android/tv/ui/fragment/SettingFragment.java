@@ -14,6 +14,7 @@ import com.xingchen.android.tv.Updater;
 import com.xingchen.android.tv.api.config.LiveConfig;
 import com.xingchen.android.tv.api.config.VodConfig;
 import com.xingchen.android.tv.runtime.XingchenRuntime;
+import com.xingchen.android.tv.runtime.config.ConfigExporter;
 import com.xingchen.android.tv.api.config.WallConfig;
 import com.xingchen.android.tv.bean.Config;
 import com.xingchen.android.tv.bean.Live;
@@ -125,6 +126,7 @@ public class SettingFragment extends BaseFragment implements ConfigListener, Sit
         mBinding.size.setOnClickListener(this::setSize);
         mBinding.cache.setOnClickListener(this::onCache);
         mBinding.backup.setOnClickListener(this::onBackup);
+        mBinding.backup.setOnLongClickListener(v -> { onExportXingchen(v); return true; });
         mBinding.player.setOnClickListener(this::onPlayer);
         mBinding.danmaku.setOnClickListener(this::onDanmaku);
         mBinding.restore.setOnClickListener(this::onRestore);

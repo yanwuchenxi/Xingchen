@@ -56,3 +56,10 @@
 - 不替换 Spider ABI  
 - 不强制用户改订阅  
 - 不移除 jar/js/py  
+
+
+## 导出（C1）
+
+- 代码：`ConfigExporter.build()` / `writeToTvDir()`
+- 设置页：长按「备份」→ 写入应用 `TV/` 目录下的 `xingchen-config-时间戳.json`
+- 可用 `ConfigNormalizer` 再读回（别名与标准字段均支持）
