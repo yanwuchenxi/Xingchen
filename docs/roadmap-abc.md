@@ -59,11 +59,21 @@
 
 ---
 
-## C · 生态自研（B 完成后再开）
+## C · 生态自研
 
-1. 星辰订阅 JSON schema（可先 **兼容读 FongMi JSON**，写出用星辰格式）
+### C0（已落地）
+
+- [x] `docs/schema-xingchen-config.md` 草案
+- [x] `ConfigNormalizer`：识别 `xingchen/1`，别名展开后走现有解析
+- [x] 无 schema 的 FongMi JSON **行为不变**
+
+### C1（后续）
+
+
+
+1. 从内存配置 **导出** `schema: xingchen/1` JSON
 2. 自研或精简 Spider ABI（或 WASM/JS 单一运行时）
-3. 官方 Media3 稳定版或自有 softload 策略，去掉 fongmi 私有 Maven 强绑定
+3. 官方 Media3 稳定版或自有 softload 策略
 4. 公共源迁移工具（FongMi JSON → 星辰 schema）
 
 验收：无 FongMi 源时应用仍可用；有转换器时可导入旧源。

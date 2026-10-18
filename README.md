@@ -24,4 +24,4 @@ CI：push 到 `main` 自动构建手机版 Release。
 
 - **A 产品自研**：品牌/UI 独立（基本完成）
 - **B 代码自研**：`runtime`（Vod/Live/Play/Loader）边界 + Compat（进行中）
-- **C 生态自研**：自有源格式与可替换运行时（未开始）
+- **C 生态自研**：C0 已启动 — [schema 草案](docs/schema-xingchen-config.md) + `ConfigNormalizer` 只读兼容

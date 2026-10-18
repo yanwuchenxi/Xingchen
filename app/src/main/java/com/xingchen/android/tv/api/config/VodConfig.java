@@ -6,6 +6,7 @@ import com.xingchen.android.tv.App;
 import com.xingchen.android.tv.utils.Task;
 import com.xingchen.android.tv.api.Decoder;
 import com.xingchen.android.tv.runtime.XingchenRuntime;
+import com.xingchen.android.tv.runtime.config.ConfigNormalizer;
 import com.xingchen.android.tv.bean.Config;
 import com.xingchen.android.tv.bean.Depot;
 import com.xingchen.android.tv.bean.Parse;
@@ -122,6 +123,7 @@ public class VodConfig extends BaseConfig {
     }
 
     private void checkJson(Config config, JsonObject object) throws Throwable {
+        object = ConfigNormalizer.normalize(object);
         if (object.has("msg")) {
             throw new Exception(object.get("msg").getAsString());
         } else if (object.has("urls")) {

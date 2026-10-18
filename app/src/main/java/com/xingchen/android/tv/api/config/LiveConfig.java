@@ -5,6 +5,7 @@ import android.text.TextUtils;
 import com.xingchen.android.tv.api.Decoder;
 import com.xingchen.android.tv.api.LiveApi;
 import com.xingchen.android.tv.runtime.XingchenRuntime;
+import com.xingchen.android.tv.runtime.config.ConfigNormalizer;
 import com.xingchen.android.tv.api.parser.LiveParser;
 import com.xingchen.android.tv.bean.Channel;
 import com.xingchen.android.tv.bean.Config;
@@ -149,6 +150,7 @@ public class LiveConfig extends BaseConfig {
     }
 
     private void checkJson(Config config, JsonObject object) throws Throwable {
+        object = ConfigNormalizer.normalize(object);
         if (object.has("msg")) {
             throw new Exception(object.get("msg").getAsString());
         } else if (object.has("urls")) {
@@ -173,7 +175,7 @@ public class LiveConfig extends BaseConfig {
     }
 
     public void parse(JsonObject object) {
-        initLive(getConfig(), object);
+        initLive(getConfig(), ConfigNormalizer.normalize(object));
     }
 
     private void initList(JsonObject object) {

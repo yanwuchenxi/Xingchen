@@ -1,0 +1,19 @@
+{
+  "schema": "xingchen/1",
+  "name": "星辰示例源",
+  "spider": "",
+  "sources": [
+    {
+      "id": "demo_js",
+      "name": "示例JS站",
+      "type": 3,
+      "api": "https://example.com/demo.js",
+      "searchable": 1,
+      "quickSearch": 1,
+      "changeable": 1
+    }
+  ],
+  "channels": [],
+  "parsers": [],
+  "wallpaper": ""
+}
