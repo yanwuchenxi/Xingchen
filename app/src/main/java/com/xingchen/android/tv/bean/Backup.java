@@ -6,7 +6,7 @@ import com.xingchen.android.tv.App;
 import com.xingchen.android.tv.api.config.LiveConfig;
 import com.xingchen.android.tv.api.config.VodConfig;
 import com.xingchen.android.tv.api.config.WallConfig;
-import com.xingchen.android.tv.api.loader.BaseLoader;
+import com.xingchen.android.tv.runtime.XingchenRuntime;
 import com.xingchen.android.tv.db.AppDatabase;
 import com.xingchen.android.tv.event.ConfigEvent;
 import com.xingchen.android.tv.event.RefreshEvent;
@@ -107,7 +107,7 @@ public class Backup {
             AppDatabase.get().getHistoryDao().insertOrUpdate(getHistory());
         }
         for (Map.Entry<String, ?> entry : filter(getPrefers(), options).entrySet()) Prefers.put(entry.getKey(), entry.getValue());
-        if (options.isSpider()) BaseLoader.get().clear();
+        if (options.isSpider()) XingchenRuntime.loader().clear();
         if (options.isConfig() || options.isSpider()) reloadConfig();
         if (options.isKeep()) RefreshEvent.keep();
         if (options.isHistory()) RefreshEvent.history();

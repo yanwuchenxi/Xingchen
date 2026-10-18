@@ -5,7 +5,7 @@ import android.text.TextUtils;
 import com.xingchen.android.tv.App;
 import com.xingchen.android.tv.utils.Task;
 import com.xingchen.android.tv.api.Decoder;
-import com.xingchen.android.tv.api.loader.BaseLoader;
+import com.xingchen.android.tv.runtime.XingchenRuntime;
 import com.xingchen.android.tv.bean.Config;
 import com.xingchen.android.tv.bean.Depot;
 import com.xingchen.android.tv.bean.Parse;
@@ -89,7 +89,7 @@ public class VodConfig extends BaseConfig {
         flags = null;
         rules = null;
         parses = null;
-        BaseLoader.get().clear();
+        XingchenRuntime.loader().clear();
         RuleConfig.get().invalidate();
         return this;
     }
@@ -178,7 +178,7 @@ public class VodConfig extends BaseConfig {
 
     private void initSite(Config config, JsonObject object) {
         String spider = Json.safeString(object, "spider");
-        BaseLoader.get().parseJar(spider, true);
+        XingchenRuntime.loader().parseJar(spider, true);
         setSites(Json.safeListElement(object, "sites").stream().map(e -> Site.objectFrom(e, spider)).distinct().collect(Collectors.toCollection(ArrayList::new)));
         Map<String, Site> items = Site.findAll().stream().collect(Collectors.toMap(Site::getKey, Function.identity()));
         getSites().forEach(site -> site.sync(items.get(site.getKey())));

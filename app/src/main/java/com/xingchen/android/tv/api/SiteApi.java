@@ -6,7 +6,7 @@ import androidx.annotation.NonNull;
 import androidx.collection.ArrayMap;
 
 import com.xingchen.android.tv.App;
-import com.xingchen.android.tv.api.loader.BaseLoader;
+import com.xingchen.android.tv.runtime.XingchenRuntime;
 import com.xingchen.android.tv.R;
 import com.xingchen.android.tv.api.config.VodConfig;
 import com.xingchen.android.tv.bean.Class;
@@ -64,7 +64,7 @@ public class SiteApi {
         if (isSpider(site)) {
             Spider spider = site.recent().spider();
             if (spider instanceof SpiderNull) {
-                String err = BaseLoader.get().getLastError();
+                String err = XingchenRuntime.loader().getLastError();
                 if (err == null || err.isEmpty()) err = "脚本源初始化失败，请检查 api/spider 或网络";
                 SpiderDebug.log("home", "spider null site=%s err=%s", site.getKey(), err);
                 return Result.error(err);
@@ -80,7 +80,7 @@ public class SiteApi {
             if (!list.isEmpty()) result.setList(list);
             setTypes(site, result);
             if (result.getTypes().isEmpty() && result.getList().isEmpty()) {
-                String err = BaseLoader.get().getLastError();
+                String err = XingchenRuntime.loader().getLastError();
                 if (err != null && !err.isEmpty()) return Result.error(err);
             }
             return result;

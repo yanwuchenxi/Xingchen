@@ -1,6 +1,6 @@
 package com.xingchen.android.tv.server.process;
 
-import com.xingchen.android.tv.api.loader.BaseLoader;
+import com.xingchen.android.tv.runtime.XingchenRuntime;
 import com.xingchen.android.tv.server.Nano;
 import com.xingchen.android.tv.server.impl.Process;
 import com.github.catvod.crawler.SpiderDebug;
@@ -27,7 +27,7 @@ public class Proxy implements Process {
             params.putAll(session.getHeaders());
             params.putAll(files);
             SpiderDebug.log("proxy", "request uri=%s method=%s do=%s params=%s", url, session.getMethod(), params.get("do"), params);
-            Object[] rs = BaseLoader.get().proxy(params);
+            Object[] rs = XingchenRuntime.loader().proxy(params);
             if (rs == null) {
                 SpiderDebug.log("proxy", "response null do=%s uri=%s", params.get("do"), url);
                 return Nano.error("Proxy response is null");

@@ -21,4 +21,8 @@ public final class XingchenRuntime {
     public static PlayRuntime play() {
         return PlayRuntime.Compat.get();
     }
+
+    public static LoaderRuntime loader() {
+        return LoaderRuntime.Compat.get();
+    }
 }

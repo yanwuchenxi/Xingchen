@@ -4,7 +4,7 @@ import android.text.TextUtils;
 
 import com.xingchen.android.tv.api.Decoder;
 import com.xingchen.android.tv.api.LiveApi;
-import com.xingchen.android.tv.api.loader.BaseLoader;
+import com.xingchen.android.tv.runtime.XingchenRuntime;
 import com.xingchen.android.tv.api.parser.LiveParser;
 import com.xingchen.android.tv.bean.Channel;
 import com.xingchen.android.tv.bean.Config;
@@ -186,7 +186,7 @@ public class LiveConfig extends BaseConfig {
 
     private void initLive(Config config, JsonObject object) {
         String spider = Json.safeString(object, "spider");
-        BaseLoader.get().parseJar(spider, false);
+        XingchenRuntime.loader().parseJar(spider, false);
         setLives(Json.safeListElement(object, "lives").stream().map(e -> Live.objectFrom(e, spider)).distinct().collect(Collectors.toCollection(ArrayList::new)));
         Map<String, Live> items = Live.findAll().stream().collect(Collectors.toMap(Live::getName, Function.identity()));
         getLives().forEach(live -> live.sync(items.get(live.getName())));

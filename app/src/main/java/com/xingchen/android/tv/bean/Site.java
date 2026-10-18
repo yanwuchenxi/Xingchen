@@ -12,7 +12,7 @@ import androidx.room.PrimaryKey;
 
 import com.xingchen.android.tv.App;
 import com.xingchen.android.tv.Constant;
-import com.xingchen.android.tv.api.loader.BaseLoader;
+import com.xingchen.android.tv.runtime.XingchenRuntime;
 import com.xingchen.android.tv.db.AppDatabase;
 import com.xingchen.android.tv.gson.ExtAdapter;
 import com.xingchen.android.tv.gson.HeaderAdapter;
@@ -349,12 +349,12 @@ public class Site implements Parcelable {
     }
 
     public Site recent() {
-        BaseLoader.get().setRecent(getKey(), getApi(), getJar());
+        XingchenRuntime.loader().setRecent(getKey(), getApi(), getJar());
         return this;
     }
 
     public Spider spider() {
-        return BaseLoader.get().getSpider(getKey(), getApi(), getExt(), getJar());
+        return XingchenRuntime.loader().getSpider(getKey(), getApi(), getExt(), getJar());
     }
 
     public void save() {

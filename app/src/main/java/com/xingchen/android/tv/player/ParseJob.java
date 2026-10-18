@@ -5,7 +5,7 @@ import android.text.TextUtils;
 import com.xingchen.android.tv.App;
 import com.xingchen.android.tv.Constant;
 import com.xingchen.android.tv.api.config.VodConfig;
-import com.xingchen.android.tv.api.loader.BaseLoader;
+import com.xingchen.android.tv.runtime.XingchenRuntime;
 import com.xingchen.android.tv.bean.Parse;
 import com.xingchen.android.tv.bean.Result;
 import com.xingchen.android.tv.impl.ParseCallback;
@@ -126,13 +126,13 @@ public class ParseJob implements ParseCallback {
     private void jsonExtend(String webUrl) throws Throwable {
         LinkedHashMap<String, String> jxs = new LinkedHashMap<>();
         for (Parse item : VodConfig.get().getParses()) if (item.getType() == 1) jxs.put(item.getName(), item.extUrl());
-        checkResult(Result.fromObject(BaseLoader.get().jsonExt(parse.getUrl(), jxs, webUrl)));
+        checkResult(Result.fromObject(XingchenRuntime.loader().jsonExt(parse.getUrl(), jxs, webUrl)));
     }
 
     private void jsonMix(String webUrl, String flag) throws Throwable {
         LinkedHashMap<String, HashMap<String, String>> jxs = new LinkedHashMap<>();
         for (Parse item : VodConfig.get().getParses()) jxs.put(item.getName(), item.mixMap());
-        checkResult(Result.fromObject(BaseLoader.get().jsonExtMix(flag, parse.getUrl(), parse.getName(), jxs, webUrl)));
+        checkResult(Result.fromObject(XingchenRuntime.loader().jsonExtMix(flag, parse.getUrl(), parse.getName(), jxs, webUrl)));
     }
 
     private void superParse(String webUrl, String flag) throws Exception {

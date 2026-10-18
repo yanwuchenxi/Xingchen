@@ -11,7 +11,7 @@ import androidx.room.PrimaryKey;
 import com.xingchen.android.tv.App;
 import com.xingchen.android.tv.Constant;
 import com.xingchen.android.tv.R;
-import com.xingchen.android.tv.api.loader.BaseLoader;
+import com.xingchen.android.tv.runtime.XingchenRuntime;
 import com.xingchen.android.tv.db.AppDatabase;
 import com.xingchen.android.tv.gson.ExtAdapter;
 import com.xingchen.android.tv.gson.HeaderAdapter;
@@ -347,12 +347,12 @@ public class Live {
     }
 
     public Live recent() {
-        BaseLoader.get().setRecent(getName(), getApi(), getJar());
+        XingchenRuntime.loader().setRecent(getName(), getApi(), getJar());
         return this;
     }
 
     public Spider spider() {
-        return BaseLoader.get().getSpider(getName(), getApi(), getExt(), getJar());
+        return XingchenRuntime.loader().getSpider(getName(), getApi(), getExt(), getJar());
     }
 
     public Map<String, String> getHeaders() {
