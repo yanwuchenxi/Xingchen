@@ -6,10 +6,10 @@ import androidx.lifecycle.ViewModel;
 
 import com.xingchen.android.tv.Constant;
 import com.xingchen.android.tv.api.SiteApi;
-import com.xingchen.android.tv.api.config.VodConfig;
 import com.xingchen.android.tv.bean.Result;
 import com.xingchen.android.tv.bean.Site;
 import com.xingchen.android.tv.exception.ExtractException;
+import com.xingchen.android.tv.runtime.XingchenRuntime;
 import com.xingchen.android.tv.utils.Task;
 import com.google.common.util.concurrent.FluentFuture;
 import com.google.common.util.concurrent.ListenableFuture;
@@ -76,11 +76,15 @@ public class SiteViewModel extends ViewModel {
     }
 
     public void homeContent() {
-        execute(TaskType.RESULT, result, () -> SiteApi.homeContent(VodConfig.get().getHome()));
+        execute(TaskType.RESULT, result, () -> {
+            Site home = XingchenRuntime.vod().getHome();
+            if (home == null) return Result.empty();
+            return XingchenRuntime.vod().homeContent(home);
+        });
     }
 
     public void categoryContent(String key, String tid, String page, boolean filter, HashMap<String, String> extend) {
-        execute(TaskType.RESULT, result, () -> SiteApi.categoryContent(key, tid, page, filter, extend));
+        execute(TaskType.RESULT, result, () -> XingchenRuntime.vod().categoryContent(key, tid, page, filter, extend));
     }
 
     public void action(String key, String act) {
@@ -88,11 +92,11 @@ public class SiteViewModel extends ViewModel {
     }
 
     public void detailContent(String key, String id) {
-        execute(TaskType.RESULT, result, () -> SiteApi.detailContent(key, id));
+        execute(TaskType.RESULT, result, () -> XingchenRuntime.vod().detailContent(key, id));
     }
 
     public void playerContent(String key, String flag, String id) {
-        execute(TaskType.PLAYER, player, () -> SiteApi.playerContent(key, flag, id));
+        execute(TaskType.PLAYER, player, () -> XingchenRuntime.vod().playerContent(key, flag, id));
     }
 
     public void searchContent(Site site, String keyword, boolean quick, String page) {
