@@ -20,6 +20,7 @@ import androidx.viewpager.widget.ViewPager;
 
 import com.xingchen.android.tv.R;
 import com.xingchen.android.tv.api.config.VodConfig;
+import com.xingchen.android.tv.runtime.XingchenRuntime;
 import com.xingchen.android.tv.bean.Class;
 import com.xingchen.android.tv.bean.Config;
 import com.xingchen.android.tv.bean.Result;
@@ -77,11 +78,11 @@ public class VodFragment extends BaseFragment implements ConfigListener, SiteLis
     }
 
     private Site getHome() {
-        return VodConfig.get().getHome();
+        return XingchenRuntime.vod().getHome();
     }
 
     private Config getConfig() {
-        return VodConfig.get().getConfig();
+        return XingchenRuntime.vod().getConfig();
     }
 
     @Override
@@ -347,7 +348,7 @@ public class VodFragment extends BaseFragment implements ConfigListener, SiteLis
 
     @Override
     public void setConfig(Config config) {
-        VodConfig.load(config, new Callback() {
+        XingchenRuntime.config().loadVodConfig(config, new Callback() {
             @Override
             public void start() {
                 showProgress();
@@ -367,7 +368,7 @@ public class VodFragment extends BaseFragment implements ConfigListener, SiteLis
 
     @Override
     public void setSite(Site item) {
-        VodConfig.get().setHome(item);
+        XingchenRuntime.vod().setHome(item);
         setTitle();
         homeContent();
     }

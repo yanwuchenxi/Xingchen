@@ -45,7 +45,8 @@
 4. **详情 Activity 内残留 SiteApi** — PUSH 常量等可保留；业务经 ViewModel
 5. **播放与解析** — ✅ `PlayRuntime`：元数据 / 创建播放器 / 嗅探源退出；PlaybackService + Live/Video/Home 已接入
 6. **Loader（Jar/JS/Py）** — ✅ `LoaderRuntime`
-7. **Config / UI 收敛（B4）** — ✅ `ConfigRuntime`；Home 启停、Video pushKey/getSite、Live keep/lives
+7. **Config / UI 收敛（B4）** — ✅
+8. **B5 扫尾** — ✅ 手机/TV 主路径 Activity·Fragment·Dialog·Adapter 尽量走 runtime（Doh 等次要仍可直接 Config）
 
 每完成一块：上层只依赖 `runtime.*`，测试源站仍可用。
 

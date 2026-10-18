@@ -20,6 +20,7 @@ import androidx.viewbinding.ViewBinding;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.xingchen.android.tv.api.config.LiveConfig;
+import com.xingchen.android.tv.runtime.XingchenRuntime;
 import com.xingchen.android.tv.bean.Live;
 import com.xingchen.android.tv.databinding.DialogLiveBinding;
 import com.xingchen.android.tv.impl.LiveListener;
@@ -91,7 +92,7 @@ public class LiveDialog extends BaseBottomSheetDialog implements LiveAdapter.OnC
         binding.recycler.setHasFixedSize(true);
         binding.recycler.setLayoutManager(new GridLayoutManager(requireContext(), 2));
         binding.recycler.setMaxHeight(ResUtil.getScreenHeight(requireContext()) * 50 / 100);
-        binding.recycler.post(() -> binding.recycler.scrollToPosition(Math.max(LiveConfig.getHomeIndex(), 0)));
+        binding.recycler.post(() -> binding.recycler.scrollToPosition(Math.max(XingchenRuntime.live().getHomeIndex(), 0)));
     }
 
     @Override
@@ -115,7 +116,7 @@ public class LiveDialog extends BaseBottomSheetDialog implements LiveAdapter.OnC
     @Override
     public boolean onBootLongClick(Live item) {
         boolean result = !item.isBoot();
-        LiveConfig.get().getLives().forEach(live -> live.boot(result).save());
+        XingchenRuntime.live().getLives().forEach(live -> live.boot(result).save());
         adapter.notifyItemRangeChanged(0, adapter.getItemCount());
         return true;
     }
@@ -123,7 +124,7 @@ public class LiveDialog extends BaseBottomSheetDialog implements LiveAdapter.OnC
     @Override
     public boolean onPassLongClick(Live item) {
         boolean result = !item.isPass();
-        LiveConfig.get().getLives().forEach(live -> live.pass(result).save());
+        XingchenRuntime.live().getLives().forEach(live -> live.pass(result).save());
         adapter.notifyItemRangeChanged(0, adapter.getItemCount());
         return true;
     }

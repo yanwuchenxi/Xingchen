@@ -9,6 +9,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.xingchen.android.tv.api.config.VodConfig;
+import com.xingchen.android.tv.runtime.XingchenRuntime;
 import com.xingchen.android.tv.bean.Site;
 import com.xingchen.android.tv.databinding.AdapterSiteBinding;
 import com.github.catvod.crawler.SpiderDebug;
@@ -58,7 +59,7 @@ public class SiteAdapter extends RecyclerView.Adapter<SiteAdapter.ViewHolder> {
     }
 
     private void addAll() {
-        for (Site site : VodConfig.get().getSites()) if (!site.isHide()) allItems.add(site);
+        for (Site site : XingchenRuntime.vod().getSites()) if (!site.isHide()) allItems.add(site);
         mItems.addAll(allItems);
     }
 

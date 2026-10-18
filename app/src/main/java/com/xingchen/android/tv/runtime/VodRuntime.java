@@ -3,6 +3,7 @@ package com.xingchen.android.tv.runtime;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.xingchen.android.tv.bean.Config;
 import com.xingchen.android.tv.bean.Parse;
 import com.xingchen.android.tv.bean.Result;
 import com.xingchen.android.tv.bean.Site;
@@ -24,6 +25,11 @@ public interface VodRuntime {
     Site getHome();
 
     void setHome(@NonNull Site site);
+
+    int getHomeIndex();
+
+    @Nullable
+    Config getConfig();
 
     @Nullable
     Site getSite(@NonNull String key);

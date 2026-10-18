@@ -8,6 +8,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.xingchen.android.tv.api.config.LiveConfig;
+import com.xingchen.android.tv.runtime.XingchenRuntime;
 import com.xingchen.android.tv.bean.Live;
 import com.xingchen.android.tv.databinding.AdapterLiveBinding;
 
@@ -21,7 +22,7 @@ public class LiveAdapter extends RecyclerView.Adapter<LiveAdapter.ViewHolder> {
 
     public LiveAdapter(OnClickListener listener) {
         this.listener = listener;
-        this.mItems = LiveConfig.get().getLives();
+        this.mItems = XingchenRuntime.live().getLives();
     }
 
     public interface OnClickListener {

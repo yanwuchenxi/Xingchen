@@ -19,6 +19,7 @@ import com.xingchen.android.tv.App;
 import com.xingchen.android.tv.Constant;
 import com.xingchen.android.tv.R;
 import com.xingchen.android.tv.api.config.VodConfig;
+import com.xingchen.android.tv.runtime.XingchenRuntime;
 import com.xingchen.android.tv.bean.Config;
 import com.xingchen.android.tv.bean.Device;
 import com.xingchen.android.tv.bean.History;
@@ -173,7 +174,7 @@ public class SyncDialog extends BaseBottomSheetDialog implements DeviceAdapter.O
 
     private void deleteLocal() {
         if (type.equals("keep")) Keep.deleteAll();
-        if (type.equals("history")) History.delete(VodConfig.getCid());
+        if (type.equals("history")) History.delete(XingchenRuntime.config().getVodCid());
     }
 
     private Callback getCallback() {

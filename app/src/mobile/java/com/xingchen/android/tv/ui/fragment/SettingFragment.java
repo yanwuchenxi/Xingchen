@@ -92,8 +92,8 @@ public class SettingFragment extends BaseFragment implements ConfigListener, Sit
     @Override
     protected void initView() {
         EventBus.getDefault().register(this);
-        mBinding.vodUrl.setText(VodConfig.getDesc());
-        mBinding.liveUrl.setText(LiveConfig.getDesc());
+        mBinding.vodUrl.setText(XingchenRuntime.config().getVodDesc());
+        mBinding.liveUrl.setText(XingchenRuntime.config().getLiveDesc());
         mBinding.wallUrl.setText(WallConfig.getDesc());
         mBinding.versionText.setText(BuildConfig.VERSION_NAME);
         setOtherText();
@@ -155,10 +155,10 @@ public class SettingFragment extends BaseFragment implements ConfigListener, Sit
     private void load(Config config) {
         switch (config.getType()) {
             case 0:
-                VodConfig.load(config, getCallback());
+                XingchenRuntime.config().loadVodConfig(config, getCallback());
                 break;
             case 1:
-                LiveConfig.load(config, getCallback());
+                XingchenRuntime.config().loadLiveConfig(config, getCallback());
                 break;
             case 2:
                 Setting.putWall(0);
@@ -190,12 +190,12 @@ public class SettingFragment extends BaseFragment implements ConfigListener, Sit
 
     @Override
     public void setSite(Site item) {
-        VodConfig.get().setHome(item);
+        XingchenRuntime.vod().setHome(item);
     }
 
     @Override
     public void setLive(Live item) {
-        LiveConfig.get().setHome(item);
+        XingchenRuntime.live().setHome(item);
     }
 
     @Override
@@ -348,15 +348,15 @@ public class SettingFragment extends BaseFragment implements ConfigListener, Sit
 
     private void initConfig() {
         XingchenRuntime.config().loadVod(getCallback());
-        LiveConfig.get().init().load();
+        XingchenRuntime.config().loadLive();
         WallConfig.get().init().load();
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onConfigEvent(ConfigEvent event) {
         if (event.type() != ConfigEvent.Type.COMMON) return;
-        mBinding.vodUrl.setText(VodConfig.getDesc());
-        mBinding.liveUrl.setText(LiveConfig.getDesc());
+        mBinding.vodUrl.setText(XingchenRuntime.config().getVodDesc());
+        mBinding.liveUrl.setText(XingchenRuntime.config().getLiveDesc());
         mBinding.wallUrl.setText(WallConfig.getDesc());
     }
 

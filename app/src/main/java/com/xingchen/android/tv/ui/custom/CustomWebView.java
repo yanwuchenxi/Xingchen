@@ -22,7 +22,7 @@ import androidx.annotation.NonNull;
 import com.xingchen.android.tv.App;
 import com.xingchen.android.tv.Constant;
 import com.xingchen.android.tv.api.config.RuleConfig;
-import com.xingchen.android.tv.api.config.VodConfig;
+import com.xingchen.android.tv.runtime.XingchenRuntime;
 import com.xingchen.android.tv.impl.ParseCallback;
 import com.xingchen.android.tv.setting.Setting;
 import com.xingchen.android.tv.ui.dialog.WebDialog;
@@ -215,7 +215,7 @@ public class CustomWebView extends WebView implements DialogInterface.OnDismissL
     private boolean isVideoFormat(String url) {
         try {
             if (!detect && url.equals(this.url)) return false;
-            Spider spider = VodConfig.get().getSite(key).spider();
+            Spider spider = XingchenRuntime.vod().getSite(key).spider();
             if (spider.manualVideoCheck()) return spider.isVideoFormat(url);
             return Sniffer.isVideoFormat(url);
         } catch (Exception ignored) {

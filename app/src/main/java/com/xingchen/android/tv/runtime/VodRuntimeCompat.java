@@ -5,6 +5,7 @@ import androidx.annotation.Nullable;
 
 import com.xingchen.android.tv.api.SiteApi;
 import com.xingchen.android.tv.api.config.VodConfig;
+import com.xingchen.android.tv.bean.Config;
 import com.xingchen.android.tv.bean.Parse;
 import com.xingchen.android.tv.bean.Result;
 import com.xingchen.android.tv.bean.Site;
@@ -43,6 +44,17 @@ public final class VodRuntimeCompat implements VodRuntime {
     @Override
     public void setHome(@NonNull Site site) {
         VodConfig.get().setHome(site);
+    }
+
+    @Override
+    public int getHomeIndex() {
+        return VodConfig.getHomeIndex();
+    }
+
+    @Nullable
+    @Override
+    public Config getConfig() {
+        return VodConfig.get().getConfig();
     }
 
     @Nullable

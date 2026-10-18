@@ -35,7 +35,6 @@ import com.xingchen.android.tv.App;
 import com.xingchen.android.tv.Constant;
 import com.xingchen.android.tv.R;
 import com.xingchen.android.tv.api.DanmakuApi;
-import com.xingchen.android.tv.api.config.VodConfig;
 import com.xingchen.android.tv.bean.Danmaku;
 import com.xingchen.android.tv.bean.Episode;
 import com.xingchen.android.tv.bean.Flag;
@@ -207,7 +206,7 @@ public class VideoActivity extends PlaybackActivity implements CustomKeyDownVod.
     }
 
     private String getHistoryKey() {
-        return getKey().concat(AppDatabase.SYMBOL).concat(getId()).concat(AppDatabase.SYMBOL) + VodConfig.getCid();
+        return getKey().concat(AppDatabase.SYMBOL).concat(getId()).concat(AppDatabase.SYMBOL) + XingchenRuntime.config().getVodCid();
     }
 
     private Site getSite() {
@@ -414,7 +413,7 @@ public class VideoActivity extends PlaybackActivity implements CustomKeyDownVod.
         mBinding.control.parse.setHorizontalSpacing(ResUtil.dp2px(8));
         mBinding.control.parse.setRowHeight(ViewGroup.LayoutParams.WRAP_CONTENT);
         mBinding.control.parse.setAdapter(mParseAdapter = new ParseAdapter(this));
-        mParseAdapter.addAll(VodConfig.get().getParses());
+        mParseAdapter.addAll(XingchenRuntime.vod().getParses());
     }
 
     private void setVideoView() {
@@ -1139,7 +1138,7 @@ public class VideoActivity extends PlaybackActivity implements CustomKeyDownVod.
     private History createHistory(Vod item) {
         History history = new History();
         history.setKey(getHistoryKey());
-        history.setCid(VodConfig.getCid());
+        history.setCid(XingchenRuntime.config().getVodCid());
         history.setVodName(item.getName());
         history.findEpisode(item.getFlags());
         return history;
@@ -1180,7 +1179,7 @@ public class VideoActivity extends PlaybackActivity implements CustomKeyDownVod.
     private void createKeep() {
         Keep keep = new Keep();
         keep.setKey(getHistoryKey());
-        keep.setCid(VodConfig.getCid());
+        keep.setCid(XingchenRuntime.config().getVodCid());
         keep.setVodPic(mHistory.getVodPic());
         keep.setVodName(mHistory.getVodName());
         keep.setSiteName(getSite().getName());

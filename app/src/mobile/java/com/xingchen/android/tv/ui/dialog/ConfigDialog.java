@@ -15,6 +15,7 @@ import androidx.viewbinding.ViewBinding;
 import com.xingchen.android.tv.R;
 import com.xingchen.android.tv.api.config.LiveConfig;
 import com.xingchen.android.tv.api.config.VodConfig;
+import com.xingchen.android.tv.runtime.XingchenRuntime;
 import com.xingchen.android.tv.api.config.WallConfig;
 import com.xingchen.android.tv.bean.Config;
 import com.xingchen.android.tv.databinding.DialogConfigBinding;
@@ -95,8 +96,8 @@ public class ConfigDialog extends BaseAlertDialog {
 
     private Config getConfig() {
         return switch (type) {
-            case 0 -> VodConfig.get().getConfig();
-            case 1 -> LiveConfig.get().getConfig();
+            case 0 -> XingchenRuntime.vod().getConfig();
+            case 1 -> XingchenRuntime.live().getConfig();
             case 2 -> WallConfig.get().getConfig();
             default -> null;
         };

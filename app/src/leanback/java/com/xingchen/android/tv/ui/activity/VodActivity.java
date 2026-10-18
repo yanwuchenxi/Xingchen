@@ -19,6 +19,7 @@ import androidx.viewpager.widget.ViewPager;
 
 import com.xingchen.android.tv.App;
 import com.xingchen.android.tv.api.config.VodConfig;
+import com.xingchen.android.tv.runtime.XingchenRuntime;
 import com.xingchen.android.tv.bean.Class;
 import com.xingchen.android.tv.bean.Result;
 import com.xingchen.android.tv.databinding.ActivityVodBinding;
@@ -41,7 +42,7 @@ public class VodActivity extends BaseActivity implements TypeAdapter.OnClickList
     private View mOldView;
 
     public static void start(Activity activity, Result result) {
-        start(activity, VodConfig.get().getHome().getKey(), result);
+        start(activity, XingchenRuntime.vod().getHome().getKey(), result);
     }
 
     public static void start(Activity activity, String key, Result result) {

@@ -14,6 +14,7 @@ import androidx.viewbinding.ViewBinding;
 
 import com.xingchen.android.tv.Product;
 import com.xingchen.android.tv.api.config.VodConfig;
+import com.xingchen.android.tv.runtime.XingchenRuntime;
 import com.xingchen.android.tv.bean.Result;
 import com.xingchen.android.tv.bean.Site;
 import com.xingchen.android.tv.bean.Style;
@@ -81,7 +82,7 @@ public class TypeFragment extends BaseFragment implements CustomScroller.Callbac
     }
 
     private Site getSite() {
-        return VodConfig.get().getSite(getKey());
+        return XingchenRuntime.vod().getSite(getKey());
     }
 
     private FolderFragment getParent() {

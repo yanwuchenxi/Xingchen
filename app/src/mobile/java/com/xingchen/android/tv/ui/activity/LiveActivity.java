@@ -128,7 +128,7 @@ public class LiveActivity extends PlaybackActivity implements CustomKeyDown.List
     private PiP mPiP;
 
     public static void start(Context context) {
-        context.startActivity(new Intent(context, LiveActivity.class).putExtra("empty", LiveConfig.isEmpty()));
+        context.startActivity(new Intent(context, LiveActivity.class).putExtra("empty", XingchenRuntime.config().isLiveEmpty()));
         if (context instanceof android.app.Activity activity) {
             activity.overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
         }
@@ -347,7 +347,7 @@ public class LiveActivity extends PlaybackActivity implements CustomKeyDown.List
         Live home = getHome();
         if (home == null) home = new Live();
         String name = home.getName();
-        mBinding.control.action.home.setText(LiveConfig.isOnly() || name == null || name.isEmpty()
+        mBinding.control.action.home.setText(XingchenRuntime.config().isLiveOnly() || name == null || name.isEmpty()
                 ? getString(R.string.live_refresh) : name);
         mViewModel.parse(home);
         showProgress();
@@ -439,7 +439,7 @@ public class LiveActivity extends PlaybackActivity implements CustomKeyDown.List
     }
 
     private void onHome() {
-        if (LiveConfig.isOnly()) setLive(getHome());
+        if (XingchenRuntime.config().isLiveOnly()) setLive(getHome());
         else LiveDialog.show(this);
         hideControl();
     }
@@ -979,8 +979,8 @@ public class LiveActivity extends PlaybackActivity implements CustomKeyDown.List
 
     @Override
     public void setConfig(Config config) {
-        Config current = LiveConfig.get().getConfig();
-        LiveConfig.load(config, getCallback(current));
+        Config current = XingchenRuntime.live().getConfig();
+        XingchenRuntime.config().loadLiveConfig(config, getCallback(current));
     }
 
     private Callback getCallback(Config config) {
@@ -997,7 +997,7 @@ public class LiveActivity extends PlaybackActivity implements CustomKeyDown.List
 
             @Override
             public void error(String msg) {
-                LiveConfig.load(config, new Callback());
+                XingchenRuntime.config().loadLiveConfig(config, new Callback());
                 Notify.show(msg);
                 hideProgress();
             }

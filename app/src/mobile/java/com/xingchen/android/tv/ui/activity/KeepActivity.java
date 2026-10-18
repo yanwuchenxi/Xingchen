@@ -15,6 +15,7 @@ import androidx.viewbinding.ViewBinding;
 import com.xingchen.android.tv.Product;
 import com.xingchen.android.tv.R;
 import com.xingchen.android.tv.api.config.VodConfig;
+import com.xingchen.android.tv.runtime.XingchenRuntime;
 import com.xingchen.android.tv.bean.Config;
 import com.xingchen.android.tv.bean.Keep;
 import com.xingchen.android.tv.databinding.ActivityKeepBinding;
@@ -80,7 +81,7 @@ public class KeepActivity extends BaseActivity implements KeepAdapter.OnClickLis
     }
 
     private void loadConfig(Config config, Keep item) {
-        VodConfig.load(config, new Callback() {
+        XingchenRuntime.config().loadVodConfig(config, new Callback() {
             @Override
             public void success() {
                 VideoActivity.start(getActivity(), item.getSiteKey(), item.getVodId(), item.getVodName(), item.getVodPic());
@@ -102,7 +103,7 @@ public class KeepActivity extends BaseActivity implements KeepAdapter.OnClickLis
     public void onItemClick(Keep item) {
         Config config = Config.find(item.getCid());
         if (config == null) SearchActivity.start(this, item.getVodName());
-        else if (item.getCid() != VodConfig.getCid()) loadConfig(config, item);
+        else if (item.getCid() != XingchenRuntime.config().getVodCid()) loadConfig(config, item);
         else VideoActivity.start(this, item.getSiteKey(), item.getVodId(), item.getVodName(), item.getVodPic());
     }
 

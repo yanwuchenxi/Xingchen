@@ -6,6 +6,8 @@ import androidx.annotation.Nullable;
 import com.xingchen.android.tv.api.LiveApi;
 import com.xingchen.android.tv.api.config.LiveConfig;
 import com.xingchen.android.tv.bean.Channel;
+import com.xingchen.android.tv.bean.Config;
+import com.xingchen.android.tv.bean.Group;
 import com.xingchen.android.tv.bean.Epg;
 import com.xingchen.android.tv.bean.EpgData;
 import com.xingchen.android.tv.bean.Live;
@@ -27,12 +29,19 @@ public interface LiveRuntime {
 
     void setHome(@Nullable Live live);
 
+    int getHomeIndex();
+
     @NonNull
     List<Live> getLives();
 
     void setKeep(@NonNull Channel channel);
 
-    int[] findKeepPosition(@NonNull List<com.xingchen.android.tv.bean.Group> items);
+    int[] findKeepPosition(@NonNull List<Group> items);
+
+    int[] findByChannelNumber(@NonNull String number, @NonNull List<Group> items);
+
+    @Nullable
+    Config getConfig();
 
     void parse(@NonNull Live item) throws Exception;
 
@@ -69,6 +78,11 @@ public interface LiveRuntime {
             if (live != null) LiveConfig.get().setHome(live);
         }
 
+        @Override
+        public int getHomeIndex() {
+            return LiveConfig.getHomeIndex();
+        }
+
         @NonNull
         @Override
         public List<Live> getLives() {
@@ -82,8 +96,19 @@ public interface LiveRuntime {
         }
 
         @Override
-        public int[] findKeepPosition(@NonNull List<com.xingchen.android.tv.bean.Group> items) {
+        public int[] findKeepPosition(@NonNull List<Group> items) {
             return LiveConfig.get().findKeepPosition(items);
+        }
+
+        @Override
+        public int[] findByChannelNumber(@NonNull String number, @NonNull List<Group> items) {
+            return LiveConfig.get().findByChannelNumber(number, items);
+        }
+
+        @Nullable
+        @Override
+        public Config getConfig() {
+            return LiveConfig.get().getConfig();
         }
 
         @Override

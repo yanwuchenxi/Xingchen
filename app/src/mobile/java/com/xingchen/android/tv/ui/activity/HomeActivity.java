@@ -169,7 +169,7 @@ public class HomeActivity extends BaseActivity implements NavigationBarView.OnIt
     }
 
     private void loadLive(String url) {
-        LiveConfig.load(Config.find(url, 1), new Callback() {
+        XingchenRuntime.config().loadLiveConfig(Config.find(url, 1), new Callback() {
             @Override
             public void success() {
                 openLive();
@@ -180,7 +180,7 @@ public class HomeActivity extends BaseActivity implements NavigationBarView.OnIt
     private void setNavigation() {
         mBinding.navigation.getMenu().findItem(R.id.vod).setVisible(true);
         mBinding.navigation.getMenu().findItem(R.id.setting).setVisible(true);
-        mBinding.navigation.getMenu().findItem(R.id.live).setVisible(LiveConfig.hasUrl());
+        mBinding.navigation.getMenu().findItem(R.id.live).setVisible(XingchenRuntime.config().hasLiveUrl());
     }
 
     private boolean openLive() {

@@ -12,6 +12,7 @@ import androidx.annotation.Nullable;
 import com.xingchen.android.tv.App;
 import com.xingchen.android.tv.R;
 import com.xingchen.android.tv.api.config.VodConfig;
+import com.xingchen.android.tv.runtime.XingchenRuntime;
 import com.xingchen.android.tv.bean.Site;
 import com.xingchen.android.tv.impl.SiteListener;
 import com.xingchen.android.tv.utils.KeyUtil;
@@ -27,7 +28,7 @@ public class CustomTitleView extends MaterialTextView {
     private boolean coolDown;
 
     private Site getHome() {
-        return VodConfig.get().getHome();
+        return XingchenRuntime.vod().getHome();
     }
 
     public CustomTitleView(@NonNull Context context) {
@@ -85,7 +86,7 @@ public class CustomTitleView extends MaterialTextView {
     }
 
     private List<Site> getSites() {
-        return VodConfig.get().getSites().stream().filter(site -> !site.isHide()).toList();
+        return XingchenRuntime.vod().getSites().stream().filter(site -> !site.isHide()).toList();
     }
 
     public interface Listener extends SiteListener {

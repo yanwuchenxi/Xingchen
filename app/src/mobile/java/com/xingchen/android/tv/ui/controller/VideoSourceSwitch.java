@@ -2,7 +2,7 @@ package com.xingchen.android.tv.ui.controller;
 
 import android.text.TextUtils;
 
-import com.xingchen.android.tv.api.config.VodConfig;
+import com.xingchen.android.tv.runtime.XingchenRuntime;
 import com.xingchen.android.tv.bean.Site;
 import com.xingchen.android.tv.bean.Vod;
 
@@ -21,7 +21,7 @@ public final class VideoSourceSwitch {
     /** 可参与换源搜索的站点列表 */
     public static List<Site> collectSites(boolean autoMode) {
         List<Site> sites = new ArrayList<>();
-        for (Site item : VodConfig.get().getSites()) {
+        for (Site item : XingchenRuntime.vod().getSites()) {
             if (autoMode && !item.isChangeable()) continue;
             if (item.isSearchable()) sites.add(item);
         }

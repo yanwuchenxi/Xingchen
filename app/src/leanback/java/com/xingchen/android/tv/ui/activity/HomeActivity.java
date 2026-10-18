@@ -101,11 +101,11 @@ public class HomeActivity extends BaseActivity implements CustomTitleView.Listen
     private boolean loadingHomeCategory;
 
     private Site getHome() {
-        return VodConfig.get().getHome();
+        return XingchenRuntime.vod().getHome();
     }
 
     private Config getConfig() {
-        return VodConfig.get().getConfig();
+        return XingchenRuntime.vod().getConfig();
     }
 
     @Override
@@ -309,7 +309,7 @@ public class HomeActivity extends BaseActivity implements CustomTitleView.Listen
 
     private void prewarmWebView() {
         if (isFinishing() || mWeb != null) return;
-        boolean hasWebHome = VodConfig.get().getSites().stream().anyMatch(Site::hasHomePage);
+        boolean hasWebHome = XingchenRuntime.vod().getSites().stream().anyMatch(Site::hasHomePage);
         if (!hasWebHome) return;
         SpiderDebug.log("startup", "webview prewarm start cost=%sms", System.currentTimeMillis() - App.time());
         ensureWebView();
@@ -429,7 +429,7 @@ public class HomeActivity extends BaseActivity implements CustomTitleView.Listen
 
     private void clearHistory() {
         mAdapter.removeItems(getHistoryIndex(), 1);
-        History.delete(VodConfig.getCid());
+        History.delete(XingchenRuntime.config().getVodCid());
         mPresenter.setDelete(false);
         mHistoryAdapter.clear();
     }
@@ -500,10 +500,10 @@ public class HomeActivity extends BaseActivity implements CustomTitleView.Listen
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onCastEvent(CastEvent event) {
-        if (VodConfig.get().getConfig().equals(event.config())) {
-            VideoActivity.cast(this, event.history().save(VodConfig.getCid()));
+        if (XingchenRuntime.vod().getConfig().equals(event.config())) {
+            VideoActivity.cast(this, event.history().save(XingchenRuntime.config().getVodCid()));
         } else {
-            VodConfig.load(event.config(), getCallback(event));
+            XingchenRuntime.config().loadVodConfig(event.config(), getCallback(event));
         }
     }
 
@@ -599,7 +599,7 @@ public class HomeActivity extends BaseActivity implements CustomTitleView.Listen
     @Override
     public void setSite(Site item) {
         SpiderDebug.log("site-dialog", "set site key=%s name=%s homePage=%s", item.getKey(), item.getName(), item.hasHomePage());
-        VodConfig.get().setHome(item);
+        XingchenRuntime.vod().setHome(item);
     }
 
     @Override

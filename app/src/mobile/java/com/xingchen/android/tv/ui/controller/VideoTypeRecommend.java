@@ -1,7 +1,6 @@
 package com.xingchen.android.tv.ui.controller;
 
 import com.xingchen.android.tv.runtime.XingchenRuntime;
-import com.xingchen.android.tv.api.config.VodConfig;
 import com.xingchen.android.tv.bean.Class;
 import com.xingchen.android.tv.bean.Result;
 import com.xingchen.android.tv.bean.Site;
@@ -22,7 +21,7 @@ public final class VideoTypeRecommend {
     public static List<Vod> fetch(String siteKey, String vodId, String typeName, String name) {
         List<Vod> out = new ArrayList<>();
         try {
-            Site site = VodConfig.get().getSite(siteKey);
+            Site site = XingchenRuntime.vod().getSite(siteKey);
             if (site == null || site.getKey() == null || site.getKey().isEmpty()) return out;
             String tn = typeName == null ? "" : typeName.trim();
             String nm = name == null ? "" : name.trim();

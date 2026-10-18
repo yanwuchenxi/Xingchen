@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.viewbinding.ViewBinding;
 
 import com.xingchen.android.tv.api.config.VodConfig;
+import com.xingchen.android.tv.runtime.XingchenRuntime;
 import com.xingchen.android.tv.bean.Collect;
 import com.xingchen.android.tv.bean.Result;
 import com.xingchen.android.tv.bean.Site;
@@ -117,7 +118,7 @@ public class CollectFragment extends BaseFragment implements MenuProvider, Colle
 
     private void setSites() {
         String siteKey = getSiteKey();
-        mSites = VodConfig.get().getSites().stream().filter(Site::isSearchable).filter(site -> TextUtils.isEmpty(siteKey) || site.getKey().equals(siteKey)).toList();
+        mSites = XingchenRuntime.vod().getSites().stream().filter(Site::isSearchable).filter(site -> TextUtils.isEmpty(siteKey) || site.getKey().equals(siteKey)).toList();
     }
 
     private void setWidth() {

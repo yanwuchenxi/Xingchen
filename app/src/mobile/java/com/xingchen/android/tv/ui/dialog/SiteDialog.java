@@ -23,6 +23,7 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.xingchen.android.tv.R;
 import com.xingchen.android.tv.api.config.VodConfig;
+import com.xingchen.android.tv.runtime.XingchenRuntime;
 import com.xingchen.android.tv.bean.Site;
 import com.xingchen.android.tv.databinding.DialogSiteBinding;
 import com.xingchen.android.tv.impl.SiteListener;
@@ -106,7 +107,7 @@ public class SiteDialog extends BaseBottomSheetDialog implements SiteAdapter.OnC
         binding.recycler.setHasFixedSize(true);
         applySpan();
         binding.recycler.setMaxHeight(ResUtil.getScreenHeight(requireContext()) * 55 / 100);
-        binding.recycler.post(() -> binding.recycler.scrollToPosition(Math.max(VodConfig.getHomeIndex(), 0)));
+        binding.recycler.post(() -> binding.recycler.scrollToPosition(Math.max(XingchenRuntime.vod().getHomeIndex(), 0)));
         updateSpanIcon();
     }
 

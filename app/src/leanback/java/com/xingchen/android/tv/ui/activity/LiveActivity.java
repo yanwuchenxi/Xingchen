@@ -99,7 +99,7 @@ public class LiveActivity extends PlaybackActivity implements GroupAdapter.OnCli
     private int count;
 
     public static void start(Context context) {
-        context.startActivity(new Intent(context, LiveActivity.class).putExtra("empty", LiveConfig.isEmpty()));
+        context.startActivity(new Intent(context, LiveActivity.class).putExtra("empty", XingchenRuntime.config().isLiveEmpty()));
     }
 
     private boolean isEmpty() {
@@ -111,7 +111,7 @@ public class LiveActivity extends PlaybackActivity implements GroupAdapter.OnCli
     }
 
     private Live getHome() {
-        return LiveConfig.get().getHome();
+        return XingchenRuntime.live().getHome();
     }
 
     @Override
@@ -245,7 +245,7 @@ public class LiveActivity extends PlaybackActivity implements GroupAdapter.OnCli
 
     private void checkLive() {
         if (isEmpty()) {
-            LiveConfig.get().init().load(getCallback());
+            XingchenRuntime.config().loadLive(getCallback());
         } else {
             getLive();
         }
@@ -266,7 +266,7 @@ public class LiveActivity extends PlaybackActivity implements GroupAdapter.OnCli
     }
 
     private void getLive() {
-        mBinding.control.action.home.setText(LiveConfig.isOnly() ? getString(R.string.live_refresh) : getHome().getName());
+        mBinding.control.action.home.setText(XingchenRuntime.config().isLiveOnly() ? getString(R.string.live_refresh) : getHome().getName());
         mViewModel.parse(getHome());
         showProgress();
     }
@@ -275,7 +275,7 @@ public class LiveActivity extends PlaybackActivity implements GroupAdapter.OnCli
         List<Group> items = new ArrayList<>();
         for (Group group : live.getGroups()) (group.isHidden() ? mHides : items).add(group);
         mGroupAdapter.addAll(items);
-        setPosition(LiveConfig.get().findKeepPosition(items));
+        setPosition(XingchenRuntime.live().findKeepPosition(items));
     }
 
     private void setWidth(Live live) {
@@ -364,7 +364,7 @@ public class LiveActivity extends PlaybackActivity implements GroupAdapter.OnCli
     }
 
     private void onHome() {
-        if (LiveConfig.isOnly()) setLive(getHome());
+        if (XingchenRuntime.config().isLiveOnly()) setLive(getHome());
         else LiveDialog.create().show(this);
         hideControl();
     }
@@ -734,7 +734,7 @@ public class LiveActivity extends PlaybackActivity implements GroupAdapter.OnCli
 
     private void fetch() {
         if (mChannel == null) return;
-        LiveConfig.get().setKeep(mChannel);
+        XingchenRuntime.live().setKeep(mChannel);
         mViewModel.getUrl(mChannel);
         player().clear();
         player().stop();
@@ -765,8 +765,8 @@ public class LiveActivity extends PlaybackActivity implements GroupAdapter.OnCli
 
     @Override
     public void setConfig(Config config) {
-        Config current = LiveConfig.get().getConfig();
-        LiveConfig.load(config, getCallback(current));
+        Config current = XingchenRuntime.live().getConfig();
+        XingchenRuntime.config().loadLiveConfig(config, getCallback(current));
     }
 
     private Callback getCallback(Config config) {
@@ -783,7 +783,7 @@ public class LiveActivity extends PlaybackActivity implements GroupAdapter.OnCli
 
             @Override
             public void error(String msg) {
-                LiveConfig.load(config, new Callback());
+                XingchenRuntime.config().loadLiveConfig(config, new Callback());
                 Notify.show(msg);
                 hideProgress();
             }
@@ -793,7 +793,7 @@ public class LiveActivity extends PlaybackActivity implements GroupAdapter.OnCli
     @Override
     public void setLive(Live item) {
         if (item.isSelected()) item.getGroups().clear();
-        LiveConfig.get().setHome(item);
+        XingchenRuntime.live().setHome(item);
         player().reset();
         player().clear();
         player().stop();
@@ -972,7 +972,7 @@ public class LiveActivity extends PlaybackActivity implements GroupAdapter.OnCli
     @Override
     public void onFind(String number) {
         mBinding.widget.digital.setVisibility(View.GONE);
-        setPosition(LiveConfig.get().findByChannelNumber(number, mGroupAdapter.unmodifiableList()));
+        setPosition(XingchenRuntime.live().findByChannelNumber(number, mGroupAdapter.unmodifiableList()));
     }
 
     @Override

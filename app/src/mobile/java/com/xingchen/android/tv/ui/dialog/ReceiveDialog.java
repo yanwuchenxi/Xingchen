@@ -11,6 +11,7 @@ import androidx.fragment.app.FragmentActivity;
 import androidx.viewbinding.ViewBinding;
 
 import com.xingchen.android.tv.api.config.VodConfig;
+import com.xingchen.android.tv.runtime.XingchenRuntime;
 import com.xingchen.android.tv.bean.History;
 import com.xingchen.android.tv.databinding.DialogReceiveBinding;
 import com.xingchen.android.tv.event.CastEvent;
@@ -74,12 +75,12 @@ public class ReceiveDialog extends BaseBottomSheetDialog {
     }
 
     private void onReceiveCast() {
-        if (VodConfig.get().getConfig().equals(event.config())) {
-            VideoActivity.cast(requireActivity(), event.history().save(VodConfig.getCid()));
+        if (XingchenRuntime.vod().getConfig().equals(event.config())) {
+            VideoActivity.cast(requireActivity(), event.history().save(XingchenRuntime.config().getVodCid()));
             dismiss();
         } else {
             showProgress();
-            VodConfig.load(event.config(), getCallback());
+            XingchenRuntime.config().loadVodConfig(event.config(), getCallback());
         }
     }
 
