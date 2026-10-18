@@ -46,7 +46,7 @@ import com.xingchen.android.tv.event.RefreshEvent;
 import com.xingchen.android.tv.event.ServerEvent;
 import com.xingchen.android.tv.impl.Callback;
 import com.xingchen.android.tv.model.SiteViewModel;
-import com.xingchen.android.tv.player.Source;
+import com.xingchen.android.tv.runtime.XingchenRuntime;
 import com.xingchen.android.tv.server.Server;
 import com.xingchen.android.tv.service.DLNARendererService;
 import com.xingchen.android.tv.service.PlaybackService;
@@ -671,7 +671,7 @@ public class HomeActivity extends BaseActivity implements CustomTitleView.Listen
         VodConfig.get().clear();
         AppDatabase.backup();
         OkHttp.get().clear();
-        Source.get().exit();
+        XingchenRuntime.play().exitExtractors();
         Server.get().stop();
         super.onDestroy();
     }

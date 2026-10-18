@@ -66,6 +66,7 @@ import com.xingchen.android.tv.impl.CustomTarget;
 import com.xingchen.android.tv.model.SiteViewModel;
 import com.xingchen.android.tv.player.PlayerHelper;
 import com.xingchen.android.tv.player.PlayerManager;
+import com.xingchen.android.tv.runtime.XingchenRuntime;
 import com.xingchen.android.tv.service.PlaybackService;
 import com.xingchen.android.tv.setting.DanmakuSetting;
 import com.xingchen.android.tv.setting.PlayerSetting;
@@ -1450,7 +1451,7 @@ public class VideoActivity extends PlaybackActivity implements Clock.Callback, C
         String episode = getEpisode().getName();
         boolean empty = episode.isEmpty() || title.equals(episode);
         String artist = empty ? "" : episode;
-        return PlayerManager.buildMetadata(title, artist, mHistory.getVodPic());
+        return XingchenRuntime.play().buildMetadata(title, artist, mHistory.getVodPic());
     }
 
     private void setMetadata() {

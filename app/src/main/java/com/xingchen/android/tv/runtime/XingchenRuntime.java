@@ -17,4 +17,8 @@ public final class XingchenRuntime {
     public static LiveRuntime live() {
         return LiveRuntime.Compat.get();
     }
+
+    public static PlayRuntime play() {
+        return PlayRuntime.Compat.get();
+    }
 }

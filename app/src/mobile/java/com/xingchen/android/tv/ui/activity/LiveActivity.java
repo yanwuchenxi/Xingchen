@@ -62,6 +62,7 @@ import com.xingchen.android.tv.impl.PassListener;
 import com.xingchen.android.tv.model.LiveViewModel;
 import com.xingchen.android.tv.player.PlayerHelper;
 import com.xingchen.android.tv.player.PlayerManager;
+import com.xingchen.android.tv.runtime.XingchenRuntime;
 import com.xingchen.android.tv.player.Source;
 import com.xingchen.android.tv.service.PlaybackService;
 import com.xingchen.android.tv.setting.LiveSetting;
@@ -1063,7 +1064,7 @@ public class LiveActivity extends PlaybackActivity implements CustomKeyDown.List
 
     private MediaMetadata buildMetadata() {
         if (mChannel == null) {
-            return PlayerManager.buildMetadata("", null, null);
+            return XingchenRuntime.play().buildMetadata("", null, null);
         }
         String artist = "";
         try {
@@ -1073,7 +1074,7 @@ public class LiveActivity extends PlaybackActivity implements CustomKeyDown.List
             }
         } catch (Throwable ignored) {
         }
-        return PlayerManager.buildMetadata(mChannel.getShow(), artist, mChannel.getLogo());
+        return XingchenRuntime.play().buildMetadata(mChannel.getShow(), artist, mChannel.getLogo());
     }
 
     private void setMetadata() {
@@ -1421,7 +1422,7 @@ public class LiveActivity extends PlaybackActivity implements CustomKeyDown.List
 
     @Override
     protected void onDestroy() {
-        Source.get().exit();
+        XingchenRuntime.play().exitExtractors();
         App.removeCallbacks(mR1, mR2, mR3);
         mViewModel.url().removeObserver(mObserveUrl);
         mViewModel.epg().removeObserver(mObserveEpg);

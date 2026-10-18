@@ -43,7 +43,7 @@
 2. **UI controller** — 已拆 Live/Video 控制器，继续抽
 3. **ViewModel / 搜索 / 推荐 / Browse** — ✅ `SiteViewModel`、`SearchTask`、`LiveViewModel`、`VideoTypeRecommend`、`VodBrowse` 已走 runtime
 4. **详情 Activity 内残留 SiteApi** — PUSH 常量等可保留；业务经 ViewModel
-5. **播放与解析** — 经 `PlayRuntime`（下一步），内部仍可 Media3-fongmi
+5. **播放与解析** — ✅ `PlayRuntime`：元数据 / 创建播放器 / 嗅探源退出；PlaybackService + Live/Video/Home 已接入
 6. **Loader（Jar/JS/Py）** — 最后动；接口留在 runtime，实现可替换
 
 每完成一块：上层只依赖 `runtime.*`，测试源站仍可用。

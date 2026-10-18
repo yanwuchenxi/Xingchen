@@ -30,6 +30,7 @@ import com.xingchen.android.tv.browse.BrowseTree;
 import com.xingchen.android.tv.event.ActionEvent;
 import com.xingchen.android.tv.event.ConfigEvent;
 import com.xingchen.android.tv.player.PlayerManager;
+import com.xingchen.android.tv.runtime.XingchenRuntime;
 import com.xingchen.android.tv.player.engine.PlaySpec;
 import com.xingchen.android.tv.server.Server;
 import com.xingchen.android.tv.utils.Task;
@@ -88,7 +89,7 @@ public class PlaybackService extends MediaLibraryService implements MediaLibrary
         super.onCreate();
         SpiderDebug.log("playback-flow", "service onCreate start");
         running = true;
-        player = new PlayerManager(this);
+        player = XingchenRuntime.play().createPlayer(this);
         SpiderDebug.log("playback-flow", "service player ready cost=%dms", System.currentTimeMillis() - start);
         exoPlayer = player.getPlayer();
         exoPlayer.addListener(listener);

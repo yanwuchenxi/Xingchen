@@ -46,7 +46,7 @@ import com.xingchen.android.tv.impl.PassListener;
 import com.xingchen.android.tv.model.LiveViewModel;
 import com.xingchen.android.tv.player.PlayerHelper;
 import com.xingchen.android.tv.player.PlayerManager;
-import com.xingchen.android.tv.player.Source;
+import com.xingchen.android.tv.runtime.XingchenRuntime;
 import com.xingchen.android.tv.service.PlaybackService;
 import com.xingchen.android.tv.setting.LiveSetting;
 import com.xingchen.android.tv.setting.PlayerSetting;
@@ -851,7 +851,7 @@ public class LiveActivity extends PlaybackActivity implements GroupAdapter.OnCli
 
     private MediaMetadata buildMetadata() {
         String artist = mBinding.widget.play.getText().toString();
-        return PlayerManager.buildMetadata(mChannel.getShow(), artist, mChannel.getLogo());
+        return XingchenRuntime.play().buildMetadata(mChannel.getShow(), artist, mChannel.getLogo());
     }
 
     private void setMetadata() {
@@ -1061,7 +1061,7 @@ public class LiveActivity extends PlaybackActivity implements GroupAdapter.OnCli
     @Override
     protected void onDestroy() {
         mClock.release();
-        Source.get().exit();
+        XingchenRuntime.play().exitExtractors();
         App.removeCallbacks(mR0, mR1, mR2, mR3, mR4);
         mViewModel.url().removeObserver(mObserveUrl);
         mViewModel.epg().removeObserver(mObserveEpg);

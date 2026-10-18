@@ -26,6 +26,7 @@ import com.xingchen.android.tv.dlna.CastAction;
 import com.xingchen.android.tv.event.RefreshEvent;
 import com.xingchen.android.tv.player.PlayerHelper;
 import com.xingchen.android.tv.player.PlayerManager;
+import com.xingchen.android.tv.runtime.XingchenRuntime;
 import com.xingchen.android.tv.service.DLNARendererService;
 import com.xingchen.android.tv.service.PlaybackService;
 import com.xingchen.android.tv.setting.PlayerSetting;
@@ -302,7 +303,7 @@ public class CastActivity extends PlaybackActivity implements CustomKeyDownVod.L
     }
 
     private MediaMetadata buildMetadata() {
-        return PlayerManager.buildMetadata(mBinding.widget.title.getText().toString(), "", "");
+        return XingchenRuntime.play().buildMetadata(mBinding.widget.title.getText().toString(), "", "");
     }
 
     private void onPaused() {
