@@ -1,8 +1,8 @@
 package com.xingchen.android.tv.model;
 
-import com.xingchen.android.tv.api.SiteApi;
 import com.xingchen.android.tv.bean.Result;
 import com.xingchen.android.tv.bean.Site;
+import com.xingchen.android.tv.runtime.XingchenRuntime;
 import com.github.catvod.utils.Trans;
 
 import java.util.concurrent.Callable;
@@ -27,6 +27,6 @@ public record SearchTask(Site site, String keyword, boolean quick, String page) 
     @Override
     public Result call() throws Exception {
         if (quick && !site.isQuickSearch()) return Result.empty();
-        return SiteApi.searchContent(site, keyword, quick, page);
+        return XingchenRuntime.vod().searchContent(site, keyword, quick, page);
     }
 }

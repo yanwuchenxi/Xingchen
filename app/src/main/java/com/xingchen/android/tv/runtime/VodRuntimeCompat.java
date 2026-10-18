@@ -73,4 +73,10 @@ public final class VodRuntimeCompat implements VodRuntime {
     public Result searchContent(@NonNull Site site, @NonNull String keyword, boolean quick, @NonNull String page) throws Exception {
         return SiteApi.searchContent(site, keyword, quick, page);
     }
+
+    @NonNull
+    @Override
+    public Result action(@NonNull String siteKey, @NonNull String act) throws Exception {
+        return SiteApi.action(siteKey, act);
+    }
 }

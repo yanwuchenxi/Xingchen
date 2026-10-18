@@ -5,7 +5,6 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.xingchen.android.tv.Constant;
-import com.xingchen.android.tv.api.SiteApi;
 import com.xingchen.android.tv.bean.Result;
 import com.xingchen.android.tv.bean.Site;
 import com.xingchen.android.tv.exception.ExtractException;
@@ -88,7 +87,7 @@ public class SiteViewModel extends ViewModel {
     }
 
     public void action(String key, String act) {
-        execute(TaskType.ACTION, action, () -> SiteApi.action(key, act));
+        execute(TaskType.ACTION, action, () -> XingchenRuntime.vod().action(key, act));
     }
 
     public void detailContent(String key, String id) {

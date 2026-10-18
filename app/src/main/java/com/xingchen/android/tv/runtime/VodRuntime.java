@@ -38,4 +38,7 @@ public interface VodRuntime {
 
     @NonNull
     Result searchContent(@NonNull Site site, @NonNull String keyword, boolean quick, @NonNull String page) throws Exception;
+
+    @NonNull
+    Result action(@NonNull String siteKey, @NonNull String act) throws Exception;
 }

@@ -1,6 +1,6 @@
 package com.xingchen.android.tv.ui.controller;
 
-import com.xingchen.android.tv.api.SiteApi;
+import com.xingchen.android.tv.runtime.XingchenRuntime;
 import com.xingchen.android.tv.api.config.VodConfig;
 import com.xingchen.android.tv.bean.Class;
 import com.xingchen.android.tv.bean.Result;
@@ -31,7 +31,7 @@ public final class VideoTypeRecommend {
             String tid = resolveTypeId(site, tn);
             if (tid != null && !tid.isEmpty()) {
                 try {
-                    result = SiteApi.categoryContent(siteKey, tid, "1", false, new HashMap<>());
+                    result = XingchenRuntime.vod().categoryContent(siteKey, tid, "1", false, new HashMap<>());
                     fromCategory = result != null && !result.getList().isEmpty();
                 } catch (Throwable e) {
                     e.printStackTrace();
@@ -41,7 +41,7 @@ public final class VideoTypeRecommend {
                 String kw = !tn.isEmpty() ? tn : nm;
                 if (!kw.isEmpty()) {
                     try {
-                        result = SiteApi.searchContent(site, kw, true, "1");
+                        result = XingchenRuntime.vod().searchContent(site, kw, true, "1");
                         fromCategory = false;
                     } catch (Throwable e) {
                         e.printStackTrace();
@@ -69,7 +69,7 @@ public final class VideoTypeRecommend {
     private static String resolveTypeId(Site site, String typeName) {
         if (typeName == null || typeName.isEmpty()) return null;
         try {
-            Result home = SiteApi.homeContent(site);
+            Result home = XingchenRuntime.vod().homeContent(site);
             if (home == null || home.getTypes() == null) return null;
             String exact = null, soft = null;
             for (Class c : home.getTypes()) {

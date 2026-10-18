@@ -35,19 +35,18 @@
   - `PlayRuntime`：播放会话抽象（薄封装）
 - 实现类 `*Compat`：**仅委托**现有 `VodConfig` / `SiteApi` / `LiveConfig` / `PlayerManager`，行为与现在一致
 
-### B1 绞杀迁移（后续按模块）
+### B1 绞杀迁移（进行中）
 
 顺序建议（风险从低到高）：
 
 1. **设置 / 备份 / 更新 / 主题** — 已较独立，继续纯星辰
 2. **UI controller** — 已拆 Live/Video 控制器，继续抽
-3. **详情 / 历史 / 收藏** — 经 `VodRuntime` 访问站点，UI 不直接碰 Spider
-4. **首页分类与筛选** — 同上
-5. **直播页** — 经 `LiveRuntime`
-6. **播放与解析** — 经 `PlayRuntime`，内部仍可 Media3-fongmi
-7. **Loader（Jar/JS/Py）** — 最后动；接口留在 runtime，实现可替换
+3. **ViewModel / 搜索 / 推荐 / Browse** — ✅ `SiteViewModel`、`SearchTask`、`LiveViewModel`、`VideoTypeRecommend`、`VodBrowse` 已走 runtime
+4. **详情 Activity 内残留 SiteApi** — PUSH 常量等可保留；业务经 ViewModel
+5. **播放与解析** — 经 `PlayRuntime`（下一步），内部仍可 Media3-fongmi
+6. **Loader（Jar/JS/Py）** — 最后动；接口留在 runtime，实现可替换
 
-每完成一块：UI 只依赖 `runtime.*`，测试源站仍可用。
+每完成一块：上层只依赖 `runtime.*`，测试源站仍可用。
 
 ### B2 实现可替换
 

@@ -8,6 +8,7 @@ import androidx.media3.common.C;
 import androidx.media3.common.MediaItem;
 
 import com.xingchen.android.tv.api.SiteApi;
+import com.xingchen.android.tv.runtime.XingchenRuntime;
 import com.xingchen.android.tv.api.config.VodConfig;
 import com.xingchen.android.tv.bean.Episode;
 import com.xingchen.android.tv.bean.Flag;
@@ -72,7 +73,7 @@ class VodBrowse {
     }
 
     private static List<MediaItem> searchSite(@NonNull Site site, @NonNull String keyword) throws Exception {
-        Result result = SiteApi.searchContent(site, keyword, false, "1");
+        Result result = XingchenRuntime.vod().searchContent(site, keyword, false, "1");
         return result.getList().stream().map(vod -> BrowseTree.playable(VOD_SEARCH + site.getKey() + "|" + vod.getId(), vod.getName(), vod.getRemarks(), vod.getPic())).toList();
     }
 
@@ -146,7 +147,7 @@ class VodBrowse {
         History existing = History.find(historyKey);
         if (existing != null) return resolveWithHistory(historyKey, existing);
         VodConfig.get().ensureLoaded();
-        Vod vod = SiteApi.detailContent(siteKey, vodId).getVod();
+        Vod vod = XingchenRuntime.vod().detailContent(siteKey, vodId).getVod();
         if (TextUtils.isEmpty(vod.getId()) || vod.getFlags().isEmpty()) return null;
         vodCache.put(historyKey, vod);
         History history = createHistory(historyKey, vod);
@@ -239,7 +240,7 @@ class VodBrowse {
         Flag flag = findFlag(vod, entry.flagName);
         if (flag == null || entry.index >= flag.getEpisodes().size()) return null;
         Episode episode = flag.getEpisodes().get(entry.index);
-        Result result = SiteApi.playerContent(entry.siteKey, entry.flagName, episode.getUrl());
+        Result result = XingchenRuntime.vod().playerContent(entry.siteKey, entry.flagName, episode.getUrl());
         if (TextUtils.isEmpty(result.getRealUrl())) return null;
         updateHistory(episode);
         BrowseTree.putBrowseResult(mediaId, result);
@@ -275,7 +276,7 @@ class VodBrowse {
     @Nullable
     private static Vod fetchDetail(@NonNull History history) throws Exception {
         VodConfig.get().ensureLoaded();
-        Vod vod = SiteApi.detailContent(history.getSiteKey(), history.getVodId()).getVod();
+        Vod vod = XingchenRuntime.vod().detailContent(history.getSiteKey(), history.getVodId()).getVod();
         return TextUtils.isEmpty(vod.getId()) ? null : vod;
     }
 

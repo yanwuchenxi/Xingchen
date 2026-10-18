@@ -5,7 +5,7 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.xingchen.android.tv.Constant;
-import com.xingchen.android.tv.api.LiveApi;
+import com.xingchen.android.tv.runtime.XingchenRuntime;
 import com.xingchen.android.tv.bean.Channel;
 import com.xingchen.android.tv.bean.Epg;
 import com.xingchen.android.tv.bean.EpgData;
@@ -70,7 +70,7 @@ public class LiveViewModel extends ViewModel {
 
     public void parse(Live item) {
         execute(TaskType.LIVE, () -> {
-            LiveApi.parse(item);
+            XingchenRuntime.live().parse(item);
             setTimeZone(item);
             return item;
         }, live::postValue, error -> {
@@ -80,19 +80,19 @@ public class LiveViewModel extends ViewModel {
     }
 
     public void parseXml(Live item) {
-        execute(TaskType.XML, () -> LiveApi.parseXml(item), xml::postValue, error -> xml.postValue(false));
+        execute(TaskType.XML, () -> XingchenRuntime.live().parseXml(item), xml::postValue, error -> xml.postValue(false));
     }
 
     public void getEpg(Channel item) {
-        execute(TaskType.EPG, () -> LiveApi.getEpg(item, zoneId), epg::postValue, error -> epg.postValue(new Epg()));
+        execute(TaskType.EPG, () -> XingchenRuntime.live().getEpg(item, zoneId), epg::postValue, error -> epg.postValue(new Epg()));
     }
 
     public void getUrl(Channel item) {
-        execute(TaskType.URL, () -> LiveApi.getUrl(item), url::postValue, this::handleUrlError);
+        execute(TaskType.URL, () -> XingchenRuntime.live().getUrl(item), url::postValue, this::handleUrlError);
     }
 
     public void getUrl(Channel item, EpgData data) {
-        execute(TaskType.URL, () -> LiveApi.getUrl(item, data), url::postValue, this::handleUrlError);
+        execute(TaskType.URL, () -> XingchenRuntime.live().getUrl(item, data), url::postValue, this::handleUrlError);
     }
 
     private void handleUrlError(Throwable t) {
