@@ -25,4 +25,8 @@ public final class XingchenRuntime {
     public static LoaderRuntime loader() {
         return LoaderRuntime.Compat.get();
     }
+
+    public static ConfigRuntime config() {
+        return ConfigRuntime.Compat.get();
+    }
 }

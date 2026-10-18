@@ -3,6 +3,7 @@ package com.xingchen.android.tv.runtime;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.xingchen.android.tv.bean.Parse;
 import com.xingchen.android.tv.bean.Result;
 import com.xingchen.android.tv.bean.Site;
 
@@ -23,6 +24,18 @@ public interface VodRuntime {
     Site getHome();
 
     void setHome(@NonNull Site site);
+
+    @Nullable
+    Site getSite(@NonNull String key);
+
+    @NonNull
+    List<Parse> getParses();
+
+    void setParse(@Nullable Parse parse);
+
+    /** 推送播放专用站 key，兼容历史 push_agent */
+    @NonNull
+    String pushKey();
 
     @NonNull
     Result homeContent(@NonNull Site site) throws Exception;

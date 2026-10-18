@@ -44,7 +44,6 @@ import com.xingchen.android.tv.App;
 import com.xingchen.android.tv.Constant;
 import com.xingchen.android.tv.R;
 import com.xingchen.android.tv.api.DanmakuApi;
-import com.xingchen.android.tv.api.SiteApi;
 import com.xingchen.android.tv.api.config.VodConfig;
 import com.xingchen.android.tv.bean.CastVideo;
 import com.xingchen.android.tv.bean.Danmaku;
@@ -161,7 +160,7 @@ public class VideoActivity extends PlaybackActivity implements Clock.Callback, C
     public static void file(FragmentActivity activity, String path) {
         if (TextUtils.isEmpty(path)) return;
         String name = new File(path).getName();
-        start(activity, SiteApi.PUSH, "file://" + path, name);
+        start(activity, XingchenRuntime.vod().pushKey(), "file://" + path, name);
     }
 
     public static void cast(Activity activity, History history) {
@@ -173,7 +172,7 @@ public class VideoActivity extends PlaybackActivity implements Clock.Callback, C
     }
 
     public static void start(Activity activity, String url) {
-        start(activity, SiteApi.PUSH, url, url);
+        start(activity, XingchenRuntime.vod().pushKey(), url, url);
     }
 
     public static void start(Activity activity, String key, String id, String name) {
@@ -224,7 +223,7 @@ public class VideoActivity extends PlaybackActivity implements Clock.Callback, C
     }
 
     private Site getSite() {
-        return VodConfig.get().getSite(getKey());
+        return XingchenRuntime.vod().getSite(getKey());
     }
 
     private Flag getFlag() {
@@ -447,7 +446,7 @@ public class VideoActivity extends PlaybackActivity implements Clock.Callback, C
     }
 
     private void checkId() {
-        if (getId().startsWith("push://")) getIntent().putExtra("key", SiteApi.PUSH).putExtra("id", getId().substring(7));
+        if (getId().startsWith("push://")) getIntent().putExtra("key", XingchenRuntime.vod().pushKey()).putExtra("id", getId().substring(7));
         if (getId().isEmpty() || getId().startsWith("msearch:")) setEmpty(false);
         else getDetail();
     }
@@ -642,7 +641,7 @@ public class VideoActivity extends PlaybackActivity implements Clock.Callback, C
     }
 
     private void setParse(Parse item) {
-        VodConfig.get().setParse(item);
+        XingchenRuntime.vod().setParse(item);
         notifyItemChanged(mBinding.control.parse, mParseAdapter);
     }
 

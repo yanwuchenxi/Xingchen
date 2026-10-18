@@ -7,7 +7,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.xingchen.android.tv.api.config.VodConfig;
+import com.xingchen.android.tv.runtime.XingchenRuntime;
 import com.xingchen.android.tv.bean.Parse;
 import com.xingchen.android.tv.databinding.AdapterParseDarkBinding;
 import com.xingchen.android.tv.databinding.AdapterParseLightBinding;
@@ -22,7 +22,7 @@ public class ParseAdapter extends RecyclerView.Adapter<ParseAdapter.ViewHolder> 
     private final int viewType;
 
     public ParseAdapter(OnClickListener listener, int viewType) {
-        this.mItems = VodConfig.get().getParses();
+        this.mItems = XingchenRuntime.vod().getParses();
         this.listener = listener;
         this.viewType = viewType;
     }

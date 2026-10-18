@@ -24,7 +24,6 @@ import com.xingchen.android.tv.App;
 import com.xingchen.android.tv.R;
 import com.xingchen.android.tv.api.config.LiveConfig;
 import com.xingchen.android.tv.api.config.VodConfig;
-import com.xingchen.android.tv.api.config.WallConfig;
 import com.xingchen.android.tv.utils.FileUtil;
 import android.graphics.Color;
 import android.graphics.BitmapFactory;
@@ -150,9 +149,7 @@ public class HomeActivity extends BaseActivity implements NavigationBarView.OnIt
     }
 
     private void initConfig() {
-        VodConfig.get().init().load(getCallback());
-        LiveConfig.get().init().load();
-        WallConfig.get().init();
+        XingchenRuntime.config().initHome(getCallback());
     }
 
     private Callback getCallback() {
@@ -273,8 +270,7 @@ public class HomeActivity extends BaseActivity implements NavigationBarView.OnIt
 
     @Override
     protected void onDestroy() {
-        LiveConfig.get().clear();
-        VodConfig.get().clear();
+        XingchenRuntime.config().clearVodAndLive();
         AppDatabase.backup();
         OkHttp.get().clear();
         XingchenRuntime.play().exitExtractors();

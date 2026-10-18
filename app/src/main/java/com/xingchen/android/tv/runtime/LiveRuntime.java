@@ -11,6 +11,9 @@ import com.xingchen.android.tv.bean.EpgData;
 import com.xingchen.android.tv.bean.Live;
 import com.xingchen.android.tv.bean.Result;
 
+import java.util.Collections;
+import java.util.List;
+
 import java.time.ZoneId;
 
 /**
@@ -23,6 +26,13 @@ public interface LiveRuntime {
     Live getHome();
 
     void setHome(@Nullable Live live);
+
+    @NonNull
+    List<Live> getLives();
+
+    void setKeep(@NonNull Channel channel);
+
+    int[] findKeepPosition(@NonNull List<com.xingchen.android.tv.bean.Group> items);
 
     void parse(@NonNull Live item) throws Exception;
 
@@ -57,6 +67,23 @@ public interface LiveRuntime {
         @Override
         public void setHome(@Nullable Live live) {
             if (live != null) LiveConfig.get().setHome(live);
+        }
+
+        @NonNull
+        @Override
+        public List<Live> getLives() {
+            List<Live> list = LiveConfig.get().getLives();
+            return list == null ? Collections.emptyList() : list;
+        }
+
+        @Override
+        public void setKeep(@NonNull Channel channel) {
+            LiveConfig.get().setKeep(channel);
+        }
+
+        @Override
+        public int[] findKeepPosition(@NonNull List<com.xingchen.android.tv.bean.Group> items) {
+            return LiveConfig.get().findKeepPosition(items);
         }
 
         @Override

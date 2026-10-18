@@ -13,6 +13,7 @@ import com.xingchen.android.tv.R;
 import com.xingchen.android.tv.Updater;
 import com.xingchen.android.tv.api.config.LiveConfig;
 import com.xingchen.android.tv.api.config.VodConfig;
+import com.xingchen.android.tv.runtime.XingchenRuntime;
 import com.xingchen.android.tv.api.config.WallConfig;
 import com.xingchen.android.tv.bean.Config;
 import com.xingchen.android.tv.bean.Live;
@@ -346,7 +347,7 @@ public class SettingFragment extends BaseFragment implements ConfigListener, Sit
     }
 
     private void initConfig() {
-        VodConfig.get().init().load(getCallback());
+        XingchenRuntime.config().loadVod(getCallback());
         LiveConfig.get().init().load();
         WallConfig.get().init().load();
     }

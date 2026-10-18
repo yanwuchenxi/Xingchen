@@ -143,7 +143,7 @@ public class LiveActivity extends PlaybackActivity implements CustomKeyDown.List
     }
 
     private Live getHome() {
-        return LiveConfig.get().getHome();
+        return XingchenRuntime.live().getHome();
     }
 
     @Override
@@ -323,7 +323,7 @@ public class LiveActivity extends PlaybackActivity implements CustomKeyDown.List
 
     private void checkLive() {
         if (isEmpty()) {
-            LiveConfig.get().init().load(getCallback());
+            XingchenRuntime.config().loadLive(getCallback());
         } else {
             getLive();
         }
@@ -357,7 +357,7 @@ public class LiveActivity extends PlaybackActivity implements CustomKeyDown.List
         List<Group> items = new ArrayList<>();
         for (Group group : live.getGroups()) (group.isHidden() ? mHides : items).add(group);
         mGroupAdapter.addAll(items);
-        setPosition(LiveConfig.get().findKeepPosition(items));
+        setPosition(XingchenRuntime.live().findKeepPosition(items));
     }
 
     private void setWidth(Live live) {
@@ -844,7 +844,7 @@ public class LiveActivity extends PlaybackActivity implements CustomKeyDown.List
 
     private void fetch() {
         if (mChannel == null) return;
-        LiveConfig.get().setKeep(mChannel);
+        XingchenRuntime.live().setKeep(mChannel);
         mViewModel.getUrl(mChannel);
         player().clear();
         player().stop();
@@ -1007,7 +1007,7 @@ public class LiveActivity extends PlaybackActivity implements CustomKeyDown.List
     @Override
     public void setLive(Live item) {
         if (item.isSelected()) item.getGroups().clear();
-        LiveConfig.get().setHome(item);
+        XingchenRuntime.live().setHome(item);
         player().reset();
         player().clear();
         player().stop();

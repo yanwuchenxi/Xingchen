@@ -273,9 +273,7 @@ public class HomeActivity extends BaseActivity implements CustomTitleView.Listen
 
     private void initConfig() {
         SpiderDebug.log("startup", "config load start cost=%sms", System.currentTimeMillis() - App.time());
-        VodConfig.get().init().load(getCallback());
-        LiveConfig.get().init().load();
-        WallConfig.get().init();
+        XingchenRuntime.config().initHome(getCallback());
     }
 
     private Callback getCallback() {
@@ -667,8 +665,7 @@ public class HomeActivity extends BaseActivity implements CustomTitleView.Listen
     protected void onDestroy() {
         if (mWeb != null) mWeb.destroy();
         DLNARendererService.stop(this);
-        LiveConfig.get().clear();
-        VodConfig.get().clear();
+        XingchenRuntime.config().clearVodAndLive();
         AppDatabase.backup();
         OkHttp.get().clear();
         XingchenRuntime.play().exitExtractors();
